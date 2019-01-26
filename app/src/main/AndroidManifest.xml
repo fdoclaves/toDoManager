@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.faaya.fernandoaranaandrade.demo"
+    android:versionCode="2"
+    android:versionName="2.0">
+
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/todomanager512"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/roundicon"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".AllTasksActivity"
+            android:label="@string/tasks_">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.faaya.fernandoaranaandrade.demo.MainActivity" />
+        </activity>
+        <activity
+            android:name=".EditProyectActivity"
+            android:label="@string/proyect">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.faaya.fernandoaranaandrade.demo.MainActivity" />
+        </activity>
+        <activity
+            android:name=".EditTaskActivity"
+            android:label="@string/task_">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.faaya.fernandoaranaandrade.demo.AllTasksActivity" />
+        </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/settings">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.faaya.fernandoaranaandrade.demo.MainActivity" />
+        </activity>
+        <activity
+            android:name=".AboutMeActivity"
+            android:label="@string/aboutMe">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.faaya.fernandoaranaandrade.demo.MainActivity" />
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".CalendarActivity"
+            android:label="@string/title_activity_calendar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.faaya.fernandoaranaandrade.demo.MainActivity" />
+        </activity>
+        <activity
+            android:name=".EditSemaforoActivity"
+            android:label="@string/edit_colors_tasks_title">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.faaya.fernandoaranaandrade.demo.SettingsActivity" />
+        </activity>
+        <activity
+            android:name=".EditSemaforoTaskActivity"
+            android:label="@string/edit_colors_tasks_title"></activity>
+        <activity android:name=".AddTaskTypeActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.faaya.fernandoaranaandrade.demo.ListTaskTypeActivity" />
+        </activity>
+        <activity android:name=".ListTaskTypeActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.faaya.fernandoaranaandrade.demo.SettingsActivity" />
+        </activity>
+
+        <service
+            android:name=".notifications.NotificationService"
+            android:enabled="true"></service>
+
+        <receiver
+            android:name=".notifications.NotificationServiceRestarterBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:label="RestartServiceWhenStopped"></receiver>
+
+        <activity android:name=".NotificationsSettingsActivity" android:label="@string/notificationSettings">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.faaya.fernandoaranaandrade.demo.SettingsActivity" />
+        </activity>
+        <activity android:name=".NotificationsSettingsTaskActivity" android:label="@string/notificationSettings">
+        </activity>
+    </application>
+
+</manifest>
