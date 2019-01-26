@@ -1,5 +1,6 @@
 package com.faaya.fernandoaranaandrade.demo.notifications;
 
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.job.JobParameters;
@@ -23,6 +24,7 @@ import java.util.TimerTask;
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class NotificationServiceUpgrade extends JobService {
+    public static String CHANNEL_ID = "CHANNEL_TODOMANAGER";
     public int counter = 0;
     private Queries queries;
 
@@ -39,7 +41,7 @@ public class NotificationServiceUpgrade extends JobService {
                 work();
             }
         };
-        timer.schedule(timerTask, 2 * 30 * 1000L, 1 * 30 * 1000L);
+        timer.schedule(timerTask, 2 * 60 * 1000L, 1 * 60 * 1000L);
         return true;
     }
 
@@ -63,8 +65,10 @@ public class NotificationServiceUpgrade extends JobService {
 
     private void work() {
         Log.i("NOTIFICATION", "Time ++++  " + (counter++));
+        //System.out.println("allNotifications:" + queries.getAllNotification().size());
         NotificationsApp notificationsApp = queries.getNotificationToShow(System.currentTimeMillis());
         if (notificationsApp != null) {
+            Log.i("NOTIFICATION", notificationsApp.getIdTask().toString());
             TaskApp taskApp = queries.getByIdTask(notificationsApp.getIdTask());
             Proyect proyect = queries.getByIdProyect(taskApp.getProyectId());
             showNotifications(taskApp.getName(), proyect.getName(), taskApp.getId());
@@ -88,6 +92,13 @@ public class NotificationServiceUpgrade extends JobService {
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setAutoCancel(true);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
+                    "ToDoManager Channel", NotificationManager.IMPORTANCE_DEFAULT);
+            manager.createNotificationChannel(channel);
+            builder.setChannelId(CHANNEL_ID);
+        }
 
         manager.notify(id.intValue(), builder.build());
     }

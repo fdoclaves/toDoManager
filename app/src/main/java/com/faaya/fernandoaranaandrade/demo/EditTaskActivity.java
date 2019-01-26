@@ -37,10 +37,6 @@ import static com.faaya.fernandoaranaandrade.demo.EditProyectActivity.DATE_REGEX
 
 public class EditTaskActivity extends AppCompatActivity {
 
-    private static final long MIN_PERIOD_MILLIS = 15 * 60 * 1000L; // 15'
-
-    private static final long MIN_FLEX_MILLIS = 5 * 60 * 1000L; // 5'
-
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     Spinner typesSpinner;
@@ -54,6 +50,8 @@ public class EditTaskActivity extends AppCompatActivity {
     Button dateEndTaskButton;
 
     Button realDataTaskButton;
+
+    ImageButton deleteTaskEditImageButton;
 
     EditText commentsTaskEditText;
 
@@ -103,8 +101,8 @@ public class EditTaskActivity extends AppCompatActivity {
         idProyectCurrentIntent = intent.getLongExtra(TaskEnum.ID_PROYECT.toString(), 0);
         fillData(typesValues, proyects);
         if (isNew()) {
-            ImageButton deleteTaskEditImageButton = findViewById(R.id.deleteTaskEditImageButton);
-            deleteTaskEditImageButton.setEnabled(false);
+            deleteTaskEditImageButton = findViewById(R.id.deleteTaskEditImageButton);
+            deleteTaskEditImageButton.setVisibility(View.INVISIBLE);
         }
 
         typesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -235,7 +233,7 @@ public class EditTaskActivity extends AppCompatActivity {
         try {
             if (isCorrectData()) {
                 saveData();
-                showMessage("Tarea guardada");
+                showMessage("Tarea " + taskApp.getName().toUpperCase() + " guardada");
                 exit();
             }
         } catch (ParseException e) {

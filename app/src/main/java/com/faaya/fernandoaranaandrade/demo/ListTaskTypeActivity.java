@@ -7,10 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.faaya.fernandoaranaandrade.demo.Beans.TaskAppAdapter;
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskType;
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskTypeAdapter;
 import com.faaya.fernandoaranaandrade.demo.database.Queries;
@@ -69,7 +67,7 @@ public class ListTaskTypeActivity extends AppCompatActivity {
     }
 
     private void goToEditTaskType(TaskType taskType) {
-        Intent intent = new Intent(this, AddTaskTypeActivity.class);
+        Intent intent = new Intent(this, EditTaskTypeActivity.class);
         if(taskType != null){
             intent.putExtra(TaskType.ID_TASK_TYPE,taskType);
         }

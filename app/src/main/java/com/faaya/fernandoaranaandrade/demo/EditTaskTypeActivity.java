@@ -1,18 +1,18 @@
 package com.faaya.fernandoaranaandrade.demo;
 
 import android.content.Intent;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskType;
 import com.faaya.fernandoaranaandrade.demo.database.Queries;
 
-public class AddTaskTypeActivity extends AppCompatActivity {
+public class EditTaskTypeActivity extends AppCompatActivity {
 
     private Queries queries;
 
@@ -20,10 +20,12 @@ public class AddTaskTypeActivity extends AppCompatActivity {
 
     private TaskType taskType;
 
+    private ImageButton deleteButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_task_type);
+        setContentView(R.layout.activity_edit_task_type);
         queries = new Queries(this);
         nameEditText = findViewById(R.id.editTextAddTaskType);
         Intent intent = getIntent();
@@ -32,6 +34,8 @@ public class AddTaskTypeActivity extends AppCompatActivity {
             nameEditText.setText(taskType.getName());
         } else {
             taskType = new TaskType();
+            deleteButton = findViewById(R.id.imageButtonDeleteTypeTask);
+            deleteButton.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -51,23 +55,17 @@ public class AddTaskTypeActivity extends AppCompatActivity {
     }
 
     public void deleteTaskType(View view) {
-        //se eliminaran las tareas
-        if (taskType.getId() == null) {
-            Snackbar.make(view, "Debe ser guardado antes", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
-        } else {
-            FragmentManager fm = getSupportFragmentManager();
-            EditNameDialogFragment editNameDialogFragment = EditNameDialogFragment.newInstance(" Se eliminaran TODAS la tareas de este tipo ");
-            editNameDialogFragment.setAlgo(new OkAction() {
-                @Override
-                public void doAction() {
-                    queries.deleteTaskType(taskType.getId());
-                    queries.deleteTaskByTaskType(taskType.getId());
-                    goToSettinsActivity();
-                }
-            });
-            editNameDialogFragment.show(fm, "fragment_edit_name");
-        }
+        FragmentManager fm = getSupportFragmentManager();
+        EditNameDialogFragment editNameDialogFragment = EditNameDialogFragment.newInstance(" Se eliminaran TODAS la tareas de este tipo ");
+        editNameDialogFragment.setAlgo(new OkAction() {
+            @Override
+            public void doAction() {
+                queries.deleteTaskType(taskType.getId());
+                queries.deleteTaskByTaskType(taskType.getId());
+                goToSettinsActivity();
+            }
+        });
+        editNameDialogFragment.show(fm, "fragment_edit_name");
     }
 
     private void goToSettinsActivity() {

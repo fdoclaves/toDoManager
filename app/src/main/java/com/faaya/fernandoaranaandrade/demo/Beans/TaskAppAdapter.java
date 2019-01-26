@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
-import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +62,7 @@ public class TaskAppAdapter extends ArrayAdapter<TaskApp> {
         nameTextView.setText(spanString);
         Date endDate = new Date(taskApp.getDateEnd());
         startTextView.setText("Fecha estimada: " + simpleDateFormat.format(endDate));
-        typeTextView.setText(queries.getTaskTypeById(taskApp.getIdType()).getName());
+        typeTextView.setText(queries.getTaskTypeById(taskApp.getIdType()).getName().toUpperCase());
         Proyect proyect = queries.getByIdProyect(taskApp.getProyectId());
         proyectTextView.setText(proyect.getName().toUpperCase());
 
@@ -95,6 +94,7 @@ public class TaskAppAdapter extends ArrayAdapter<TaskApp> {
 
     private int getColor(TaskApp taskApp) {
         int color = Color.WHITE;
+        int priority = 365;
         Date endDate = new Date(taskApp.getDateEnd());
         List<DateColor> dateColors = new ArrayList<>();
         dateColors.add(new DateColor(taskApp.getWhiteSemaforo(), endDate, WHITE));
@@ -102,8 +102,9 @@ public class TaskAppAdapter extends ArrayAdapter<TaskApp> {
         dateColors.add(new DateColor(taskApp.getOrangeSemaforo(), endDate, ORANGE));
         dateColors.add(new DateColor(taskApp.getRedSemaforo(), endDate, RED));
         for (DateColor dateColor : dateColors) {
-            if (dateColor.isOn()) {
+            if (dateColor.show() && dateColor.getPriority() <= priority) {
                 color = dateColor.getColor();
+                priority = dateColor.getPriority();
             }
         }
         return color;

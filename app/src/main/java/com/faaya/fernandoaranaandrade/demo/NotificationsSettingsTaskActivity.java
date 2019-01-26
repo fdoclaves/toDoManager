@@ -3,6 +3,7 @@ package com.faaya.fernandoaranaandrade.demo;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -32,6 +33,7 @@ public class NotificationsSettingsTaskActivity extends AppCompatActivity {
         setContentView(R.layout.activity_notifications_settings);
         imageButton = findViewById(R.id.imageButtonNotificationSave);
         imageButton.setImageResource(R.drawable.ic_keyboard_backspace);
+        imageButton.setVisibility(View.INVISIBLE);
         hourButton = findViewById(R.id.notifacionButton);
         aSwitch = findViewById(R.id.switchNotification);
         taskApp = (TaskApp) getIntent().getSerializableExtra(TASK);
@@ -71,6 +73,10 @@ public class NotificationsSettingsTaskActivity extends AppCompatActivity {
     }
 
     public void save(View view) {
+        saveData();
+    }
+
+    private void saveData() {
         if (aSwitch.isChecked()) {
             taskApp.setActiveNotification(SettingsEnum.ON.toString());
         } else {
@@ -81,6 +87,17 @@ public class NotificationsSettingsTaskActivity extends AppCompatActivity {
         Intent intent = new Intent(this, EditTaskActivity.class);
         intent.putExtra(TASK, taskApp);
         startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                saveData();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

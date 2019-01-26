@@ -2,6 +2,7 @@ package com.faaya.fernandoaranaandrade.demo;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -23,9 +24,14 @@ public class EditSemaforoTaskActivity extends SuperEditSemaforoActivity {
         super.onCreate(savedInstanceState);
         imageButton = findViewById(R.id.imageButtonSaveSemaforo);
         imageButton.setImageResource(R.drawable.ic_keyboard_backspace);
+        imageButton.setVisibility(View.INVISIBLE);
     }
 
     public void save_semaforo(View view) {
+        saveData();
+    }
+
+    private void saveData() {
         if (check()) {
             taskApp.setRedSemaforo(getText(spinnerBeforeAfterRed,  editTextRed));
             taskApp.setOrangeSemaforo(getText(spinnerBeforeAfterOrange,  editTextOrange));
@@ -37,10 +43,15 @@ public class EditSemaforoTaskActivity extends SuperEditSemaforoActivity {
             } else {
                 taskApp.setActiveSemaforo(SettingsEnum.OFF.toString());
             }
-            Intent intent = new Intent(this, EditTaskActivity.class);
-            intent.putExtra(TASK, taskApp);
-            startActivity(intent);
+            exit();
         }
+    }
+
+    private void exit() {
+        Intent intent = new Intent(this, EditTaskActivity.class);
+        intent.putExtra(TASK, taskApp);
+        startActivity(intent);
+        finish();
     }
 
     private String getText(Spinner spinner, EditText editText) {
@@ -73,5 +84,15 @@ public class EditSemaforoTaskActivity extends SuperEditSemaforoActivity {
         if (index != null) {
             spinner.setSelection(index);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                saveData();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

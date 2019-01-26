@@ -40,6 +40,7 @@ public class EditProyectActivity extends AppCompatActivity {
     TextView endTextView;
     private Queries queries;
     private Proyect proyect;
+    ImageButton deleteImageButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,8 +98,8 @@ public class EditProyectActivity extends AppCompatActivity {
 
     private void fillBorrado() {
         if(isNew()){
-            ImageButton deleteImageButton = findViewById(R.id.deleteImageButton);
-            deleteImageButton.setEnabled(false);
+            deleteImageButton = findViewById(R.id.deleteImageButton);
+            deleteImageButton.setVisibility(View.INVISIBLE);
         }
     }
 
