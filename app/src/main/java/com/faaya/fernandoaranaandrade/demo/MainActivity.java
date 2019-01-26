@@ -1,8 +1,12 @@
 package com.faaya.fernandoaranaandrade.demo;
 
 import android.app.ActivityManager;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
@@ -22,7 +26,8 @@ import com.faaya.fernandoaranaandrade.demo.Beans.Proyect;
 import com.faaya.fernandoaranaandrade.demo.Beans.ProyectAdapter;
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskEnum;
 import com.faaya.fernandoaranaandrade.demo.database.Queries;
-import com.faaya.fernandoaranaandrade.demo.notifications.NotificationService;
+import com.faaya.fernandoaranaandrade.demo.notifications.NotificationServiceUpgrade;
+import com.faaya.fernandoaranaandrade.demo.notifications.Util;
 
 import java.util.List;
 
@@ -33,7 +38,6 @@ public class MainActivity extends AppCompatActivity
     public static final String ID_PROYECT = "ID_PROYECT";
     public static final String ID_TASK = "ID_TASK";
     private List<Proyect> proyects;
-    private Intent mServiceIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,9 +61,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void loadNotificationService() {
-        if (!isMyServiceRunning(NotificationService.class)) {
-            mServiceIntent = new Intent(this, NotificationService.class);
-            startService(mServiceIntent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            System.out.println("entre");
+            Util.scheduleJob(this);
         }
     }
 
@@ -176,21 +180,21 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
-
         if (id == R.id.nav_aboutme) {
             Intent intent = new Intent(this, AboutMeActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_settings) {
             goToSettings();
-        } else if (id == R.id.nav_day_goals) {
+        } else if (id == R.id.nav_all_task) {
             Intent intent = new Intent(this, AllTasksActivity.class);
-            intent.putExtra(TaskEnum.RANGO_TIEMPO.toString(), TaskEnum.HOY.toString());
+            startActivity(intent);
+        } else if (id == R.id.nav_goals) {
+            Intent intent = new Intent(this, PendientesActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_exit) {
             exit();
-        } else if (id == R.id.nav_calendar){
+        } else if (id == R.id.nav_calendar) {
             Intent intent = new Intent(this, CalendarActivity.class);
             startActivity(intent);
         }
@@ -202,9 +206,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onDestroy() {
-        if(mServiceIntent != null){
-           stopService(mServiceIntent);
-        }
         super.onDestroy();
     }
 }

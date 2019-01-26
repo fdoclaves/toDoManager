@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -337,8 +338,13 @@ public class EditTaskActivity extends AppCompatActivity {
     }
 
     private void exit() {
-        System.out.println(idTipoCurrentIntent);
         Intent newIntent = new Intent(this, AllTasksActivity.class);
+        fillIBackIntent(newIntent);
+        startActivity(newIntent);
+        finish();
+    }
+
+    private void fillIBackIntent(Intent newIntent) {
         if (idTipoCurrentIntent != null && idTipoCurrentIntent.longValue() != 0) {
             newIntent.putExtra(TaskEnum.ID_TYPE.toString(), idTipoCurrentIntent);
         }
@@ -348,8 +354,6 @@ public class EditTaskActivity extends AppCompatActivity {
         if (idProyectCurrentIntent != 0) {
             newIntent.putExtra(TaskEnum.ID_PROYECT.toString(), idProyectCurrentIntent);
         }
-        startActivity(newIntent);
-        finish();
     }
 
     private void setTask(Intent intent) {
@@ -421,5 +425,15 @@ public class EditTaskActivity extends AppCompatActivity {
         Intent intent = new Intent(this, NotificationsSettingsTaskActivity.class);
         intent.putExtra(NotificationsSettingsTaskActivity.TASK, taskApp);
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                fillIBackIntent(item.getIntent());
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

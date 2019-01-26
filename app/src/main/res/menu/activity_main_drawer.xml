@@ -5,9 +5,15 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_day_goals"
+            android:id="@+id/nav_all_task"
+            android:icon="@drawable/ic_action_document"
+            android:title="@string/all_task" />
+
+        <item
+            android:id="@+id/nav_goals"
             android:icon="@drawable/ic_assignment_late"
-            android:title="@string/day_goals" />
+            android:title="@string/pendientes_day" />
+
         <item
             android:id="@+id/nav_calendar"
             android:icon="@drawable/ic_action_calendar_day"

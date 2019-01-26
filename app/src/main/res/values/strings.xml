@@ -2,7 +2,8 @@
     <string name="app_name">ToDo Manager</string>
     <string name="new_proyect">NUEVO PROYECTO</string>
     <string name="all_pendientes">PENDIENTES</string>
-    <string name="day_goals">Tareas del día</string>
+    <string name="all_task">Tareas</string>
+    <string name="pendientes_day">Pendientes</string>
     <string name="back">ATRAS</string>
     <string name="pendientes">PENDIENTES</string>
     <string name="activities">ACTIVIDADES</string>
@@ -57,6 +58,9 @@
     <string name="realTaskDate">Tarea con fecha real:</string>
     <string name="green">VERDE</string>
     <string name="white">BLANCO</string>
+    <string name="red">ROJO</string>
+    <string name="yellow">AMARILLO</string>
+    <string name="orange">NARANJA</string>
     <string name="fechaEstimada">fecha estimada:</string>
     <string name="addTaskType">Agregar un nuevo tipo de tarea</string>
     <string name="notificationSettings">Configurar notificaciones</string>

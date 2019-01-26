@@ -2,14 +2,10 @@ package com.faaya.fernandoaranaandrade.demo.notifications;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.app.job.JobParameters;
 import android.app.job.JobService;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -22,93 +18,57 @@ import com.faaya.fernandoaranaandrade.demo.MainActivity;
 import com.faaya.fernandoaranaandrade.demo.R;
 import com.faaya.fernandoaranaandrade.demo.database.Queries;
 
-import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class NotificationServiceUpgrade extends JobService {
-    public static final int MAX_TO_WAIT = 30;
     public int counter = 0;
+    private Queries queries;
+
     private Timer timer;
     private TimerTask timerTask;
-    private Queries queries;
-    private Integer timeWithoutAsk = 0;
-
-    public NotificationServiceUpgrade(Context applicationContext) {
-        super();
-    }
-
-    public NotificationServiceUpgrade() {
-    }
 
     @Override
-    public boolean onStartJob(JobParameters params) {
-        return false;
-    }
-
-    @Override
-    public boolean onStopJob(JobParameters params) {
-        return false;
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        super.onStartCommand(intent, flags, startId);
+    public boolean onStartJob(JobParameters jobParameters) {
         queries = new Queries(this);
+        System.out.println("start");
         timer = new Timer();
         timerTask = new TimerTask() {
             public void run() {
                 work();
             }
         };
-        timer.schedule(timerTask, 2 * 60 * 1000L, 1 * 60 * 1000L);
-        return START_STICKY;
+        timer.schedule(timerTask, 2 * 30 * 1000L, 1 * 30 * 1000L);
+        return true;
+    }
+
+    @Override
+    public boolean onStopJob(JobParameters jobParameters) {
+        System.out.println("Job cancelled before being completed.");
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+        return true;
     }
 
     @Override
     public void onDestroy() {
-        stoptimertask();
-        Intent broadcastIntent = new Intent(this, NotificationServiceRestarterBroadcastReceiver.class);
-        sendBroadcast(broadcastIntent);
+        System.out.println("destruido");
+        //Intent broadcastIntent = new Intent(this, NotificationServiceReceiver.class);
+        //sendBroadcast(broadcastIntent);
         super.onDestroy();
     }
 
     private void work() {
         Log.i("NOTIFICATION", "Time ++++  " + (counter++));
-        long time = System.currentTimeMillis();
-        if (true || search()) {
-            NotificationsApp notificationsApp = queries.getNotificationToShow(time);
-            if (notificationsApp != null) {
-                TaskApp taskApp = queries.getByIdTask(notificationsApp.getIdTask());
-                Proyect proyect = queries.getByIdProyect(taskApp.getProyectId());
-                showNotifications(taskApp.getName(), proyect.getName(), taskApp.getId());
-                queries.deleteNotificationByIdTask(notificationsApp.getIdTask());
-            }
-        }
-    }
-
-    private boolean search() {
-        if(isSleepTime(Calendar.getInstance().get(Calendar.HOUR_OF_DAY))){
-            if (timeWithoutAsk < 0) {
-                timeWithoutAsk = MAX_TO_WAIT;
-                return true;
-            } else {
-                timeWithoutAsk--;
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private boolean isSleepTime(int hourOfDay) {
-        return hourOfDay > 20 || hourOfDay < 6;
-    }
-
-    public void stoptimertask() {
-        if (timer != null) {
-            timer.cancel();
-            timer = null;
+        NotificationsApp notificationsApp = queries.getNotificationToShow(System.currentTimeMillis());
+        if (notificationsApp != null) {
+            TaskApp taskApp = queries.getByIdTask(notificationsApp.getIdTask());
+            Proyect proyect = queries.getByIdProyect(taskApp.getProyectId());
+            showNotifications(taskApp.getName(), proyect.getName(), taskApp.getId());
+            queries.deleteNotificationByIdTask(notificationsApp.getIdTask());
         }
     }
 
@@ -120,12 +80,12 @@ public class NotificationServiceUpgrade extends JobService {
 
         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "1")
                 .setContentTitle(title)
                 .setContentText(text)
                 .setContentIntent(contentPendingIntent)
                 .setSmallIcon(R.drawable.todomanager512)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setAutoCancel(true);
 
@@ -133,3 +93,7 @@ public class NotificationServiceUpgrade extends JobService {
     }
 
 }
+
+
+
+

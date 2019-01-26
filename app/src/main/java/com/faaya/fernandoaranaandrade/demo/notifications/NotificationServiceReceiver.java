@@ -6,17 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 
-public class NotificationServiceRestarterBroadcastReceiver extends BroadcastReceiver {
+public class NotificationServiceReceiver extends BroadcastReceiver {
+
     @Override
     public void onReceive(Context context, Intent intent) {
-        boolean myServiceRunning = isMyServiceRunning(NotificationService.class, context);
+        boolean myServiceRunning = isMyServiceRunning(NotificationServiceUpgrade.class, context);
         System.out.println("++++++++++++++++++++++++++++++++++++" + myServiceRunning);
         if (!myServiceRunning) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                context.startForegroundService(new Intent(context, NotificationService.class));
-            } else {
-                context.startService(new Intent(context, NotificationService.class));
-            }
+            Util.scheduleJob(context);
         }
     }
 

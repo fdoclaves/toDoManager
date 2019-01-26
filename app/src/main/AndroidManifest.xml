@@ -74,7 +74,7 @@
         </activity>
         <activity
             android:name=".EditSemaforoTaskActivity"
-            android:label="@string/edit_colors_tasks_title"></activity>
+            android:label="@string/edit_colors_tasks_title" />
         <activity android:name=".AddTaskTypeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -87,21 +87,30 @@
         </activity>
 
         <service
-            android:name=".notifications.NotificationService"
-            android:enabled="true"></service>
+            android:name=".notifications.NotificationServiceUpgrade"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
 
-        <receiver
-            android:name=".notifications.NotificationServiceRestarterBroadcastReceiver"
-            android:enabled="true"
-            android:exported="true"
-            android:label="RestartServiceWhenStopped"></receiver>
+        <receiver android:name=".notifications.NotificationServiceReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
 
-        <activity android:name=".NotificationsSettingsActivity" android:label="@string/notificationSettings">
+        <activity
+            android:name=".NotificationsSettingsActivity"
+            android:label="@string/notificationSettings">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.faaya.fernandoaranaandrade.demo.SettingsActivity" />
         </activity>
-        <activity android:name=".NotificationsSettingsTaskActivity" android:label="@string/notificationSettings">
+        <activity
+            android:name=".NotificationsSettingsTaskActivity"
+            android:label="@string/notificationSettings"></activity>
+        <activity android:name=".PendientesActivity" android:label="@string/pendientes">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.faaya.fernandoaranaandrade.demo.MainActivity" />
         </activity>
     </application>
 
