@@ -6,50 +6,24 @@
     android:layout_height="match_parent"
     tools:context=".PendientesActivity">
 
-    <CheckBox
-        android:id="@+id/checkBoxRed"
+    <ListView
+        android:id="@+id/listAllPendientes"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switchPendientesDia" />
+
+    <Switch
+        android:id="@+id/switchPendientesDia"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="@string/red"
+        android:text="@string/pendientesDelDia"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <CheckBox
-        android:id="@+id/checkBoxOrange"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="@string/orange"
-        app:layout_constraintBottom_toBottomOf="@+id/checkBoxRed"
-        app:layout_constraintStart_toEndOf="@+id/checkBoxRed" />
-
-    <CheckBox
-        android:id="@+id/checkBoxYellow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="@string/yellow"
-        app:layout_constraintBottom_toBottomOf="@+id/checkBoxOrange"
-        app:layout_constraintStart_toEndOf="@+id/checkBoxOrange" />
-
-    <CheckBox
-        android:id="@+id/checkBoxGreen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/green"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkBoxRed" />
-
-    <ListView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkBoxGreen" />
 </android.support.constraint.ConstraintLayout>

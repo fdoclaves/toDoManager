@@ -65,4 +65,5 @@
     <string name="addTaskType">Agregar un nuevo tipo de tarea</string>
     <string name="notificationSettings">Configurar notificaciones</string>
     <string name="notificationsActive">Activar notificaciones: </string>
+    <string name="pendientesDelDia">Pendientes del día:</string>
 </resources>

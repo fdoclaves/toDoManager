@@ -431,7 +431,7 @@ public class EditTaskActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                fillIBackIntent(item.getIntent());
+                exit();
                 return true;
         }
         return super.onOptionsItemSelected(item);

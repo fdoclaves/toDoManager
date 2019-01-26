@@ -169,6 +169,10 @@ public class Queries {
         return selectTask("SELECT * FROM " + DataBase.TASK_TABLE);
     }
 
+    public List<TaskApp> getAllPendientesTask(Long time) {
+        return selectTask("SELECT * FROM " + DataBase.TASK_TABLE + " WHERE END_DATE <= ? and REAL_DATE is null", time.toString());
+    }
+
     public void deleteTask(Long id) {
         if (id != null) {
             String[] ids = new String[1];

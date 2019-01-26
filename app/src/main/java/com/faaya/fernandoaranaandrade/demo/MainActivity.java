@@ -1,9 +1,6 @@
 package com.faaya.fernandoaranaandrade.demo;
 
 import android.app.ActivityManager;
-import android.app.job.JobInfo;
-import android.app.job.JobScheduler;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -24,9 +21,7 @@ import android.widget.ListView;
 
 import com.faaya.fernandoaranaandrade.demo.Beans.Proyect;
 import com.faaya.fernandoaranaandrade.demo.Beans.ProyectAdapter;
-import com.faaya.fernandoaranaandrade.demo.Beans.TaskEnum;
 import com.faaya.fernandoaranaandrade.demo.database.Queries;
-import com.faaya.fernandoaranaandrade.demo.notifications.NotificationServiceUpgrade;
 import com.faaya.fernandoaranaandrade.demo.notifications.Util;
 
 import java.util.List;
@@ -191,6 +186,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         } else if (id == R.id.nav_goals) {
             Intent intent = new Intent(this, PendientesActivity.class);
+            intent.putExtra(PendientesActivity.TODAY, true);
             startActivity(intent);
         } else if (id == R.id.nav_exit) {
             exit();
