@@ -57,9 +57,10 @@ public class EditTaskTypeActivity extends AppCompatActivity {
     public void deleteTaskType(View view) {
         FragmentManager fm = getSupportFragmentManager();
         EditNameDialogFragment editNameDialogFragment = EditNameDialogFragment.newInstance(" Se eliminaran TODAS la tareas de este tipo ");
-        editNameDialogFragment.setAlgo(new OkAction() {
+        editNameDialogFragment.setOkAction(new OkAction() {
             @Override
             public void doAction() {
+                queries.deleteNotificationByTaskType(taskType.getId());
                 queries.deleteTaskType(taskType.getId());
                 queries.deleteTaskByTaskType(taskType.getId());
                 goToSettinsActivity();

@@ -1,17 +1,14 @@
 package com.faaya.fernandoaranaandrade.demo.utils;
 
-import android.support.annotation.NonNull;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
 
 public class FechasUtils {
 
-    public static final String SEMANAS = "semanas";
-    public static final String DIAS = "días";
-    public static final String MESES = "meses";
+
 
     public static final int MILLIS_BY_DAY = 86400000;
 
@@ -24,45 +21,43 @@ public class FechasUtils {
         return abs;
     }
 
-    public static FechasBean getFechasBean(Date statEditable, int number, String selectedTimeRange) throws ParseException {
+    public static FechasBean getFechasBean(Date statEditable, int number, String selectedTimeRange, Map<String, String> map) throws ParseException {
         Calendar startCalendar = Calendar.getInstance();
         Calendar endCalendar = Calendar.getInstance();
         startCalendar.setTime(statEditable);
         endCalendar.setTime(statEditable);
         Long resultTimeLong = Long.parseLong("0");
-        String resultaTimeString = "TIEMPO FINALIZADO";
-        switch (selectedTimeRange) {
-            case MESES:
-                endCalendar.add(Calendar.MONTH, number);
-                resultTimeLong = FechasUtils.getDaysBetweenDates(new Date(), endCalendar.getTime());
-                resultTimeLong = new Double(resultTimeLong / 30).longValue();
-                if(resultTimeLong.longValue() == 1){
-                    resultaTimeString = "Falta un mes";
-                } else {
-                    resultaTimeString = "Faltan " + resultTimeLong + " meses";
-                }
-                break;
-            case DIAS:
-                endCalendar.add(Calendar.DATE, number);
-                resultTimeLong = FechasUtils.getDaysBetweenDates(new Date(), endCalendar.getTime());
-                if(resultTimeLong.longValue() == 1){
-                    resultaTimeString = "Falta un día";
-                } else {
-                    resultaTimeString = "Faltan " + resultTimeLong + " días";
-                }
-                break;
-            case SEMANAS:
-                endCalendar.add(Calendar.DATE, number * 7);
-                resultTimeLong = FechasUtils.getDaysBetweenDates(new Date(), endCalendar.getTime());
-                resultTimeLong = new Double(resultTimeLong / 7).longValue();
-                if(resultTimeLong.longValue() == 1){
-                    resultaTimeString = "Falta una semana";
-                } else {
-                    resultaTimeString = "Faltan " + resultTimeLong + " semanas";
-                }
-                break;
+        String resultaTimeString = map.get(StringUtils.tiempo_finalizado);
+        if(selectedTimeRange.equals(map.get(StringUtils.MESES))){
+            endCalendar.add(Calendar.MONTH, number);
+            resultTimeLong = FechasUtils.getDaysBetweenDates(new Date(), endCalendar.getTime());
+            resultTimeLong = new Double(resultTimeLong / 30).longValue();
+            if(resultTimeLong.longValue() == 1){
+                resultaTimeString = map.get(StringUtils.fata_un_mes_);
+            } else {
+                resultaTimeString = map.get(StringUtils.faltan_) + " " + resultTimeLong + " " + map.get(StringUtils.meses_);
+            }
         }
-        String endDateText = "Fecha final: " + simpleDateFormat.format(endCalendar.getTime());
+        if (selectedTimeRange.equals(map.get(StringUtils.DIAS))){
+            endCalendar.add(Calendar.DATE, number);
+            resultTimeLong = FechasUtils.getDaysBetweenDates(new Date(), endCalendar.getTime());
+            if(resultTimeLong.longValue() == 1){
+                resultaTimeString = map.get(StringUtils.falta_un_dia_);
+            } else {
+                resultaTimeString = map.get(StringUtils.faltan_) + " " + resultTimeLong + " " + map.get(StringUtils.dias_);
+            }
+        }
+        if (selectedTimeRange.equals(map.get(StringUtils.SEMANAS))){
+            endCalendar.add(Calendar.DATE, number * 7);
+            resultTimeLong = FechasUtils.getDaysBetweenDates(new Date(), endCalendar.getTime());
+            resultTimeLong = new Double(resultTimeLong / 7).longValue();
+            if(resultTimeLong.longValue() == 1){
+                resultaTimeString = map.get(StringUtils.faltan_una_semana_);
+            } else {
+                resultaTimeString = map.get(StringUtils.faltan_) + " " + resultTimeLong + " " + map.get(StringUtils.semanas_);
+            }
+        }
+        String endDateText = map.get(StringUtils.fecha_final_) + simpleDateFormat.format(endCalendar.getTime());
         return new FechasBean(endDateText, resultaTimeString, endCalendar);
     }
 }

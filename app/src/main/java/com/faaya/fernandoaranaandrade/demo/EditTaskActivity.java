@@ -218,11 +218,12 @@ public class EditTaskActivity extends AppCompatActivity {
 
     public void delete(View view) {
         FragmentManager fm = getSupportFragmentManager();
-        EditNameDialogFragment editNameDialogFragment = EditNameDialogFragment.newInstance(" Eliminar definitivamente ");
-        editNameDialogFragment.setAlgo(new OkAction() {
+        EditNameDialogFragment editNameDialogFragment = EditNameDialogFragment.newInstance(getString(R.string.eliminar_definitivamente));
+        editNameDialogFragment.setOkAction(new OkAction() {
             @Override
             public void doAction() {
                 queries.deleteTask(taskApp.getId());
+                queries.deleteNotificationByIdTask(taskApp.getId());
                 exit();
             }
         });
@@ -370,6 +371,10 @@ public class EditTaskActivity extends AppCompatActivity {
                 taskApp.setDateNotification(queries.getValueByProperty(SettingsEnum.DATE_NOTIFICATION));
             } else {
                 taskApp = queries.getByIdTask(id);
+                if(taskApp == null){ //tarea eliminada (posiblemente viene de una notificacion)
+                    showMessage(getString(R.string.notExitTask));
+                    exit();
+                }
             }
             Serializable serializable = intent.getSerializableExtra(TaskEnum.END_DAY.toString());
             if (serializable != null) {

@@ -62,7 +62,7 @@ public class EditNameDialogFragment extends DialogFragment {
                 WindowManager.LayoutParams.SCREEN_BRIGHTNESS_CHANGED);
     }
 
-    public void setAlgo(OkAction okAction) {
+    public void setOkAction(OkAction okAction) {
         this.okAction = okAction;
     }
 }

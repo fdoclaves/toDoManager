@@ -9,11 +9,9 @@ import android.widget.AdapterView;
 import android.widget.CalendarView;
 import android.widget.ListView;
 
-import com.faaya.fernandoaranaandrade.demo.Beans.Proyect;
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskApp;
-import com.faaya.fernandoaranaandrade.demo.Beans.TaskAppAdapter;
+import com.faaya.fernandoaranaandrade.demo.adapters.TaskAppAdapter;
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskEnum;
-import com.faaya.fernandoaranaandrade.demo.Beans.TaskType;
 import com.faaya.fernandoaranaandrade.demo.database.Queries;
 
 import java.util.ArrayList;

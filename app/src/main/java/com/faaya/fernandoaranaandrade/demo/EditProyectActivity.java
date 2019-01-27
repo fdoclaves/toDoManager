@@ -22,6 +22,7 @@ import com.faaya.fernandoaranaandrade.demo.Beans.TaskEnum;
 import com.faaya.fernandoaranaandrade.demo.database.Queries;
 import com.faaya.fernandoaranaandrade.demo.utils.FechasBean;
 import com.faaya.fernandoaranaandrade.demo.utils.FechasUtils;
+import com.faaya.fernandoaranaandrade.demo.utils.StringUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -109,17 +110,17 @@ public class EditProyectActivity extends AppCompatActivity {
             String statEditable = startEditButton.getText().toString();
             if (timeEditable != null && !timeEditable.toString().isEmpty() && statEditable != null && statEditable.matches(DATE_REGEX)) {
                 String timeString = timeEditable.toString();
-                FechasBean fechaBean = FechasUtils.getFechasBean(simpleDateFormat.parse(statEditable), Integer.parseInt(timeString), (String) rageSpinner.getSelectedItem());
+                FechasBean fechaBean = FechasUtils.getFechasBean(simpleDateFormat.parse(statEditable), Integer.parseInt(timeString), (String) rageSpinner.getSelectedItem(), StringUtils.getMap(this));
                 endTextView.setText(fechaBean.getEndDateText());
                 resultTextView.setText(fechaBean.getResultaTimeString());
                 if(fechaBean.getEndCalendar().getTime().before(new Date())){
                     resultTextView.setTextColor(Color.RED);
-                    resultTextView.setText("TIEMPO FINALIZADO");
+                    resultTextView.setText(getString(R.string.tiempo_finalizado));
                 } else {
                     resultTextView.setTextColor(Color.GRAY);
                 }
             } else {
-                endTextView.setText("Fecha final: " + "--/--/----");
+                endTextView.setText(getString(R.string.fecha_final) + "--/--/----");
                 resultTextView.setText("");
             }
         } catch (ParseException e) {
@@ -162,16 +163,14 @@ public class EditProyectActivity extends AppCompatActivity {
         if (isNew()) {
             rageSpinner.setSelection(0);
         } else {
-            switch (proyect.getRange()) {
-                case FechasUtils.MESES:
-                    rageSpinner.setSelection(2);
-                    break;
-                case FechasUtils.DIAS:
-                    rageSpinner.setSelection(1);
-                    break;
-                case FechasUtils.SEMANAS:
-                    rageSpinner.setSelection(0);
-                    break;
+            if(proyect.getRange().equals(getString(R.string.MESES))){
+                rageSpinner.setSelection(2);
+            }
+            if(proyect.getRange().equals(getString(R.string.DIAS))){
+                rageSpinner.setSelection(1);
+            }
+            if(proyect.getRange().equals(getString(R.string.SEMANAS))){
+                rageSpinner.setSelection(0);
             }
         }
     }
@@ -190,7 +189,7 @@ public class EditProyectActivity extends AppCompatActivity {
     }
 
     private void fillSpinner() {
-        String[] rageValues = {FechasUtils.SEMANAS, FechasUtils.DIAS, FechasUtils.MESES};
+        String[] rageValues = {getString(R.string.SEMANAS), getString(R.string.DIAS), getString(R.string.MESES)};
         ArrayAdapter<String> rages = new ArrayAdapter<String>(this, R.layout.spinner24, rageValues);
         rageSpinner.setAdapter(rages);
         rageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -212,7 +211,7 @@ public class EditProyectActivity extends AppCompatActivity {
             if (isCorrectData()) {
                 fillProyectData();
                 queries.saveOrUpdateProyect(proyect);
-                showMessage("Proyecto guardado");
+                showMessage(getString(R.string.proyectoGuardado));
                 exit();
             }
         } catch (ParseException e) {
@@ -263,9 +262,10 @@ public class EditProyectActivity extends AppCompatActivity {
     public void delete(View view) {
         FragmentManager fm = getSupportFragmentManager();
         EditNameDialogFragment editNameDialogFragment = EditNameDialogFragment.newInstance(" Se eliminarán todos las tareas relacioandas a este proyecto ");
-        editNameDialogFragment.setAlgo(new OkAction() {
+        editNameDialogFragment.setOkAction(new OkAction() {
             @Override
             public void doAction() {
+                queries.deleteNotificationsByIdProyect(proyect.getId());
                 queries.deleteProyect(proyect.getId());
                 queries.deleteTasksByIdProyect(proyect.getId());
                 exit();
@@ -285,7 +285,7 @@ public class EditProyectActivity extends AppCompatActivity {
             if (isCorrectData()) {
                 fillProyectData();
                 proyect = queries.saveProyect(proyect);
-                showMessage("Proyecto guardado");
+                showMessage(getString(R.string.proyectoGuardado));
             } else {
                 return;
             }

@@ -1,4 +1,4 @@
-package com.faaya.fernandoaranaandrade.demo.Beans;
+package com.faaya.fernandoaranaandrade.demo.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -12,6 +12,10 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.faaya.fernandoaranaandrade.demo.Beans.DateColor;
+import com.faaya.fernandoaranaandrade.demo.Beans.Proyect;
+import com.faaya.fernandoaranaandrade.demo.Beans.SettingsEnum;
+import com.faaya.fernandoaranaandrade.demo.Beans.TaskApp;
 import com.faaya.fernandoaranaandrade.demo.R;
 import com.faaya.fernandoaranaandrade.demo.database.Queries;
 
@@ -36,12 +40,14 @@ public class TaskAppAdapter extends ArrayAdapter<TaskApp> {
     private static int RED_R = Color.argb(100, 186, 32, 37);
     private static int YELLOW_R = Color.argb(100, 172, 148, 49);
     private static int GREEN_R = Color.argb(100, 0, 133, 119);
+    private String fecha_estimada;
 
     public TaskAppAdapter(Context context, List<TaskApp> values) {
         super(context, -1, values);
         this.context = context;
         this.values = values;
         this.queries = new Queries(context);
+        this.fecha_estimada = context.getString(R.string.fecha_estimada);
     }
 
     @Override
@@ -61,7 +67,7 @@ public class TaskAppAdapter extends ArrayAdapter<TaskApp> {
         spanString.setSpan(new StyleSpan(Typeface.BOLD), 0, spanString.length(), 0);
         nameTextView.setText(spanString);
         Date endDate = new Date(taskApp.getDateEnd());
-        startTextView.setText("Fecha estimada: " + simpleDateFormat.format(endDate));
+        startTextView.setText(fecha_estimada + simpleDateFormat.format(endDate));
         typeTextView.setText(queries.getTaskTypeById(taskApp.getIdType()).getName().toUpperCase());
         Proyect proyect = queries.getByIdProyect(taskApp.getProyectId());
         proyectTextView.setText(proyect.getName().toUpperCase());
@@ -102,6 +108,7 @@ public class TaskAppAdapter extends ArrayAdapter<TaskApp> {
         dateColors.add(new DateColor(taskApp.getOrangeSemaforo(), endDate, ORANGE));
         dateColors.add(new DateColor(taskApp.getRedSemaforo(), endDate, RED));
         for (DateColor dateColor : dateColors) {
+            //System.out.println("priority:"+priority + "show:" + dateColor.show() + ",semaforo:" + dateColor.getSemaforo()+", prioriy" + dateColor.getPriority());
             if (dateColor.show() && dateColor.getPriority() <= priority) {
                 color = dateColor.getColor();
                 priority = dateColor.getPriority();

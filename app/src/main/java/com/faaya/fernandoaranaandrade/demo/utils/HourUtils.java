@@ -14,7 +14,6 @@ public class HourUtils {
         Date date = new Date();
         try {
             date = simpleDateFormat.parse(text);
-            System.out.println("da" + date);
         } catch (ParseException e) {
             e.printStackTrace();
         }

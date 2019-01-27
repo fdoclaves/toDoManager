@@ -66,4 +66,23 @@
     <string name="notificationSettings">Configurar notificaciones</string>
     <string name="notificationsActive">Activar notificaciones: </string>
     <string name="pendientesDelDia">Pendientes del día:</string>
+    <string name="refresh">Refrescar</string>
+    <string name="notExitTask">La tarea ha sido eliminada con anterioridad</string>
+    <string name="snoozeAction">Recordar después</string>
+    <string name="tiempo_finalizado">TIEMPO FINALIZADO</string>
+    <string name="fecha_estimada">Fecha estimada: </string>
+    <string name="faltan_">Faltan</string>
+    <string name="semanas_"> semanas</string>
+    <string name="faltan_una_semana_">Falta una semana</string>
+    <string name="fecha_final">Fecha final: </string>
+    <string name="falta_un_dia_">Falta un día</string>
+    <string name="dias_"> días</string>
+    <string name="fata_un_mes_">Falta un mes</string>
+    <string name="meses_"> meses</string>
+    <string name="SEMANAS">semanas</string>
+    <string name="DIAS">días</string>
+    <string name="MESES">meses</string>
+    <string name="eliminar_definitivamente"> Eliminar definitivamente </string>
+    <string name="proyectoGuardado">Proyecto guardado</string>
+
 </resources>

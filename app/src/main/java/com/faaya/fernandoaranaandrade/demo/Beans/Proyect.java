@@ -2,7 +2,9 @@ package com.faaya.fernandoaranaandrade.demo.Beans;
 
 import android.database.Cursor;
 
-public class Proyect {
+import java.io.Serializable;
+
+public class Proyect implements Serializable {
 
     private Long id;
     private String name;

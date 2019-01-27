@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.faaya.fernandoaranaandrade.demo.Beans.SettingsEnum;
+import com.faaya.fernandoaranaandrade.demo.R;
 
 public class DataBase extends SQLiteOpenHelper {
 
@@ -44,10 +45,14 @@ public class DataBase extends SQLiteOpenHelper {
     String taskTypeTable = "CREATE TABLE TASK_TYPE(ID INTEGER PRIMARY KEY AUTOINCREMENT, NAME TEXT)";
 
     String notificationsTable = "CREATE TABLE NOTIFICATIONS(DATE_NOTIFICATION INT, ID_TASK INT)";
+    private String task1;
+    private String task2;
 
 
     public DataBase(Context context,String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
+        task1 = context.getString(R.string.pendientes);
+        task2 = context.getString(R.string.activities);
     }
 
     @Override
@@ -57,8 +62,8 @@ public class DataBase extends SQLiteOpenHelper {
         db.execSQL(settingsTable);
         db.execSQL(taskTypeTable);
         db.execSQL(notificationsTable);
-        db.execSQL("INSERT INTO TASK_TYPE(NAME) VALUES ('ACTIVIDAD')");
-        db.execSQL("INSERT INTO TASK_TYPE(NAME) VALUES ('PENDIENTE')");
+        db.execSQL("INSERT INTO TASK_TYPE(NAME) VALUES ('" + task1 + "')");
+        db.execSQL("INSERT INTO TASK_TYPE(NAME) VALUES ('" + task2 + "')");
         db.execSQL("INSERT INTO SETTINGS(KEYWORD,VALUE) VALUES ('" + SettingsEnum.WHITE_SEMAFORO.toString() +"','10-DB')");
         db.execSQL("INSERT INTO SETTINGS(KEYWORD,VALUE) VALUES ('" + SettingsEnum.YELLOW_SEMAFORO.toString() +"','5-DB')");
         db.execSQL("INSERT INTO SETTINGS(KEYWORD,VALUE) VALUES ('" + SettingsEnum.ORANGE_SEMAFORO.toString() +"','3-DB')");

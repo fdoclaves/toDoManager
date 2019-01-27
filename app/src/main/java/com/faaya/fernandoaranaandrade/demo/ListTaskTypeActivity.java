@@ -10,7 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskType;
-import com.faaya.fernandoaranaandrade.demo.Beans.TaskTypeAdapter;
+import com.faaya.fernandoaranaandrade.demo.adapters.TaskTypeAdapter;
 import com.faaya.fernandoaranaandrade.demo.database.Queries;
 
 import java.util.List;
@@ -40,11 +40,13 @@ public class ListTaskTypeActivity extends AppCompatActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
                 FragmentManager fm = getSupportFragmentManager();
                 EditNameDialogFragment editNameDialogFragment = EditNameDialogFragment.newInstance(" Se eliminaran TODAS la tareas de este tipo ");
-                editNameDialogFragment.setAlgo(new OkAction() {
+                editNameDialogFragment.setOkAction(new OkAction() {
                     @Override
                     public void doAction() {
-                        queries.deleteTaskType(allTaskTypes.get(position).getId());
-                        queries.deleteTaskByTaskType(allTaskTypes.get(position).getId());
+                        Long idTaskType = allTaskTypes.get(position).getId();
+                        queries.deleteNotificationByTaskType(idTaskType);
+                        queries.deleteTaskType(idTaskType);
+                        queries.deleteTaskByTaskType(idTaskType);
                         allTaskTypes = queries.getAllTaskTypes();
                         fillList(allTaskTypes);
                     }

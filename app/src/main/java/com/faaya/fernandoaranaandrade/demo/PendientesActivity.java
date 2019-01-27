@@ -12,7 +12,7 @@ import android.widget.ListView;
 import android.widget.Switch;
 
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskApp;
-import com.faaya.fernandoaranaandrade.demo.Beans.TaskAppAdapter;
+import com.faaya.fernandoaranaandrade.demo.adapters.TaskAppAdapter;
 import com.faaya.fernandoaranaandrade.demo.database.Queries;
 
 import java.util.ArrayList;
@@ -56,11 +56,13 @@ public class PendientesActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
                 FragmentManager fm = getSupportFragmentManager();
-                EditNameDialogFragment editNameDialogFragment = EditNameDialogFragment.newInstance(" Eliminar definitivamente ");
-                editNameDialogFragment.setAlgo(new OkAction() {
+                EditNameDialogFragment editNameDialogFragment = EditNameDialogFragment.newInstance(getString(R.string.eliminar_definitivamente));
+                editNameDialogFragment.setOkAction(new OkAction() {
                     @Override
                     public void doAction() {
-                        queries.deleteTask(taskToday.get(position).getId());
+                        Long idTask = taskToday.get(position).getId();
+                        queries.deleteTask(idTask);
+                        queries.deleteNotificationByIdTask(idTask);
                         filter();
                     }
                 });
@@ -76,7 +78,7 @@ public class PendientesActivity extends AppCompatActivity {
     private void filter() {
         List<TaskApp> allTask;
         if(aSwitch.isChecked()){
-            allTask = queries.selectTaskByIdProyectEndDateAndType(null, getStartDate(), getEndDate(), null);
+            allTask = queries.selectTaskByIdProyectEndDateAndType(null, getStartDate(), getEndDate(), null, true);
         } else {
             allTask = queries.getAllPendientesTask(getStartDate());
         }

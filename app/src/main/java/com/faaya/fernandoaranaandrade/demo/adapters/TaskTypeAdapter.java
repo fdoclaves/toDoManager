@@ -1,20 +1,14 @@
-package com.faaya.fernandoaranaandrade.demo.Beans;
+package com.faaya.fernandoaranaandrade.demo.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.faaya.fernandoaranaandrade.demo.Beans.TaskType;
 import com.faaya.fernandoaranaandrade.demo.R;
-import com.faaya.fernandoaranaandrade.demo.utils.FechasBean;
-import com.faaya.fernandoaranaandrade.demo.utils.FechasUtils;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 public class TaskTypeAdapter extends ArrayAdapter<TaskType> {

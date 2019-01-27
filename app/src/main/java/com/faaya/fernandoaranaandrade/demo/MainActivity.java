@@ -20,7 +20,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.faaya.fernandoaranaandrade.demo.Beans.Proyect;
-import com.faaya.fernandoaranaandrade.demo.Beans.ProyectAdapter;
+import com.faaya.fernandoaranaandrade.demo.Beans.TaskEnum;
+import com.faaya.fernandoaranaandrade.demo.adapters.ProyectAdapter;
 import com.faaya.fernandoaranaandrade.demo.database.Queries;
 import com.faaya.fernandoaranaandrade.demo.notifications.Util;
 
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity
 
     private void loadNotificationService() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            System.out.println("entre");
+            System.out.println("Agendando Job...");
             Util.scheduleJob(this);
         }
     }
@@ -81,7 +82,6 @@ public class MainActivity extends AppCompatActivity
                 //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
         });
-        System.out.println("Cargando...");
         proyects = queries.getAllProyects();
         final ListView listView = findViewById(R.id.main_list_all);
         fillList(proyects, listView);
@@ -96,11 +96,13 @@ public class MainActivity extends AppCompatActivity
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
                 FragmentManager fm = getSupportFragmentManager();
                 EditNameDialogFragment editNameDialogFragment = EditNameDialogFragment.newInstance(" Se eliminarán todos las tareas relacioandas a este proyecto ");
-                editNameDialogFragment.setAlgo(new OkAction() {
+                editNameDialogFragment.setOkAction(new OkAction() {
                     @Override
                     public void doAction() {
-                        queries.deleteProyect(proyects.get(position).getId());
-                        queries.deleteTasksByIdProyect(proyects.get(position).getId());
+                        Long idProyect = proyects.get(position).getId();
+                        queries.deleteNotificationsByIdProyect(idProyect);
+                        queries.deleteProyect(idProyect);
+                        queries.deleteTasksByIdProyect(idProyect);
                         proyects = queries.getAllProyects();
                         fillList(proyects, listView);
                     }
@@ -162,7 +164,7 @@ public class MainActivity extends AppCompatActivity
     private void exit() {
         FragmentManager fm = getSupportFragmentManager();
         EditNameDialogFragment editNameDialogFragment = EditNameDialogFragment.newInstance("Salir definitivamente");
-        editNameDialogFragment.setAlgo(new OkAction() {
+        editNameDialogFragment.setOkAction(new OkAction() {
             @Override
             public void doAction() {
                 System.exit(0);
@@ -183,6 +185,7 @@ public class MainActivity extends AppCompatActivity
             goToSettings();
         } else if (id == R.id.nav_all_task) {
             Intent intent = new Intent(this, AllTasksActivity.class);
+            intent.putExtra(TaskEnum.RANGO_TIEMPO.toString(), TaskEnum.HOY.toString());
             startActivity(intent);
         } else if (id == R.id.nav_goals) {
             Intent intent = new Intent(this, PendientesActivity.class);

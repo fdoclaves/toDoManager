@@ -12,6 +12,7 @@ public class DateColor {
     private final Date endDay;
     private final Date today = new Date();
     private int count;
+    private int type;
 
     public DateColor(String semaforo, Date endDate, int color) {
         this.color = color;
@@ -25,12 +26,15 @@ public class DateColor {
         Calendar endCalendar = Calendar.getInstance();
         endCalendar.setTime(endDate);
         if (semaforo.contains("D")) {
+            type = Calendar.DATE;
             endCalendar.add(Calendar.DATE, count);
         }
         if (semaforo.contains("W")) {
+            type = Calendar.WEEK_OF_MONTH;
             endCalendar.add(Calendar.DATE, count * 7);
         }
         if (semaforo.contains("M")) {
+            type = Calendar.MONTH;
             endCalendar.add(Calendar.MONTH, count);
         }
         endDay = endCalendar.getTime();
@@ -46,10 +50,26 @@ public class DateColor {
     }
 
     public int getPriority() {
-        if (before) {
-            return count * -1;
+        int priority = count * -1;
+        if(type == Calendar.WEEK_OF_MONTH){
+            priority = priority * 7;
         }
-        return count;
+        if(type == Calendar.MONTH){
+            priority = getMonthPriority();
+        }
+        return priority;
+    }
+
+    private int getMonthPriority() {
+        long startTime = new Date().getTime();
+        long endTime = endDay.getTime();
+        long diffTime = endTime - startTime;
+        Long diffDays = diffTime / (1000 * 60 * 60 * 24);
+        int priority = diffDays.intValue();
+        if(!before){
+            priority = priority * -1;
+        }
+        return priority;
     }
 
     public boolean isOff() {

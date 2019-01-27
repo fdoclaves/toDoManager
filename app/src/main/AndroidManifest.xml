@@ -94,7 +94,7 @@
             android:name=".notifications.NotificationServiceUpgrade"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
-        <receiver android:name=".notifications.NotificationServiceReceiver">
+        <receiver android:name=".notifications.NotificationServiceBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
@@ -115,10 +115,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.faaya.fernandoaranaandrade.demo.ListTaskTypeActivity" />
         </activity>
-        <activity android:name=".PendientesActivity" android:label="@string/pendientes">
+        <activity
+            android:name=".PendientesActivity"
+            android:label="@string/pendientes">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.faaya.fernandoaranaandrade.demo.MainActivity" />
+        </activity>
+        <activity android:name=".MonitorActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.faaya.fernandoaranaandrade.demo.AboutMeActivity" />
         </activity>
     </application>
 

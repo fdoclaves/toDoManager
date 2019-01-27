@@ -182,6 +182,10 @@ public class Queries {
     }
 
     public List<TaskApp> selectTaskByIdProyectEndDateAndType(Long idProyect, Long endRangeDateStart, Long endRangeDateFinish, Long idTaskType) {
+        return selectTaskByIdProyectEndDateAndType(idProyect, endRangeDateStart, endRangeDateFinish, idTaskType, false);
+    }
+
+    public List<TaskApp> selectTaskByIdProyectEndDateAndType(Long idProyect, Long endRangeDateStart, Long endRangeDateFinish, Long idTaskType, boolean onlyPendientes) {
         StringBuffer query = new StringBuffer("SELECT * FROM " + DataBase.TASK_TABLE);
         List<String> values = new ArrayList<>();
         if (idProyect != null || endRangeDateStart != null || idTaskType != null || endRangeDateFinish != null) {
@@ -211,6 +215,12 @@ public class Queries {
             }
             query.append(DataBase.ID_TYPE + " = ?");
             values.add(idTaskType.toString());
+        }
+        if(onlyPendientes){
+            if (values.size() != 0) {
+                query.append(" AND ");
+            }
+            query.append(DataBase.REAL_DATE + " is null");
         }
         System.out.println(query);
         String[] valueArray = new String[values.size()];
@@ -330,11 +340,11 @@ public class Queries {
         }
     }
 
-    private boolean isDateValid(final Long time){
-       return new Date(time).after(new Date());
+    private boolean isDateValid(final Long time) {
+        return new Date(time).after(new Date());
     }
 
-    private void insertNotifications(NotificationsApp notificationsApp) {
+    public void insertNotifications(NotificationsApp notificationsApp) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(DataBase.DATE_NOTIFICATION, notificationsApp.getDate());
         contentValues.put(DataBase.ID_TASK, notificationsApp.getIdTask());
@@ -356,12 +366,8 @@ public class Queries {
         return sqLiteDatabase.delete(DataBase.NOTIFICATIONS_TABLE, "ID_TASK = ?", ids);
     }
 
-    public NotificationsApp getNotificationToShow(Long time) {
-        List<NotificationsApp> notificationsApps = selectNotificationsApp("SELECT * FROM " + DataBase.NOTIFICATIONS_TABLE + " WHERE " + DataBase.DATE_NOTIFICATION + " < ?", time.toString());
-        if (notificationsApps.size() == 0) {
-            return null;
-        }
-        return notificationsApps.get(0);
+    public List<NotificationsApp> getNotificationToShow(Long time) {
+        return selectNotificationsApp("SELECT * FROM " + DataBase.NOTIFICATIONS_TABLE + " WHERE " + DataBase.DATE_NOTIFICATION + " < ?", time.toString());
     }
 
     public List<NotificationsApp> getAllNotification() {
@@ -378,5 +384,27 @@ public class Queries {
             } while (cursor.moveToNext());
         }
         return notificationsApps;
+    }
+
+    public void deleteNotificationsByIdProyect(Long id) {
+        for (TaskApp taskApp : getTaskAppsByIdProyect(id)) {
+            deleteNotificationByIdTask(taskApp.getId());
+        }
+    }
+
+    @NonNull
+    private List<TaskApp> getTaskAppsByIdProyect(Long id) {
+        return selectTask("SELECT * FROM " + DataBase.TASK_TABLE + " WHERE " + DataBase.ID_PROYECT + " = ?", id.toString());
+    }
+
+    public void deleteNotificationByTaskType(Long idTaskType) {
+        for (TaskApp taskApp : getTaskAppsByIdType(idTaskType)) {
+            deleteNotificationByIdTask(taskApp.getId());
+        }
+    }
+
+    @NonNull
+    private List<TaskApp> getTaskAppsByIdType(Long idTaskType) {
+        return selectTask("SELECT * FROM " + DataBase.TASK_TABLE + " WHERE " + DataBase.ID_TYPE + " = ?", idTaskType.toString());
     }
 }
