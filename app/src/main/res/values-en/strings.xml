@@ -73,7 +73,7 @@
     <string name="proyectoGuardado">Saved proyect</string>
     <string name="eliminar_definitivamente">Delete</string>
     <string name="tiempo_finalizado">TIME IS UP</string>
-    <string name="snoozeAction">Remember after</string>
+    <string name="snoozeAction">Remember later</string>
     <string name="faltan">" "</string>
     <string name="faltan_una_semana_">One week left</string>
     <string name="falta_un_dia">One day left</string>
