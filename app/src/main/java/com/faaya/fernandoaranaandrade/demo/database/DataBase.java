@@ -72,6 +72,7 @@ public class DataBase extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO SETTINGS(KEYWORD,VALUE) VALUES ('" + SettingsEnum.REAL_SEMAFORO.toString() +"','" + SettingsEnum.VERDE.toString() +"')");
         db.execSQL("INSERT INTO SETTINGS(KEYWORD,VALUE) VALUES ('" + SettingsEnum.ACTIVE_NOTIFICTION.toString() +"','" + SettingsEnum.ON.toString() +"')");
         db.execSQL("INSERT INTO SETTINGS(KEYWORD,VALUE) VALUES ('" + SettingsEnum.DATE_NOTIFICATION.toString() +"','09:00 AM')");
+        db.execSQL("INSERT INTO SETTINGS(KEYWORD,VALUE) VALUES ('" + SettingsEnum.TIME_SNOOZE.toString() +"','15M')");
     }
 
     @Override
@@ -83,6 +84,8 @@ public class DataBase extends SQLiteOpenHelper {
                 db.execSQL("ALTER TABLE TASKS ADD COLUMN ACTIVE_NOTIFICATION TEXT DEFAULT '" + SettingsEnum.ON.toString() + "'");
                 db.execSQL("ALTER TABLE TASKS ADD COLUMN DATE_NOTIFICATION TEXT DEFAULT '09:00 AM'");
                 db.execSQL(notificationsTable);
+            case 2:
+                db.execSQL("INSERT INTO SETTINGS(KEYWORD,VALUE) VALUES ('" + SettingsEnum.TIME_SNOOZE.toString() +"','15M')");
         }
     }
 }

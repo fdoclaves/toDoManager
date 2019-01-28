@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.faaya.fernandoaranaandrade.demo.Beans.NotificationsApp;
+import com.faaya.fernandoaranaandrade.demo.Beans.SettingsEnum;
 import com.faaya.fernandoaranaandrade.demo.database.Queries;
 
 import java.util.Calendar;
@@ -23,7 +24,8 @@ public class NotificationServiceBroadcastReceiver extends BroadcastReceiver {
             Long idTask = null;
             try {
                 idTask = intent.getLongExtra(ID_TASK, 0);
-                new Queries(context).insertNotifications(new NotificationsApp(getNewDate(), idTask));
+                Queries queries = new Queries(context);
+                queries.insertNotifications(new NotificationsApp(getNewDate(queries), idTask));
             } catch (Exception e) {
                 Log.e("RECEIVER", "Error:", e);
             } finally {
@@ -41,9 +43,15 @@ public class NotificationServiceBroadcastReceiver extends BroadcastReceiver {
         }
     }
 
-    private Long getNewDate() {
+    private Long getNewDate(Queries queries) {
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MINUTE, 1);
+        String timeSnooze = queries.getValueByProperty(SettingsEnum.TIME_SNOOZE);
+        int field = Calendar.MINUTE;
+        if(timeSnooze.contains("H")){
+            field = Calendar.HOUR;
+        }
+        String stringWait = timeSnooze.replace("M","").replace("H","");
+        calendar.add(field, Integer.parseInt(stringWait));
         return calendar.getTimeInMillis();
     }
 

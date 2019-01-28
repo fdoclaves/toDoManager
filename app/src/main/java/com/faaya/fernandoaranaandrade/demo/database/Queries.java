@@ -25,7 +25,7 @@ public class Queries {
     private SQLiteDatabase sqLiteDatabase;
 
     public Queries(Context context) {
-        DataBase dataBase = new DataBase(context, DataBase.SCHEMA, null, 2);
+        DataBase dataBase = new DataBase(context, DataBase.SCHEMA, null, 3);
         sqLiteDatabase = dataBase.getWritableDatabase();
     }
 

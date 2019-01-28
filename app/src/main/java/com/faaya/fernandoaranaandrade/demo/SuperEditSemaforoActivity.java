@@ -95,19 +95,19 @@ public abstract class SuperEditSemaforoActivity extends AppCompatActivity {
 
     protected boolean check() {
         if (editTextRed.getText() == null || editTextRed.getText().toString().isEmpty()) {
-            showMessage("Falta la cantidad para el color rojo");
+            showMessage(getString(R.string.falta_la_cantidad_para_el_color) + " " + getString(R.string.red));
             return false;
         }
         if (editTextOrange.getText() == null || editTextOrange.getText().toString().isEmpty()) {
-            showMessage("Falta la cantidad para el color naranja");
+            showMessage(getString(R.string.falta_la_cantidad_para_el_color) + " " + getString(R.string.orange));
             return false;
         }
         if (editTextYellow.getText() == null || editTextYellow.getText().toString().isEmpty()) {
-            showMessage("Falta la cantidad para el color amarillo");
+            showMessage(getString(R.string.falta_la_cantidad_para_el_color) + " " + getString(R.string.yellow));
             return false;
         }
         if (editTextWhite.getText() == null || editTextWhite.getText().toString().isEmpty()) {
-            showMessage("Falta la cantidad para el color verde");
+            showMessage(getString(R.string.falta_la_cantidad_para_el_color) + " " + getString(R.string.green));
             return false;
         }
         return true;

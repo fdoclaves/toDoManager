@@ -234,7 +234,7 @@ public class EditTaskActivity extends AppCompatActivity {
         try {
             if (isCorrectData()) {
                 saveData();
-                showMessage("Tarea " + taskApp.getName().toUpperCase() + " guardada");
+                showMessage(getString(R.string.Tarea) + " " + taskApp.getName().toUpperCase() + " " + getString(R.string.guardada));
                 exit();
             }
         } catch (ParseException e) {
@@ -310,19 +310,19 @@ public class EditTaskActivity extends AppCompatActivity {
 
     private boolean isCorrectData() {
         if (typesSpinner.getSelectedItem() == null || typesSpinner.getSelectedItem().toString().isEmpty()) {
-            showMessage("No se ha seleccionado un tipo de tarea");
+            showMessage(getString(R.string.No_se_ha_seleccionado_un_tipo_de_tarea));
             return false;
         }
         if (proyectSpinner.getSelectedItem() == null || ((Proyect) proyectSpinner.getSelectedItem()).getName().isEmpty()) {
-            showMessage("No se ha seleccionado un proyecto");
+            showMessage(getString(R.string.No_se_ha_seleccionado_un_proyecto));
             return false;
         }
         if (nameTaskEditText.getText() == null || nameTaskEditText.getText().toString().isEmpty()) {
-            showMessage("El Nombre no puede estar vacio");
+            showMessage(getString(R.string.El_nombre_no_puede_estar_vacio));
             return false;
         }
         if (!isValidDate(dateEndTaskButton)) {
-            showMessage("No se a configurado la fecha estimada");
+            showMessage(getString(R.string.No_se_a_configurado_la_fecha_estimada));
             return false;
         }
         return true;
@@ -421,12 +421,14 @@ public class EditTaskActivity extends AppCompatActivity {
     public void edit_semaforo(View view) {
         Intent intent = new Intent(this, EditSemaforoTaskActivity.class);
         intent.putExtra(EditSemaforoTaskActivity.TASK, taskApp);
+        fillIBackIntent(intent);
         startActivity(intent);
     }
 
     public void edit_notification(View view) {
         Intent intent = new Intent(this, NotificationsSettingsTaskActivity.class);
         intent.putExtra(NotificationsSettingsTaskActivity.TASK, taskApp);
+        fillIBackIntent(intent);
         startActivity(intent);
     }
 

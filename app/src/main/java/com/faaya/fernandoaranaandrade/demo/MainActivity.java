@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity
 
     private void exit() {
         FragmentManager fm = getSupportFragmentManager();
-        EditNameDialogFragment editNameDialogFragment = EditNameDialogFragment.newInstance("Salir definitivamente");
+        EditNameDialogFragment editNameDialogFragment = EditNameDialogFragment.newInstance(getString(R.string.salir_definitivamente));
         editNameDialogFragment.setOkAction(new OkAction() {
             @Override
             public void doAction() {
@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity
             goToSettings();
         } else if (id == R.id.nav_all_task) {
             Intent intent = new Intent(this, AllTasksActivity.class);
-            intent.putExtra(TaskEnum.RANGO_TIEMPO.toString(), TaskEnum.HOY.toString());
+            intent.putExtra(TaskEnum.RANGO_TIEMPO.toString(), getString(R.string.HOY));
             startActivity(intent);
         } else if (id == R.id.nav_goals) {
             Intent intent = new Intent(this, PendientesActivity.class);

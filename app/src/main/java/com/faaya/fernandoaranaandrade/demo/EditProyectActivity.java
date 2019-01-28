@@ -229,23 +229,23 @@ public class EditProyectActivity extends AppCompatActivity {
 
     private boolean isCorrectData() {
         if (rageSpinner.getSelectedItem() == null) {
-            showMessage("El rango es inválido");
+            showMessage(getString(R.string.El_rango_es_inválido));
             return false;
         }
         if (startEditButton.getText() == null || startEditButton.getText().toString().isEmpty()) {
-            showMessage("La fecha no puede estar vacia");
+            showMessage(getString(R.string.La_fecha_novpuede_estar_vacia));
             return false;
         }
         if (obraNameEditText.getText() == null || obraNameEditText.getText().toString().isEmpty()) {
-            showMessage("El nombre no puede estar vacio");
+            showMessage(getString(R.string.El_nombre_no_puede_estar_vacio));
             return false;
         }
         if (timeEditText.getText() == null || timeEditText.getText().toString().isEmpty()) {
-            showMessage("El tiempo no puede estar vacio");
+            showMessage(getString(R.string.El_tiempo_no_puede_estar_vacio));
             return false;
         }
         if (!isValidDate()) {
-            showMessage("No se ha configurado la fecha de inicio");
+            showMessage(getString(R.string.No_se_ha_configurado_la_fecha_de_inicio));
             return false;
         }
         return true;
@@ -261,7 +261,7 @@ public class EditProyectActivity extends AppCompatActivity {
 
     public void delete(View view) {
         FragmentManager fm = getSupportFragmentManager();
-        EditNameDialogFragment editNameDialogFragment = EditNameDialogFragment.newInstance(" Se eliminarán todos las tareas relacioandas a este proyecto ");
+        EditNameDialogFragment editNameDialogFragment = EditNameDialogFragment.newInstance(getString(R.string.Se_eliminarán_todos_las_tareas_relacioandas_a_este_proyecto));
         editNameDialogFragment.setOkAction(new OkAction() {
             @Override
             public void doAction() {
@@ -271,7 +271,7 @@ public class EditProyectActivity extends AppCompatActivity {
                 exit();
             }
         });
-        editNameDialogFragment.show(fm, "fragment_edit_name");
+        editNameDialogFragment.show(fm, "fragment_edit_proyect");
     }
 
     private void exit() {

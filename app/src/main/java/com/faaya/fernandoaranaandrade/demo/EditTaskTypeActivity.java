@@ -43,10 +43,10 @@ public class EditTaskTypeActivity extends AppCompatActivity {
         if (nameEditText.getText() != null && !nameEditText.getText().toString().isEmpty()) {
             taskType.setName(nameEditText.getText().toString());
             queries.saveOrUpdate(taskType);
-            showMessage("Se guardo correctamente");
+            showMessage(getString(R.string.se_guardo_correctamente));
             goToSettinsActivity();
         } else {
-            showMessage("El nombre no es válido");
+            showMessage(getString(R.string.el_nombre_no_es_valido));
         }
     }
 
@@ -56,7 +56,7 @@ public class EditTaskTypeActivity extends AppCompatActivity {
 
     public void deleteTaskType(View view) {
         FragmentManager fm = getSupportFragmentManager();
-        EditNameDialogFragment editNameDialogFragment = EditNameDialogFragment.newInstance(" Se eliminaran TODAS la tareas de este tipo ");
+        EditNameDialogFragment editNameDialogFragment = EditNameDialogFragment.newInstance(getString(R.string.se_eliminaran_TODAS_la_tareas_de_este_tipo));
         editNameDialogFragment.setOkAction(new OkAction() {
             @Override
             public void doAction() {
@@ -66,7 +66,7 @@ public class EditTaskTypeActivity extends AppCompatActivity {
                 goToSettinsActivity();
             }
         });
-        editNameDialogFragment.show(fm, "fragment_edit_name");
+        editNameDialogFragment.show(fm, "fragment_edit_task_type");
     }
 
     private void goToSettinsActivity() {

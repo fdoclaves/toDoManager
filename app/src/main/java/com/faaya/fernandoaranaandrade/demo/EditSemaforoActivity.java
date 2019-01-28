@@ -1,5 +1,6 @@
 package com.faaya.fernandoaranaandrade.demo;
 
+import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.os.Bundle;
 import android.view.View;
@@ -26,8 +27,10 @@ public class EditSemaforoActivity extends SuperEditSemaforoActivity {
                 queries.saveProperty(SettingsEnum.ACTIVE, SettingsEnum.OFF.toString());
             }
             queries.saveProperty(SettingsEnum.REAL_SEMAFORO, (String) spinnerColorReal.getSelectedItem());
-            Snackbar.make(view, "Ajustes guardados", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+            //Snackbar.make(view, "Ajustes guardados", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+            finish();
         }
     }
 

@@ -10,6 +10,7 @@ import android.widget.Spinner;
 
 import com.faaya.fernandoaranaandrade.demo.Beans.SettingsEnum;
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskApp;
+import com.faaya.fernandoaranaandrade.demo.Beans.TaskEnum;
 
 public class EditSemaforoTaskActivity extends SuperEditSemaforoActivity {
 
@@ -50,8 +51,24 @@ public class EditSemaforoTaskActivity extends SuperEditSemaforoActivity {
     private void exit() {
         Intent intent = new Intent(this, EditTaskActivity.class);
         intent.putExtra(TASK, taskApp);
+        fillIBackIntent(intent, getIntent());
         startActivity(intent);
         finish();
+    }
+
+    private void fillIBackIntent(final Intent newIntent, final Intent currentIntent) {
+        Long idTipoCurrentIntent = currentIntent.getLongExtra(TaskEnum.ID_TYPE.toString(), 0);
+        String rangoCurrentIntent = currentIntent.getStringExtra(TaskEnum.RANGO_TIEMPO.toString());
+        Long idProyectCurrentIntent = currentIntent.getLongExtra(TaskEnum.ID_PROYECT.toString(), 0);
+        if (idTipoCurrentIntent != null && idTipoCurrentIntent.longValue() != 0) {
+            newIntent.putExtra(TaskEnum.ID_TYPE.toString(), idTipoCurrentIntent);
+        }
+        if (rangoCurrentIntent != null && !rangoCurrentIntent.isEmpty()) {
+            newIntent.putExtra(TaskEnum.RANGO_TIEMPO.toString(), rangoCurrentIntent);
+        }
+        if (idProyectCurrentIntent != 0) {
+            newIntent.putExtra(TaskEnum.ID_PROYECT.toString(), idProyectCurrentIntent);
+        }
     }
 
     private String getText(Spinner spinner, EditText editText) {

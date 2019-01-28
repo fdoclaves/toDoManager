@@ -50,7 +50,7 @@ public class AllTasksActivity extends AppCompatActivity {
         typeSpinner.setAdapter(new ArrayAdapter<TaskType>(this, R.layout.spinner18, typesValues));
         proyectSpinner = findViewById(R.id.proyectsSpinnerAll);
         List<Proyect> allProyects = new ArrayList<Proyect>();
-        allProyects.add(new Proyect(TaskEnum.TODOS.toString()));
+        allProyects.add(new Proyect(getString(R.string.TODOS)));
         allProyects.addAll(queries.getAllProyects());
         proyectSpinner.setAdapter(new ArrayAdapter<Proyect>(this, R.layout.spinner18, allProyects));
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -79,7 +79,7 @@ public class AllTasksActivity extends AppCompatActivity {
         });
         proyectSpinner.setSelection(0);
         rangeTimeSpinner = findViewById(R.id.rangeTimeSpinner);
-        String[] rangeTimeValues = {TaskEnum.TODO.toString(), TaskEnum.HOY.toString(), TaskEnum.SEMANA.toString(), TaskEnum.MES.toString()};
+        String[] rangeTimeValues = {getString(R.string.TODO), getString(R.string.HOY), getString(R.string.SEMANA), getString(R.string.MES)};
         rangeTimeSpinner.setAdapter(new ArrayAdapter<String>(this, R.layout.spinner18, rangeTimeValues));
         AdapterView.OnItemSelectedListener listener = new AdapterView.OnItemSelectedListener() {
             @Override
@@ -123,16 +123,16 @@ public class AllTasksActivity extends AppCompatActivity {
         Long startRange = null;
         Long endRange = null;
         Long idTaskType = null;
-        if (!selectedProyect.getName().equals(TaskEnum.TODOS.toString())) {
+        if (!selectedProyect.getName().equals(getString(R.string.TODOS))) {
             idProyect = selectedProyect.getId();
         }
-        if (!selectedTaskType.getName().equals(TaskEnum.TODO.toString())) {
+        if (!selectedTaskType.getName().equals(getString(R.string.TODO))) {
             idTaskType = selectedTaskType.getId();
         }
-        if (!selectedRange.equals(TaskEnum.TODO.toString())) {
+        if (!selectedRange.equals(getString(R.string.TODO))) {
             startRange = getCalendarToday().getTimeInMillis();
         }
-        if(selectedRange.equals(TaskEnum.HOY.toString())){
+        if(selectedRange.equals(getString(R.string.HOY))){
             Calendar calendarEnd = Calendar.getInstance();
             calendarEnd.set(Calendar.HOUR_OF_DAY, 23);
             calendarEnd.set(Calendar.MINUTE, 59);
@@ -140,7 +140,7 @@ public class AllTasksActivity extends AppCompatActivity {
             calendarEnd.set(Calendar.MILLISECOND, 999);
             endRange = calendarEnd.getTimeInMillis();
         }
-        if(selectedRange.equals(TaskEnum.SEMANA.toString())){
+        if(selectedRange.equals(getString(R.string.SEMANA))){
             Calendar calendarEnd = Calendar.getInstance();
             calendarEnd.set(Calendar.HOUR_OF_DAY, 23);
             calendarEnd.set(Calendar.MINUTE, 59);
@@ -149,7 +149,7 @@ public class AllTasksActivity extends AppCompatActivity {
             calendarEnd.set(Calendar.DAY_OF_WEEK, calendarEnd.getActualMaximum(Calendar.DAY_OF_WEEK));
             endRange = calendarEnd.getTimeInMillis();
         }
-        if(selectedRange.equals(TaskEnum.MES.toString())){
+        if(selectedRange.equals(getString(R.string.MES))){
             Calendar calendarEnd = Calendar.getInstance();
             calendarEnd.set(Calendar.HOUR_OF_DAY, 23);
             calendarEnd.set(Calendar.MINUTE, 59);
@@ -178,10 +178,10 @@ public class AllTasksActivity extends AppCompatActivity {
     }
 
     private void fillData(Intent intent, List<TaskType> typesValues, List<Proyect> proyects, String[] rangeTimeValues) {
-        String tipo = intent.getStringExtra(TaskEnum.ID_TYPE.toString());
-        if (tipo != null && !tipo.isEmpty()) {
+        Long id = intent.getLongExtra(TaskEnum.ID_TYPE.toString(), 0);
+        if (id != 0) {
             for (int index = 0; index < typesValues.size(); index++) {
-                if (typesValues.get(index).equals(tipo)) {
+                if (typesValues.get(index).getId() != null && typesValues.get(index).getId().equals(id)) {
                     typeSpinner.setSelection(index);
                 }
             }
@@ -218,7 +218,7 @@ public class AllTasksActivity extends AppCompatActivity {
             intent.putExtra(TaskEnum.ID_TYPE.toString(), ((TaskType) typeSpinner.getSelectedItem()).getId());
         }
         Proyect proyect = (Proyect) proyectSpinner.getSelectedItem();
-        if (!proyect.getName().equals(TaskEnum.TODOS.toString())) {
+        if (!proyect.getName().equals(getString(R.string.TODOS))) {
             intent.putExtra(TaskEnum.ID_PROYECT.toString(), proyect.getId());
         }
         if (!rangeTimeSpinner.getSelectedItem().toString().equals(TaskEnum.TODO.toString())) {

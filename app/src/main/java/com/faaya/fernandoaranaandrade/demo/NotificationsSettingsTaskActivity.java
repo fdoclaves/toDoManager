@@ -7,11 +7,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 
 import com.faaya.fernandoaranaandrade.demo.Beans.SettingsEnum;
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskApp;
-import com.faaya.fernandoaranaandrade.demo.database.Queries;
+import com.faaya.fernandoaranaandrade.demo.Beans.TaskEnum;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -34,6 +35,8 @@ public class NotificationsSettingsTaskActivity extends AppCompatActivity {
         imageButton = findViewById(R.id.imageButtonNotificationSave);
         imageButton.setImageResource(R.drawable.ic_keyboard_backspace);
         imageButton.setVisibility(View.INVISIBLE);
+        LinearLayout layoutSnooze = findViewById(R.id.layoutSnooze);
+        layoutSnooze.setVisibility(View.INVISIBLE);
         hourButton = findViewById(R.id.notifacionButton);
         aSwitch = findViewById(R.id.switchNotification);
         taskApp = (TaskApp) getIntent().getSerializableExtra(TASK);
@@ -86,8 +89,24 @@ public class NotificationsSettingsTaskActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, EditTaskActivity.class);
         intent.putExtra(TASK, taskApp);
+        fillIBackIntent(intent, getIntent());
         startActivity(intent);
         finish();
+    }
+
+    private void fillIBackIntent(final Intent newIntent, final Intent currentIntent) {
+        Long idTipoCurrentIntent = currentIntent.getLongExtra(TaskEnum.ID_TYPE.toString(), 0);
+        String rangoCurrentIntent = currentIntent.getStringExtra(TaskEnum.RANGO_TIEMPO.toString());
+        Long idProyectCurrentIntent = currentIntent.getLongExtra(TaskEnum.ID_PROYECT.toString(), 0);
+        if (idTipoCurrentIntent != null && idTipoCurrentIntent.longValue() != 0) {
+            newIntent.putExtra(TaskEnum.ID_TYPE.toString(), idTipoCurrentIntent);
+        }
+        if (rangoCurrentIntent != null && !rangoCurrentIntent.isEmpty()) {
+            newIntent.putExtra(TaskEnum.RANGO_TIEMPO.toString(), rangoCurrentIntent);
+        }
+        if (idProyectCurrentIntent != 0) {
+            newIntent.putExtra(TaskEnum.ID_PROYECT.toString(), idProyectCurrentIntent);
+        }
     }
 
     @Override

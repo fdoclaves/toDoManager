@@ -25,14 +25,14 @@ public class StringUtils {
 
     public static Map<String, String> getMap(Context context){
         Map<String, String> map = new HashMap<>();
-        map.put(falta_un_dia_, context.getString(R.string.falta_un_dia_));
+        map.put(falta_un_dia_, context.getString(R.string.falta_un_dia));
         map.put(fecha_final_, context.getString(R.string.fecha_final));
-        map.put(faltan_, context.getString(R.string.faltan_));
+        map.put(faltan_, context.getString(R.string.faltan));
         map.put(faltan_una_semana_, context.getString(R.string.faltan_una_semana_));
-        map.put(semanas_, context.getString(R.string.semanas_));
-        map.put(dias_, context.getString(R.string.dias_));
+        map.put(semanas_, context.getString(R.string.semanas));
+        map.put(dias_, context.getString(R.string.dias));
         map.put(meses_, context.getString(R.string.meses_));
-        map.put(fata_un_mes_, context.getString(R.string.fata_un_mes_));
+        map.put(fata_un_mes_, context.getString(R.string.fata_un_mes));
         map.put(tiempo_finalizado, context.getString(R.string.tiempo_finalizado));
 
         map.put(SEMANAS, context.getString(R.string.SEMANAS));
