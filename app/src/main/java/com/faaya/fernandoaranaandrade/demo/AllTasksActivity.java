@@ -45,7 +45,7 @@ public class AllTasksActivity extends AppCompatActivity {
         listView = findViewById(R.id.list_all_task);
         typeSpinner = findViewById(R.id.typeSpinner);
         List<TaskType> typesValues = new ArrayList<TaskType>();
-        typesValues.add(new TaskType(TaskEnum.TODO.toString()));
+        typesValues.add(new TaskType(getString(R.string.TODO)));
         typesValues.addAll(queries.getAllTaskTypes());
         typeSpinner.setAdapter(new ArrayAdapter<TaskType>(this, R.layout.spinner18, typesValues));
         proyectSpinner = findViewById(R.id.proyectsSpinnerAll);
@@ -214,14 +214,14 @@ public class AllTasksActivity extends AppCompatActivity {
     }
 
     private void fillExtra(Intent intent) {
-        if (!typeSpinner.getSelectedItem().toString().equals(TaskEnum.TODO.toString())) {
+        if (!typeSpinner.getSelectedItem().toString().equals(getString(R.string.TODO))) {
             intent.putExtra(TaskEnum.ID_TYPE.toString(), ((TaskType) typeSpinner.getSelectedItem()).getId());
         }
         Proyect proyect = (Proyect) proyectSpinner.getSelectedItem();
         if (!proyect.getName().equals(getString(R.string.TODOS))) {
             intent.putExtra(TaskEnum.ID_PROYECT.toString(), proyect.getId());
         }
-        if (!rangeTimeSpinner.getSelectedItem().toString().equals(TaskEnum.TODO.toString())) {
+        if (!rangeTimeSpinner.getSelectedItem().toString().equals(getString(R.string.TODO))) {
             intent.putExtra(TaskEnum.RANGO_TIEMPO.toString(), (String) rangeTimeSpinner.getSelectedItem());
         }
     }

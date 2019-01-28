@@ -13,7 +13,7 @@
     <string name="time">Tiempo:</string>
     <string name="definity_delete">Eliminar definitivamente</string>
     <string name="cancel">Cancelar</string>
-    <string name="ok">OK</string>
+    <string name="ok" translatable="false">OK</string>
     <string name="new_task">AGREGAR</string>
     <string name="today">HOY</string>
     <string name="real_date">Fecha real:</string>
@@ -23,22 +23,22 @@
     <string name="exit">SALIR</string>
     <string name="settings">AJUSTES</string>
     <string name="aboutMe">Créditos</string>
-    <string name="title_activity_menyu">MenyuActivity</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
-    <string name="url_web">http://expresionweb.x10host.com/</string>
-    <string name="name_yop">Fernando Arana Andrade</string>
+    <string name="title_activity_menyu" translatable="false">MenyuActivity</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
+    <string name="nav_header_title" translatable="false">Android Studio</string>
+    <string name="nav_header_subtitle" translatable="false">android.studio@android.com</string>
+    <string name="nav_header_desc" translatable="false">Navigation header</string>
+    <string name="action_settings" translatable="false">Settings</string>
+    <string name="url_web" translatable="false">http://expresionweb.x10host.com/</string>
+    <string name="name_yop" translatable="false">Fernando Arana Andrade</string>
     <string name="about_app">Acerca de la Aplicación</string>
     <string name="settings_minus">Ajustes</string>
     <string name="proyects">PROYECTOS</string>
     <string name="proyect">PROYECTO</string>
     <string name="tasks_">TAREAS</string>
     <string name="task_">TAREA</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main" translatable="false">MainActivity</string>
     <string name="title_activity_calendar">CALENDARIO</string>
     <string name="calendar_minus">Calendario</string>
     <string name="changeColorRed">Cambiar a rojo:</string>
@@ -51,7 +51,7 @@
     <string name="daysAfter">días después</string>
     <string name="weekAfter">semanas después</string>
     <string name="mouthAfter">meses después</string>
-    <string name="changeColorSwich">Cambiar el color de las tareas con el tiempo a la fecha estimada:</string>
+    <string name="changeColorSwich">Cambiar el color de las tareas según el tiempo de la fecha estimada:</string>
     <string name="addDate">Configurar fecha</string>
     <string name="edit_colors_tasks_title">Editar colores de la tarea</string>
     <string name="edit_colors_tasks">Editar color de las tareas por defecto</string>
@@ -61,7 +61,7 @@
     <string name="red">ROJO</string>
     <string name="yellow">AMARILLO</string>
     <string name="orange">NARANJA</string>
-    <string name="fechaEstimada">fecha estimada:</string>
+    <string name="fechaEstimada">Fecha estimada:</string>
     <string name="addTaskType">Agregar un nuevo tipo de tarea</string>
     <string name="notificationSettings">Configurar notificaciones</string>
     <string name="notificationsActive">Activar notificaciones: </string>
@@ -72,17 +72,17 @@
     <string name="tiempo_finalizado">TIEMPO FINALIZADO</string>
     <string name="fecha_estimada">Fecha estimada: </string>
     <string name="faltan">Faltan</string>
-    <string name="semanas"> semanas</string>
+    <string name="semanas">semanas</string>
     <string name="faltan_una_semana_">Falta una semana</string>
     <string name="fecha_final">Fecha final: </string>
     <string name="falta_un_dia">Falta un día</string>
-    <string name="dias"> días</string>
+    <string name="dias">días</string>
     <string name="fata_un_mes">Falta un mes</string>
-    <string name="meses_"> meses</string>
+    <string name="meses_">meses</string>
     <string name="SEMANAS">semanas</string>
     <string name="DIAS">días</string>
     <string name="MESES">meses</string>
-    <string name="eliminar_definitivamente"> Eliminar definitivamente </string>
+    <string name="eliminar_definitivamente">Eliminar definitivamente</string>
     <string name="salir_definitivamente"> Salir definitivamente </string>
     <string name="proyectoGuardado">Proyecto guardado</string>
     <string name="tiempo_para_recordar_despues">Tiempo recordatorio:</string>
@@ -97,19 +97,19 @@
     <string name="_30minutos">30 minutos</string>
     <string name="_1Hora">Una hora</string>
     <string name="TODOS">TODOS</string>
-    <string name="falta_la_cantidad_para_el_color">Falta la cantidad para el color</string>
+    <string name="falta_la_cantidad_para_el_color">The amount for the color is missing</string>
     <string name="se_eliminaran_TODAS_la_tareas_de_este_tipo">Se eliminaran TODAS la tareas de este tipo</string>
     <string name="se_guardo_correctamente">Se guardo correctamente</string>
     <string name="el_nombre_no_es_valido">El nombre no es válido</string>
     <string name="El_rango_es_inválido">El rango es inválido</string>
-    <string name="La_fecha_novpuede_estar_vacia">La fecha no puede estar vacia</string>
-    <string name="El_nombre_no_puede_estar_vacio">El nombre no puede estar vacio</string>
-    <string name="El_tiempo_no_puede_estar_vacio">El tiempo no puede estar vacio</string>
+    <string name="La_fecha_novpuede_estar_vacia">La fecha no puede estar vacía</string>
+    <string name="El_nombre_no_puede_estar_vacio">El nombre no puede estar vacío</string>
+    <string name="El_tiempo_no_puede_estar_vacio">El tiempo no puede estar vacío</string>
     <string name="No_se_ha_configurado_la_fecha_de_inicio">No se ha configurado la fecha de inicio</string>
-    <string name="Se_eliminarán_todos_las_tareas_relacioandas_a_este_proyecto">Se eliminarán todos las tareas relacioandas a este proyecto</string>
     <string name="No_se_ha_seleccionado_un_tipo_de_tarea">No se ha seleccionado un tipo de tarea</string>
     <string name="No_se_ha_seleccionado_un_proyecto">No se ha seleccionado un proyecto</string>
     <string name="No_se_a_configurado_la_fecha_estimada">No se a configurado la fecha estimada</string>
     <string name="Tarea">Tarea</string>
     <string name="guardada">guardada</string>
+    <string name="Se_eliminarán_todos_las_tareas_relacioandas_a_este_proyecto">Todas las tareas relacionadas con este proyecto serán eliminadas.</string>
 </resources>

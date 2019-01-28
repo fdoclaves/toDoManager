@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
                 FragmentManager fm = getSupportFragmentManager();
-                EditNameDialogFragment editNameDialogFragment = EditNameDialogFragment.newInstance(" Se eliminarán todos las tareas relacioandas a este proyecto ");
+                EditNameDialogFragment editNameDialogFragment = EditNameDialogFragment.newInstance(getString(R.string.Se_eliminarán_todos_las_tareas_relacioandas_a_este_proyecto));
                 editNameDialogFragment.setOkAction(new OkAction() {
                     @Override
                     public void doAction() {
