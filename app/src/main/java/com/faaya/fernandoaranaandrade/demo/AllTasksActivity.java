@@ -3,6 +3,7 @@ package com.faaya.fernandoaranaandrade.demo;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.faaya.fernandoaranaandrade.demo.Beans.Proyect;
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskApp;
@@ -44,12 +46,12 @@ public class AllTasksActivity extends AppCompatActivity {
         queries = new Queries(this);
         listView = findViewById(R.id.list_all_task);
         typeSpinner = findViewById(R.id.typeSpinner);
-        List<TaskType> typesValues = new ArrayList<TaskType>();
+        final List<TaskType> typesValues = new ArrayList<TaskType>();
         typesValues.add(new TaskType(getString(R.string.TODO)));
         typesValues.addAll(queries.getAllTaskTypes());
         typeSpinner.setAdapter(new ArrayAdapter<TaskType>(this, R.layout.spinner18, typesValues));
         proyectSpinner = findViewById(R.id.proyectsSpinnerAll);
-        List<Proyect> allProyects = new ArrayList<Proyect>();
+        final List<Proyect> allProyects = new ArrayList<Proyect>();
         allProyects.add(new Proyect(getString(R.string.TODOS)));
         allProyects.addAll(queries.getAllProyects());
         proyectSpinner.setAdapter(new ArrayAdapter<Proyect>(this, R.layout.spinner18, allProyects));
@@ -71,6 +73,7 @@ public class AllTasksActivity extends AppCompatActivity {
                         queries.deleteTask(idTask);
                         queries.deleteNotificationByIdTask(idTask);
                         filter();
+                        showMessage(getString(R.string.task_delete));
                     }
                 });
                 editNameDialogFragment.show(fm, "fragment_edit_name");
@@ -104,12 +107,20 @@ public class AllTasksActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                goToEditTask();
+                goToEditTask(view, allProyects, typesValues);
             }
         });
     }
 
-    public void goToEditTask(){
+    private void goToEditTask(View view, List<Proyect> allProyects, List<TaskType> typesValues){
+        if(allProyects.size() <= 1){
+            Snackbar.make(view, getString(R.string.youNeedToCreateAProjectBefore), Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            return;
+        }
+        if(typesValues.size() <= 1){
+            Snackbar.make(view, getString(R.string.youNeedToCreateAHaveCategories), Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            return;
+        }
         Intent intent = new Intent(this, EditTaskActivity.class);
         fillExtra(intent);
         startActivity(intent);
@@ -224,5 +235,9 @@ public class AllTasksActivity extends AppCompatActivity {
         if (!rangeTimeSpinner.getSelectedItem().toString().equals(getString(R.string.TODO))) {
             intent.putExtra(TaskEnum.RANGO_TIEMPO.toString(), (String) rangeTimeSpinner.getSelectedItem());
         }
+    }
+
+    private void showMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }

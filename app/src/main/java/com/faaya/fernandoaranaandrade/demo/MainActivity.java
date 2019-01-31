@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.faaya.fernandoaranaandrade.demo.Beans.Proyect;
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskEnum;
@@ -53,24 +54,6 @@ public class MainActivity extends AppCompatActivity
 
         queries = new Queries(this);
         content();
-        loadNotificationService();
-    }
-
-    private void loadNotificationService() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            System.out.println("Agendando Job...");
-            Util.scheduleJob(this);
-        }
-    }
-
-    private boolean isMyServiceRunning(Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private void content() {
@@ -105,12 +88,17 @@ public class MainActivity extends AppCompatActivity
                         queries.deleteTasksByIdProyect(idProyect);
                         proyects = queries.getAllProyects();
                         fillList(proyects, listView);
+                        showMessage(getString(R.string.proyect_deleted));
                     }
                 });
                 editNameDialogFragment.show(fm, "fragment_edit_name");
                 return true;
             }
         });
+    }
+
+    private void showMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     private void fillList(List<Proyect> proyects, ListView listView) {

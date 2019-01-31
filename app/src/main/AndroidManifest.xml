@@ -54,7 +54,6 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -79,26 +78,25 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.faaya.fernandoaranaandrade.demo.MainActivity" />
         </activity>
-        <activity android:name=".EditTaskTypeActivity">
+        <activity
+            android:name=".EditTaskTypeActivity"
+            android:label="@string/categories">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.faaya.fernandoaranaandrade.demo.ListTaskTypeActivity" />
         </activity>
-        <activity android:name=".ListTaskTypeActivity">
+        <activity android:name=".ListTaskTypeActivity"
+            android:label="@string/categories">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.faaya.fernandoaranaandrade.demo.SettingsActivity" />
         </activity>
 
-        <service
-            android:name=".notifications.NotificationServiceUpgrade"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
-
         <receiver android:name=".notifications.NotificationServiceBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action android:name="me.proft.alarms.ACTION_ALARM" />
             </intent-filter>
         </receiver>
 
@@ -118,7 +116,7 @@
         </activity>
         <activity
             android:name=".PendientesActivity"
-            android:label="@string/pendientes">
+            android:label="@string/pendientes_title">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.faaya.fernandoaranaandrade.demo.MainActivity" />

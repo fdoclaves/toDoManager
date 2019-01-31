@@ -1,6 +1,5 @@
 package com.faaya.fernandoaranaandrade.demo.notifications;
 
-import android.app.ActivityManager;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -8,38 +7,57 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.faaya.fernandoaranaandrade.demo.Beans.NotificationsApp;
+import com.faaya.fernandoaranaandrade.demo.Beans.Proyect;
 import com.faaya.fernandoaranaandrade.demo.Beans.SettingsEnum;
+import com.faaya.fernandoaranaandrade.demo.Beans.TaskApp;
+import com.faaya.fernandoaranaandrade.demo.R;
 import com.faaya.fernandoaranaandrade.demo.database.Queries;
-
 import java.util.Calendar;
 
 public class NotificationServiceBroadcastReceiver extends BroadcastReceiver {
 
+    private static final String NOTIFICATION = "NOTIFICATION";
     public static String SNOOZE = "SNOOZE_ACTION";
     public static String ID_TASK = "ID_TASK";
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        Queries queries = new Queries(context);
         if (snooze(intent)) {
-            Long idTask = null;
-            try {
-                idTask = intent.getLongExtra(ID_TASK, 0);
-                Queries queries = new Queries(context);
-                queries.insertNotifications(new NotificationsApp(getNewDate(queries), idTask));
-            } catch (Exception e) {
-                Log.e("RECEIVER", "Error:", e);
-            } finally {
-                if (idTask != null) {
-                    NotificationManager manager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
-                    manager.cancel(idTask.intValue());
+            Long idTask = Long.parseLong(intent.getAction().replace(SNOOZE,""));
+            Log.i(NOTIFICATION, "SNOOZE, idTask:" + idTask);
+            NotificationManager manager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
+            manager.cancel(idTask.intValue());
+            Long newDate = getNewDate(queries);
+            queries.saveUpdateOrDeleteNotifications(true, new NotificationsApp(newDate, idTask));
+            Util.scheduleNotification(context, queries, newDate);
+        } else {
+            String titleAction = context.getString(R.string.snoozeAction);
+            searchNotificationToShow(context, queries,titleAction);
+            Util.scheduleNotification(context, queries);
+        }
+    }
+
+    private void searchNotificationToShow(Context context, Queries queries, String titleAction) {
+        try {
+            for (NotificationsApp notificationsApp : queries.getNotificationToShow(System.currentTimeMillis())) {
+                Log.i(NOTIFICATION, "IdTask:" + notificationsApp.getIdTask());
+                long idTask = 0l;
+                try {
+                    idTask = notificationsApp.getIdTask();
+                    TaskApp taskApp = queries.getByIdTask(idTask);
+                    if(taskApp != null){
+                        Proyect proyect = queries.getByIdProyect(taskApp.getProyectId());
+                        Util.showNotifications(context, proyect, taskApp, titleAction);
+                    }
+                } catch (Exception e) {
+                    Log.e(NOTIFICATION, "idTaskError:" + idTask, e);
+                } finally {
+                    queries.deleteNotificationByIdTask(idTask);
                 }
             }
-        } else {
-            boolean myServiceRunning = isMyServiceRunning(NotificationServiceUpgrade.class, context);
-            System.out.println("+++++++++++++++++++" + myServiceRunning + "+++++++++++++++++++++++");
-            if (!myServiceRunning) {
-                Util.scheduleJob(context);
-            }
+        }   catch (Exception e) {
+            Log.e(NOTIFICATION, "error:", e);
         }
     }
 
@@ -56,19 +74,9 @@ public class NotificationServiceBroadcastReceiver extends BroadcastReceiver {
     }
 
     private boolean snooze(Intent intent) {
-        if (intent == null) {
+        if (intent == null || intent.getAction() == null) {
             return false;
         }
-        return intent.getAction().equals(SNOOZE);
-    }
-
-    private boolean isMyServiceRunning(Class<?> serviceClass, Context context) {
-        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
+        return intent.getAction().contains(SNOOZE);
     }
 }

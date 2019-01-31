@@ -407,4 +407,46 @@ public class Queries {
     private List<TaskApp> getTaskAppsByIdType(Long idTaskType) {
         return selectTask("SELECT * FROM " + DataBase.TASK_TABLE + " WHERE " + DataBase.ID_TYPE + " = ?", idTaskType.toString());
     }
+
+    public int getCountTaskWithoutRealDate(Long id) {
+        String[] ids = new String[1];
+        ids[0] = id.toString();
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT COUNT(1) FROM " + DataBase.TASK_TABLE + " WHERE " + DataBase.ID_PROYECT + " = ? AND " + DataBase.REAL_DATE + " IS NULL", ids);
+        if (cursor.moveToFirst()) {
+            do {
+                return cursor.getInt(0);
+            } while (cursor.moveToNext());
+        }
+        return 0;
+    }
+
+    public Long getMinorNotificationTime() {
+            Cursor cursor = sqLiteDatabase.rawQuery("SELECT MIN(DATE_NOTIFICATION) FROM " + DataBase.NOTIFICATIONS_TABLE, new String[0]);
+        if (cursor.moveToFirst()) {
+            do {
+                return cursor.getLong(0);
+            } while (cursor.moveToNext());
+        }
+        return null;
+    }
+
+    public long getCountProyect() {
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT COUNT(1) FROM " + DataBase.PROYECT_TABLE, new String[0]);
+        if (cursor.moveToFirst()) {
+            do {
+                return cursor.getInt(0);
+            } while (cursor.moveToNext());
+        }
+        return 0;
+    }
+
+    public long getCountTask() {
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT COUNT(1) FROM " + DataBase.TASK_TYPE_TABLE, new String[0]);
+        if (cursor.moveToFirst()) {
+            do {
+                return cursor.getInt(0);
+            } while (cursor.moveToNext());
+        }
+        return 0;
+    }
 }

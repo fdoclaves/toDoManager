@@ -2,6 +2,7 @@ package com.faaya.fernandoaranaandrade.demo;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,8 +10,8 @@ import android.widget.TextView;
 
 import com.faaya.fernandoaranaandrade.demo.Beans.NotificationsApp;
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskApp;
+import com.faaya.fernandoaranaandrade.demo.Beans.TaskEnum;
 import com.faaya.fernandoaranaandrade.demo.database.Queries;
-import com.faaya.fernandoaranaandrade.demo.notifications.NotificationServiceUpgrade;
 
 import java.util.Date;
 import java.util.List;
@@ -43,7 +44,7 @@ public class MonitorActivity extends AppCompatActivity {
     }
 
     private void fill() {
-        textView1.setText("Servicio activo:" + isMyServiceRunning(NotificationServiceUpgrade.class));
+        textView1.setText("xy!");
         List<NotificationsApp> allNotification = queries.getAllNotification();
         textView2.setText("Total de notificaciónes:"+ allNotification.size());
         textView3.setText("Tiempo actual:" + new Date(System.currentTimeMillis()));
@@ -75,5 +76,11 @@ public class MonitorActivity extends AppCompatActivity {
 
     public void refresh(View view) {
         fill();
+    }
+
+    public void go(View view) {
+        Intent intent = new Intent(this, AllTasksActivity.class);
+        intent.putExtra(TaskEnum.RANGO_TIEMPO.toString(), getString(R.string.HOY));
+        startActivity(intent);
     }
 }

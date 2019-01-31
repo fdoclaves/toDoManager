@@ -3,6 +3,7 @@ package com.faaya.fernandoaranaandrade.demo;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -10,8 +11,8 @@ import android.widget.CalendarView;
 import android.widget.ListView;
 
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskApp;
-import com.faaya.fernandoaranaandrade.demo.adapters.TaskAppAdapter;
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskEnum;
+import com.faaya.fernandoaranaandrade.demo.adapters.TaskAppAdapter;
 import com.faaya.fernandoaranaandrade.demo.database.Queries;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ import java.util.List;
 
 public class CalendarActivity extends AppCompatActivity {
 
-    private int year,  month,  dayOfMonth;
+    private int year, month, dayOfMonth;
 
     private ListView listView;
 
@@ -61,7 +62,7 @@ public class CalendarActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                goToEditActivity(year,month,dayOfMonth);
+                goToEditActivity(year, month, dayOfMonth, view);
             }
         });
 
@@ -104,13 +105,21 @@ public class CalendarActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void goToEditActivity(int year, int month, int dayOfMonth) {
+    private void goToEditActivity(int year, int month, int dayOfMonth, View view) {
+        if (queries.getCountProyect() <= 0) {
+            Snackbar.make(view, getString(R.string.youNeedToCreateAProjectBefore), Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            return;
+        }
+        if (queries.getCountTask() <= 0) {
+            Snackbar.make(view, getString(R.string.youNeedToCreateAHaveCategories), Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            return;
+        }
         Intent intent = new Intent(this, EditTaskActivity.class);
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.MONTH, month);
         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        intent.putExtra(TaskEnum.END_DAY.toString(),calendar);
+        intent.putExtra(TaskEnum.END_DAY.toString(), calendar);
         startActivity(intent);
     }
 

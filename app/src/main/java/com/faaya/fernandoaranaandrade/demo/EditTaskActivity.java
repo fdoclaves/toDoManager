@@ -24,6 +24,8 @@ import com.faaya.fernandoaranaandrade.demo.Beans.TaskApp;
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskEnum;
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskType;
 import com.faaya.fernandoaranaandrade.demo.database.Queries;
+import com.faaya.fernandoaranaandrade.demo.notifications.NotificationServiceBroadcastReceiver;
+import com.faaya.fernandoaranaandrade.demo.notifications.Util;
 import com.faaya.fernandoaranaandrade.demo.utils.HourUtils;
 
 import java.io.Serializable;
@@ -266,6 +268,9 @@ public class EditTaskActivity extends AppCompatActivity {
             id = queries.getByIdProyectAndName(taskApp.getProyectId(), taskApp.getName()).getId();
         }
         queries.saveUpdateOrDeleteNotifications(active, new NotificationsApp(alarmTime.getTimeInMillis(), id));
+        if(active){
+            Util.scheduleNotification(this,queries,alarmTime.getTimeInMillis());
+        }
     }
 
     private void fillComments() {
