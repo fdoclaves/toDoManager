@@ -24,7 +24,7 @@ public class Util {
     public static void showNotifications(Context context, Proyect proyect, TaskApp taskApp, String title_action) {
         Long idTask = taskApp.getId();
         Intent intent = new Intent(context, EditTaskActivity.class);
-        intent.putExtra(MainActivity.ID_TASK, taskApp);
+        intent.putExtra(MainActivity.ID_TASK, taskApp.getId());
         PendingIntent contentPendingIntent = PendingIntent.getActivity
                 (context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
