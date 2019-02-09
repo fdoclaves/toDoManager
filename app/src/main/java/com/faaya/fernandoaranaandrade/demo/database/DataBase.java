@@ -47,12 +47,14 @@ public class DataBase extends SQLiteOpenHelper {
     String notificationsTable = "CREATE TABLE NOTIFICATIONS(DATE_NOTIFICATION INT, ID_TASK INT)";
     private String task1;
     private String task2;
+    private String verde;
 
 
     public DataBase(Context context,String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
         task1 = context.getString(R.string.pendientes);
         task2 = context.getString(R.string.activities);
+        verde = context.getString(R.string.green);
     }
 
     @Override
@@ -69,7 +71,7 @@ public class DataBase extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO SETTINGS(KEYWORD,VALUE) VALUES ('" + SettingsEnum.ORANGE_SEMAFORO.toString() +"','3-DB')");
         db.execSQL("INSERT INTO SETTINGS(KEYWORD,VALUE) VALUES ('" + SettingsEnum.RED_SEMAFORO.toString() +"','1-DB')");
         db.execSQL("INSERT INTO SETTINGS(KEYWORD,VALUE) VALUES ('" + SettingsEnum.ACTIVE.toString() +"','" + SettingsEnum.ON.toString() +"')");
-        db.execSQL("INSERT INTO SETTINGS(KEYWORD,VALUE) VALUES ('" + SettingsEnum.REAL_SEMAFORO.toString() +"','" + SettingsEnum.VERDE.toString() +"')");
+        db.execSQL("INSERT INTO SETTINGS(KEYWORD,VALUE) VALUES ('" + SettingsEnum.REAL_SEMAFORO.toString() +"','" + verde +"')");
         db.execSQL("INSERT INTO SETTINGS(KEYWORD,VALUE) VALUES ('" + SettingsEnum.ACTIVE_NOTIFICTION.toString() +"','" + SettingsEnum.ON.toString() +"')");
         db.execSQL("INSERT INTO SETTINGS(KEYWORD,VALUE) VALUES ('" + SettingsEnum.DATE_NOTIFICATION.toString() +"','09:00 AM')");
         db.execSQL("INSERT INTO SETTINGS(KEYWORD,VALUE) VALUES ('" + SettingsEnum.TIME_SNOOZE.toString() +"','15M')");

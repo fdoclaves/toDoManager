@@ -28,6 +28,7 @@ public class NotificationsSettingsActivity extends AppCompatActivity {
     public static final String _15MINUTOS = "15M";
     public static final String _30MINUTOS = "30M";
     public static final String _1HORA = "1H";
+    public static final String _24HORAS = "24H";
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a");
 
     private Button hourButton;
@@ -44,19 +45,21 @@ public class NotificationsSettingsActivity extends AppCompatActivity {
         list.add(getString(R.string._15minutos));
         list.add(getString(R.string._30minutos));
         list.add(getString(R.string._1Hora));
+        list.add(getString(R.string._24Horas));
         map.put(list.get(0),_5MINUTOS);
         map.put(list.get(1),_15MINUTOS);
         map.put(list.get(2),_30MINUTOS);
         map.put(list.get(3),_1HORA);
+        map.put(list.get(4), _24HORAS);
         setContentView(R.layout.activity_notifications_settings);
-        hourButton = findViewById(R.id.notifacionButton);
+        hourButton = findViewById(R.id.notifacionButtonGeneral);
         queries = new Queries(this);
-        aSwitch = findViewById(R.id.switchNotification);
+        aSwitch = findViewById(R.id.switchNotificationGeneral);
         String activeNotification = queries.getValueByProperty(SettingsEnum.ACTIVE_NOTIFICTION);
         aSwitch.setChecked(activeNotification.equals(SettingsEnum.ON.toString()));
         String hourNotification = queries.getValueByProperty(SettingsEnum.DATE_NOTIFICATION);
         hourButton.setText(hourNotification);
-        tiempoSpinner = findViewById(R.id.spinnerHorasMinutos);
+        tiempoSpinner = findViewById(R.id.spinnerHorasMinutosGeneral);
         tiempoSpinner.setAdapter(new ArrayAdapter<String>(this, R.layout.spinner18, list));
         fillSnooze();
     }

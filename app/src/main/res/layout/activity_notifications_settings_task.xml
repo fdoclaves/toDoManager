@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NotificationsSettingsActivity">
+    tools:context=".NotificationsSettingsTaskActivity">
 
     <Switch
-        android:id="@+id/switchNotificationGeneral"
+        android:id="@+id/switchNotification"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/notifacionButtonGeneral"
+        android:id="@+id/notifacionButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -31,12 +31,12 @@
         android:text="Button"
         android:textColor="@android:color/white"
         android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="@+id/switchNotificationGeneral"
-        app:layout_constraintStart_toStartOf="@+id/switchNotificationGeneral"
-        app:layout_constraintTop_toBottomOf="@+id/switchNotificationGeneral" />
+        app:layout_constraintEnd_toEndOf="@+id/switchNotification"
+        app:layout_constraintStart_toStartOf="@+id/switchNotification"
+        app:layout_constraintTop_toBottomOf="@+id/switchNotification" />
 
     <ImageButton
-        android:id="@+id/imageButtonNotificationSaveGeneral"
+        android:id="@+id/imageButtonNotificationSave"
         android:layout_width="53dp"
         android:layout_height="51dp"
         android:layout_marginStart="16dp"
@@ -48,36 +48,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@android:drawable/ic_menu_save" />
 
-    <LinearLayout
-        android:id="@+id/layoutSnoozeGeneral"
+    <Spinner
+        android:id="@+id/spinnerNotification"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="@+id/notifacionButtonGeneral"
-        app:layout_constraintStart_toStartOf="@+id/notifacionButtonGeneral"
-        app:layout_constraintTop_toBottomOf="@+id/notifacionButtonGeneral">
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/notifacionButton"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/notifacionButton"
+        app:layout_constraintTop_toBottomOf="@+id/notifacionButton" />
 
-        <TextView
-            android:id="@+id/textView9General"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/tiempo_para_recordar_despues" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="123dp">
-
-            <Spinner
-                android:id="@+id/spinnerHorasMinutosGeneral"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-        </LinearLayout>
-    </LinearLayout>
+    <Button
+        android:id="@+id/buttonDateNotification"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@color/colorPrimary"
+        android:onClick="set_date"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:text="@string/addDate"
+        android:textColor="@android:color/white"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@+id/switchNotification"
+        app:layout_constraintStart_toStartOf="@+id/switchNotification"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerNotification" />
 
 </android.support.constraint.ConstraintLayout>

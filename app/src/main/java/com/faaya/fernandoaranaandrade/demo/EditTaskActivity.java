@@ -12,11 +12,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.faaya.fernandoaranaandrade.demo.Beans.DateEnum;
 import com.faaya.fernandoaranaandrade.demo.Beans.NotificationsApp;
 import com.faaya.fernandoaranaandrade.demo.Beans.Proyect;
 import com.faaya.fernandoaranaandrade.demo.Beans.SettingsEnum;
@@ -24,7 +27,6 @@ import com.faaya.fernandoaranaandrade.demo.Beans.TaskApp;
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskEnum;
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskType;
 import com.faaya.fernandoaranaandrade.demo.database.Queries;
-import com.faaya.fernandoaranaandrade.demo.notifications.NotificationServiceBroadcastReceiver;
 import com.faaya.fernandoaranaandrade.demo.notifications.Util;
 import com.faaya.fernandoaranaandrade.demo.utils.HourUtils;
 
@@ -38,8 +40,6 @@ import java.util.List;
 import static com.faaya.fernandoaranaandrade.demo.EditProyectActivity.DATE_REGEX;
 
 public class EditTaskActivity extends AppCompatActivity {
-
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     Spinner typesSpinner;
 
@@ -62,6 +62,8 @@ public class EditTaskActivity extends AppCompatActivity {
     Long idTipoCurrentIntent;
 
     String rangoCurrentIntent;
+
+    private CheckBox checkBoxEditTask;
 
     long idProyectCurrentIntent;
 
@@ -101,6 +103,7 @@ public class EditTaskActivity extends AppCompatActivity {
         idTipoCurrentIntent = intent.getLongExtra(TaskEnum.ID_TYPE.toString(), 0);
         rangoCurrentIntent = intent.getStringExtra(TaskEnum.RANGO_TIEMPO.toString());
         idProyectCurrentIntent = intent.getLongExtra(TaskEnum.ID_PROYECT.toString(), 0);
+        checkBoxEditTask = findViewById(R.id.checkBoxEditTask);
         fillData(typesValues, proyects);
         if (isNew()) {
             deleteTaskEditImageButton = findViewById(R.id.deleteTaskEditImageButton);
@@ -164,7 +167,20 @@ public class EditTaskActivity extends AppCompatActivity {
                 fillComments();
             }
         });
-
+        checkBoxEditTask.setText(R.string.finish);
+        checkBoxEditTask.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    realDataTaskButton.setVisibility(View.VISIBLE);
+                    String date = DateEnum.dateSimpleDateFormat.format(new Date());
+                    realDataTaskButton.setText(date);
+                } else {
+                    realDataTaskButton.setText(getString(R.string.addDate));
+                    realDataTaskButton.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
     }
 
     private void fillData(List<TaskType> typesValues, List<Proyect> proyects) {
@@ -173,10 +189,13 @@ public class EditTaskActivity extends AppCompatActivity {
             nameTaskEditText.setText(taskApp.getName());
         }
         if(taskApp.getDateEnd() != null){
-            dateEndTaskButton.setText(simpleDateFormat.format(new Date(taskApp.getDateEnd())));
+            dateEndTaskButton.setText(DateEnum.dateSimpleDateFormat.format(new Date(taskApp.getDateEnd())));
         }
         if (taskApp.getRealDate() != null && taskApp.getRealDate().longValue() != 0) {
-            realDataTaskButton.setText(simpleDateFormat.format(new Date(taskApp.getRealDate())));
+            checkBoxEditTask.setChecked(true);
+            realDataTaskButton.setText(DateEnum.dateSimpleDateFormat.format(new Date(taskApp.getRealDate())));
+        } else {
+            realDataTaskButton.setVisibility(View.INVISIBLE);
         }
         if(taskApp.getComments() != null){
             commentsTaskEditText.setText(taskApp.getComments());
@@ -244,10 +263,6 @@ public class EditTaskActivity extends AppCompatActivity {
         }
     }
 
-    public void deleteDate(View view) {
-        realDataTaskButton.setText(getString(R.string.addDate));
-    }
-
     private void saveData() throws ParseException {
         fillTaskType();
         fillProyectId();
@@ -256,9 +271,8 @@ public class EditTaskActivity extends AppCompatActivity {
         fillRealDate();
         fillComments();
         queries.saveOrUpdateTaskApp(taskApp);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(taskApp.getDateEnd());
-        Calendar alarmTime = HourUtils.setCalendar(taskApp.getDateNotification(), calendar);
+
+        Long alarmTime = HourUtils.getCalendar(taskApp.getDateNotification(), taskApp.getDateEnd());
         boolean active = false;
         if(taskApp.getActiveNotification().equals(SettingsEnum.ON.toString()) && taskApp.getRealDate() == null){
             active = true;
@@ -267,9 +281,10 @@ public class EditTaskActivity extends AppCompatActivity {
         if(id == null){
             id = queries.getByIdProyectAndName(taskApp.getProyectId(), taskApp.getName()).getId();
         }
-        queries.saveUpdateOrDeleteNotifications(active, new NotificationsApp(alarmTime.getTimeInMillis(), id));
+        System.out.println("Fecha notificación:" + new Date(alarmTime));
+        queries.saveUpdateOrDeleteNotifications(active, new NotificationsApp(alarmTime, id));
         if(active){
-            Util.scheduleNotification(this,queries,alarmTime.getTimeInMillis());
+            Util.scheduleNotification(this,queries,alarmTime);
         }
     }
 
@@ -280,7 +295,7 @@ public class EditTaskActivity extends AppCompatActivity {
     private void fillRealDate() {
         try {
             if (isValidDate(realDataTaskButton)) {
-                Date realDate = simpleDateFormat.parse(realDataTaskButton.getText().toString());
+                Date realDate = DateEnum.dateSimpleDateFormat.parse(realDataTaskButton.getText().toString());
                 taskApp.setRealDate(realDate.getTime());
             } else {
                 taskApp.setRealDate(null);
@@ -293,7 +308,7 @@ public class EditTaskActivity extends AppCompatActivity {
     private void fillDateEnd() {
         try {
             if (isValidDate(dateEndTaskButton)) {
-                Date dateEnd = simpleDateFormat.parse(dateEndTaskButton.getText().toString());
+                Date dateEnd = DateEnum.dateSimpleDateFormat.parse(dateEndTaskButton.getText().toString());
                 taskApp.setDateEnd(dateEnd.getTime());
             }
         } catch (Exception e) {
@@ -384,7 +399,7 @@ public class EditTaskActivity extends AppCompatActivity {
             Serializable serializable = intent.getSerializableExtra(TaskEnum.END_DAY.toString());
             if (serializable != null) {
                 Calendar calendar = (Calendar) intent.getSerializableExtra(TaskEnum.END_DAY.toString());
-                dateEndTaskButton.setText(simpleDateFormat.format(calendar.getTime()));
+                dateEndTaskButton.setText(DateEnum.dateSimpleDateFormat.format(calendar.getTime()));
             }
         } else {
             taskApp = (TaskApp) taskAppExtra;
@@ -400,7 +415,7 @@ public class EditTaskActivity extends AppCompatActivity {
         dateDialogFragment.setOkActionDate(new OkActionDate() {
             @Override
             public void doAction(Calendar calendar) {
-                dateEndTaskButton.setText(simpleDateFormat.format(calendar.getTime()));
+                dateEndTaskButton.setText(DateEnum.dateSimpleDateFormat.format(calendar.getTime()));
                 fillDateEnd();
             }
         });
@@ -416,7 +431,7 @@ public class EditTaskActivity extends AppCompatActivity {
         dateDialogFragment.setOkActionDate(new OkActionDate() {
             @Override
             public void doAction(Calendar calendar) {
-                realDataTaskButton.setText(simpleDateFormat.format(calendar.getTime()));
+                realDataTaskButton.setText(DateEnum.dateSimpleDateFormat.format(calendar.getTime()));
                 fillRealDate();
             }
         });

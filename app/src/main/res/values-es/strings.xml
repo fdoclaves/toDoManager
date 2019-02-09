@@ -112,4 +112,10 @@
     <string name="youNeedToCreateAHaveCategories">Se necesita tener al menos una categoría creada</string>
     <string name="ThereAreNoPending">No hay pendientes</string>
     <string name="pendientes_title">PENDIENTES</string>
+    <string name="estimatedDate">En fecha estimada</string>
+    <string name="specifyDate">Especificar fecha</string>
+    <string name="youNeedToSetDate">Es necesario configurar la fecha</string>
+    <string name="finish">Terminar</string>
+    <string name="FINISH">TERMINAR</string>
+    <string name="_24Horas">24 horas</string>
 </resources>

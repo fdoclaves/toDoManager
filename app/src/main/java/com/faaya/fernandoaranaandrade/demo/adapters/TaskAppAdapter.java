@@ -41,6 +41,7 @@ public class TaskAppAdapter extends ArrayAdapter<TaskApp> {
     private static int YELLOW_R = Color.argb(100, 172, 148, 49);
     private static int GREEN_R = Color.argb(100, 0, 133, 119);
     private String fecha_estimada;
+    private String verde;
 
     public TaskAppAdapter(Context context, List<TaskApp> values) {
         super(context, -1, values);
@@ -48,6 +49,7 @@ public class TaskAppAdapter extends ArrayAdapter<TaskApp> {
         this.values = values;
         this.queries = new Queries(context);
         this.fecha_estimada = context.getString(R.string.fecha_estimada);
+        this.verde = context.getString(R.string.green);
     }
 
     @Override
@@ -88,7 +90,7 @@ public class TaskAppAdapter extends ArrayAdapter<TaskApp> {
                 }
             } else {
                 int color = Color.WHITE;
-                if (taskApp.getRealSemaforo().equals(SettingsEnum.VERDE.toString())) {
+                if (taskApp.getRealSemaforo().equals(verde)) {
                     color = GREEN;
                     nameTextView.setTextColor(GREEN_R);
                 }

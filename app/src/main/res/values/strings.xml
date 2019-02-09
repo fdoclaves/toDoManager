@@ -121,4 +121,10 @@
     <string name="youNeedToCreateAProjectBefore">You need to create a project before</string>
     <string name="youNeedToCreateAHaveCategories">You need to have at least one category created</string>
     <string name="ThereAreNoPending">There are no pendings</string>
+    <string name="estimatedDate">On estimated date</string>
+    <string name="specifyDate">Set date</string>
+    <string name="youNeedToSetDate">You need to set date</string>
+    <string name="finish">Finish</string>
+    <string name="_24Horas">24 hours</string>
+    <string name="FINISH">FINISH</string>
 </resources>

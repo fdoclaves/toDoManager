@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.faaya.fernandoaranaandrade.demo.Beans.NotificationsApp;
 import com.faaya.fernandoaranaandrade.demo.Beans.Proyect;
@@ -13,32 +14,47 @@ import com.faaya.fernandoaranaandrade.demo.Beans.TaskApp;
 import com.faaya.fernandoaranaandrade.demo.R;
 import com.faaya.fernandoaranaandrade.demo.database.Queries;
 import java.util.Calendar;
+import java.util.Date;
 
 public class NotificationServiceBroadcastReceiver extends BroadcastReceiver {
 
     private static final String NOTIFICATION = "NOTIFICATION";
-    public static String SNOOZE = "SNOOZE_ACTION";
-    public static String ID_TASK = "ID_TASK";
+    private static String ACTION = "_ACTION";
+    public static String SNOOZE = "SNOOZE" + ACTION;
+    public static String FINISH = "FINISH" + ACTION;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         Queries queries = new Queries(context);
-        if (snooze(intent)) {
-            Long idTask = Long.parseLong(intent.getAction().replace(SNOOZE,""));
-            Log.i(NOTIFICATION, "SNOOZE, idTask:" + idTask);
-            NotificationManager manager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
-            manager.cancel(idTask.intValue());
-            Long newDate = getNewDate(queries);
-            queries.saveUpdateOrDeleteNotifications(true, new NotificationsApp(newDate, idTask));
-            Util.scheduleNotification(context, queries, newDate);
+        if (action(intent)) {
+            if (intent.getAction().contains(SNOOZE)) {
+                Long idTask = Long.parseLong(intent.getAction().replace(SNOOZE,""));
+                Log.i(NOTIFICATION, "SNOOZE, idTask:" + idTask);
+                NotificationManager manager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
+                manager.cancel(idTask.intValue());
+                Long newDate = getNewDate(queries);
+                queries.saveUpdateOrDeleteNotifications(true, new NotificationsApp(newDate, idTask));
+                Util.scheduleNotification(context, queries, newDate);
+                Toast.makeText(context, context.getString(R.string.snoozeAction), Toast.LENGTH_SHORT).show();
+            }
+            if(intent.getAction().contains(FINISH)){
+                Long idTask = Long.parseLong(intent.getAction().replace(FINISH,""));
+                Log.i(NOTIFICATION, "FINISH, idTask:" + idTask);
+                NotificationManager manager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
+                manager.cancel(idTask.intValue());
+                TaskApp taskApp = queries.getByIdTask(idTask);
+                taskApp.setRealDate(new Date().getTime());
+                queries.saveOrUpdateTaskApp(taskApp);
+            }
         } else {
-            String titleAction = context.getString(R.string.snoozeAction);
-            searchNotificationToShow(context, queries,titleAction);
+            String titleActionSnooze = context.getString(R.string.snoozeAction);
+            String titleActionFinish = context.getString(R.string.FINISH);
+            searchNotificationToShow(context, queries,titleActionSnooze, titleActionFinish);
             Util.scheduleNotification(context, queries);
         }
     }
 
-    private void searchNotificationToShow(Context context, Queries queries, String titleAction) {
+    private void searchNotificationToShow(Context context, Queries queries, String titleActionSnooze, String titleActionFinish) {
         try {
             for (NotificationsApp notificationsApp : queries.getNotificationToShow(System.currentTimeMillis())) {
                 Log.i(NOTIFICATION, "IdTask:" + notificationsApp.getIdTask());
@@ -48,7 +64,7 @@ public class NotificationServiceBroadcastReceiver extends BroadcastReceiver {
                     TaskApp taskApp = queries.getByIdTask(idTask);
                     if(taskApp != null){
                         Proyect proyect = queries.getByIdProyect(taskApp.getProyectId());
-                        Util.showNotifications(context, proyect, taskApp, titleAction);
+                        Util.showNotifications(context, proyect, taskApp, titleActionSnooze, titleActionFinish);
                     }
                 } catch (Exception e) {
                     Log.e(NOTIFICATION, "idTaskError:" + idTask, e);
@@ -73,10 +89,10 @@ public class NotificationServiceBroadcastReceiver extends BroadcastReceiver {
         return calendar.getTimeInMillis();
     }
 
-    private boolean snooze(Intent intent) {
+    private boolean action(Intent intent) {
         if (intent == null || intent.getAction() == null) {
             return false;
         }
-        return intent.getAction().contains(SNOOZE);
+        return intent.getAction().contains(ACTION);
     }
 }
