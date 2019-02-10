@@ -41,6 +41,8 @@ import static com.faaya.fernandoaranaandrade.demo.EditProyectActivity.DATE_REGEX
 
 public class EditTaskActivity extends AppCompatActivity {
 
+    public static final String FROM_ACTIVITY = "FROM_ACTIVITY";
+
     Spinner typesSpinner;
 
     Spinner proyectSpinner;
@@ -357,8 +359,22 @@ public class EditTaskActivity extends AppCompatActivity {
     }
 
     private void exit() {
-        Intent newIntent = new Intent(this, AllTasksActivity.class);
-        fillIBackIntent(newIntent);
+        Intent newIntent = new Intent(this, MainActivity.class);
+        String fromActivity = getIntent().getStringExtra(FROM_ACTIVITY);
+        System.out.println("from:" + fromActivity);
+        if(fromActivity != null){
+            if(fromActivity.contains("AllTasksActivity")){
+                newIntent = new Intent(this, AllTasksActivity.class);
+                fillIBackIntent(newIntent);
+            }
+            if(fromActivity.contains("TaskListProyectActivity")){
+                newIntent = new Intent(this, TaskListProyectActivity.class);
+                newIntent.putExtra(TaskEnum.ID_PROYECT.toString(), idProyectCurrentIntent);
+            }
+            if(fromActivity.contains("CalendarActivity")){
+                newIntent = new Intent(this, CalendarActivity.class);
+            }
+        }
         startActivity(newIntent);
         finish();
     }

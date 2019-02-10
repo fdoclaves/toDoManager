@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.Switch;
 
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskApp;
+import com.faaya.fernandoaranaandrade.demo.Beans.TaskType;
 import com.faaya.fernandoaranaandrade.demo.adapters.TaskAppAdapter;
 import com.faaya.fernandoaranaandrade.demo.database.Queries;
 
@@ -79,7 +80,7 @@ public class PendientesActivity extends AppCompatActivity {
     private void filter() {
         List<TaskApp> allTask;
         if(aSwitch.isChecked()){
-            allTask = queries.selectTaskByIdProyectEndDateAndType(null, getStartDate(), getEndDate(), null, true);
+            allTask = queries.selectTaskByIdProyectEndDateAndType(null, getStartDate(), getEndDate(), (TaskType) null, true);
         } else {
             allTask = queries.getAllPendientesTask(getStartDate());
         }

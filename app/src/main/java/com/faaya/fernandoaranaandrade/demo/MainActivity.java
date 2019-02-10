@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setTitle(getString(R.string.proyects));
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -61,8 +62,8 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                goToEditProyect(0l);
-                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                Intent intent = new Intent(MainActivity.this, EditProyectActivity.class);
+                startActivity(intent);
             }
         });
         proyects = queries.getAllProyects();
@@ -106,7 +107,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void goToEditProyect(long id) {
-        Intent intent = new Intent(this, EditProyectActivity.class);
+        Intent intent = new Intent(this, TaskListProyectActivity.class);
         intent.putExtra(ID_PROYECT, id);
         startActivity(intent);
     }

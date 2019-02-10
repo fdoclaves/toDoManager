@@ -16,7 +16,6 @@ import com.faaya.fernandoaranaandrade.demo.Beans.TaskEnum;
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskType;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -78,8 +77,8 @@ public class Queries {
         return null;
     }
 
-    public Proyect getByIdProyect(Long idObra) {
-        List<Proyect> proyects = selectProyect("SELECT * FROM " + DataBase.PROYECT_TABLE + " WHERE ID = ?", idObra.toString());
+    public Proyect getByIdProyect(Long idProyect) {
+        List<Proyect> proyects = selectProyect("SELECT * FROM " + DataBase.PROYECT_TABLE + " WHERE ID = ?", idProyect.toString());
         if (proyects.size() == 0) {
             return null;
         }
@@ -182,45 +181,69 @@ public class Queries {
     }
 
     public List<TaskApp> selectTaskByIdProyectEndDateAndType(Long idProyect, Long endRangeDateStart, Long endRangeDateFinish, Long idTaskType) {
-        return selectTaskByIdProyectEndDateAndType(idProyect, endRangeDateStart, endRangeDateFinish, idTaskType, false);
+        TaskType taskType = null;
+        if(idTaskType != null){
+            taskType = getTaskTypeById(idTaskType);
+        }
+        return selectTaskByIdProyectEndDateAndType(idProyect, endRangeDateStart, endRangeDateFinish, taskType, false);
     }
 
-    public List<TaskApp> selectTaskByIdProyectEndDateAndType(Long idProyect, Long endRangeDateStart, Long endRangeDateFinish, Long idTaskType, boolean onlyPendientes) {
+    public List<TaskApp> selectTaskByIdProyectEndDateAndType(Long idProyect, Long endRangeDateStart, Long endRangeDateFinish, TaskType taskType, Boolean onlyPendientes) {
+        List<TaskType> ids = new ArrayList<>();
+        if(taskType != null){
+           ids.add(taskType);
+       }
+       return selectTaskByIdProyectEndDateAndType(idProyect,endRangeDateStart,endRangeDateFinish,ids, onlyPendientes);
+    }
+
+    public List<TaskApp> selectTaskByIdProyectEndDateAndType(Long idProyect, Long endRangeDateStart, Long endRangeDateFinish, List<TaskType> idTaskTypes, Boolean onlyPendientes) {
         StringBuffer query = new StringBuffer("SELECT * FROM " + DataBase.TASK_TABLE);
         List<String> values = new ArrayList<>();
-        if (idProyect != null || endRangeDateStart != null || idTaskType != null || endRangeDateFinish != null) {
+        boolean useFilter = false;
+        if (idProyect != null || endRangeDateStart != null || !idTaskTypes.isEmpty() || endRangeDateFinish != null) {
             query.append(" WHERE ");
         }
         if (idProyect != null) {
-            query.append(DataBase.ID_PROYECT + " = ?");
+            query.append(DataBase.ID_PROYECT + " = ? ");
             values.add(idProyect.toString());
+            useFilter=true;
         }
         if (endRangeDateStart != null) {
-            if (values.size() != 0) {
+            if (useFilter) {
                 query.append(" AND ");
             }
-            query.append(DataBase.END_DATE + " >= ?");
+            query.append(DataBase.END_DATE + " >= ? ");
             values.add(endRangeDateStart.toString());
+            useFilter = true;
         }
         if (endRangeDateFinish != null) {
-            if (values.size() != 0) {
+            if (useFilter) {
                 query.append(" AND ");
             }
-            query.append(DataBase.END_DATE + " <= ?");
+            query.append(DataBase.END_DATE + " <= ? ");
             values.add(endRangeDateFinish.toString());
+            useFilter = true;
         }
-        if (idTaskType != null) {
-            if (values.size() != 0) {
+        if (!idTaskTypes.isEmpty()) {
+            if (useFilter) {
                 query.append(" AND ");
             }
-            query.append(DataBase.ID_TYPE + " = ?");
-            values.add(idTaskType.toString());
+            query.append(DataBase.ID_TYPE + " in (");
+            for (int i = 0; i < idTaskTypes.size(); i++) {
+                if(i != 0){
+                    query.append(", ");
+                }
+                query.append("" + idTaskTypes.get(i).getId());
+            }
+            query.append(") ");
+            useFilter = true;
         }
-        if(onlyPendientes){
-            if (values.size() != 0) {
+        if (onlyPendientes != null && onlyPendientes) {
+            if (useFilter) {
                 query.append(" AND ");
             }
             query.append(DataBase.REAL_DATE + " is null");
+            useFilter = true;
         }
         System.out.println(query);
         String[] valueArray = new String[values.size()];
@@ -421,7 +444,7 @@ public class Queries {
     }
 
     public Long getMinorNotificationTime() {
-            Cursor cursor = sqLiteDatabase.rawQuery("SELECT MIN(DATE_NOTIFICATION) FROM " + DataBase.NOTIFICATIONS_TABLE, new String[0]);
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT MIN(DATE_NOTIFICATION) FROM " + DataBase.NOTIFICATIONS_TABLE, new String[0]);
         if (cursor.moveToFirst()) {
             do {
                 return cursor.getLong(0);

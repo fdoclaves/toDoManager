@@ -220,6 +220,7 @@ public class AllTasksActivity extends AppCompatActivity {
     private void goToEditActivity(long id) {
         Intent intent = new Intent(this, EditTaskActivity.class);
         intent.putExtra(MainActivity.ID_TASK, id);
+        intent.putExtra(EditTaskActivity.FROM_ACTIVITY, this.getClass().getName());
         fillExtra(intent);
         startActivity(intent);
     }

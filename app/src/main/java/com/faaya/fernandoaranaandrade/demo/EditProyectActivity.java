@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -212,7 +213,7 @@ public class EditProyectActivity extends AppCompatActivity {
                 fillProyectData();
                 queries.saveOrUpdateProyect(proyect);
                 showMessage(getString(R.string.proyectoGuardado));
-                exit();
+                exit(false);
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -268,15 +269,20 @@ public class EditProyectActivity extends AppCompatActivity {
                 queries.deleteNotificationsByIdProyect(proyect.getId());
                 queries.deleteProyect(proyect.getId());
                 queries.deleteTasksByIdProyect(proyect.getId());
-                exit();
+                exit(true);
             }
         });
         editNameDialogFragment.show(fm, "fragment_edit_proyect");
     }
 
-    private void exit() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+    private void exit(boolean delete) {
+        if(delete || isNew()){
+            startActivity(new Intent(this, MainActivity.class));
+        } else {
+            Intent intent = new Intent(this, TaskListProyectActivity.class);
+            intent.putExtra(MainActivity.ID_PROYECT, proyect.getId());
+            startActivity(intent);
+        }
         finish();
     }
 
@@ -294,4 +300,16 @@ public class EditProyectActivity extends AppCompatActivity {
         intent.putExtra(TaskEnum.ID_PROYECT.toString(), proyect.getId());
         startActivity(intent);
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                exit(false);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
 }

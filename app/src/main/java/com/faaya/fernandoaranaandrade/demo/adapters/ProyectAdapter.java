@@ -51,19 +51,23 @@ public class ProyectAdapter extends ArrayAdapter<Proyect> {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.obra_view_list, parent, false);
-        TextView textView = rowView.findViewById(R.id.name);
-        TextView textView1 = rowView.findViewById(R.id.start_label);
-        RelativeLayout relativeLayout = rowView.findViewById(R.id.relaviteLayoutProyect);
-        Proyect proyect = values.get(position);
-        textView.setText(proyect.getName());
         try {
+            TextView textView = rowView.findViewById(R.id.name);
+            TextView textView1 = rowView.findViewById(R.id.start_label);
+            RelativeLayout relativeLayout = rowView.findViewById(R.id.relaviteLayoutProyect);
+            Proyect proyect = values.get(position);
+            textView.setText(proyect.getName());
             FechasBean fechaBean = FechasUtils.getFechasBean(new Date(proyect.getStart()), proyect.getTime().intValue(), proyect.getRange(), map);
-            textView1.setText(fechaBean.getResultaTimeString());
-            if(fechaBean.getEndCalendar().getTime().before(new Date())){
-                int countTaskWithoutRealDate = queries.getCountTaskWithoutRealDate(proyect.getId());
-                if(hasTaskWithoutFinish(countTaskWithoutRealDate)){
+            int countTaskWithoutRealDate = queries.getCountTaskWithoutRealDate(proyect.getId());
+            if(countTaskWithoutRealDate > 0){
+                textView1.setText(fechaBean.getResultaTimeString() + " - " + context.getString(R.string.unfinishTask) + ": " + countTaskWithoutRealDate);
+            } else {
+                textView1.setText(fechaBean.getResultaTimeString());
+            }
+            if (fechaBean.getEndCalendar().getTime().before(new Date())) {
+                if (hasTaskWithoutFinish(countTaskWithoutRealDate)) {
                     textView1.setTextColor(RED_R);
-                    textView1.setText(getBoldText(this.tiempo_finalizado + ". " + countTaskWithoutRealDate + " " + context.getString(R.string.unfinishTask)));
+                    textView1.setText(getBoldText(this.tiempo_finalizado + " - " + context.getString(R.string.unfinishTask) + ": " + countTaskWithoutRealDate));
                     relativeLayout.setBackgroundColor(RED);
                 } else {
                     textView1.setTextColor(GREEN_R);
@@ -86,7 +90,7 @@ public class ProyectAdapter extends ArrayAdapter<Proyect> {
     }
 
     private boolean hasTaskWithoutFinish(int countTaskWithoutRealDate) {
-        System.out.println("count:"+countTaskWithoutRealDate);
+        System.out.println("count:" + countTaskWithoutRealDate);
         return countTaskWithoutRealDate > 0;
     }
 }

@@ -58,7 +58,7 @@
     <string name="pendientesDelDia">Pendientes del día:</string>
     <string name="refresh">Refrescar</string>
     <string name="notExitTask">La tarea ha sido eliminada con anterioridad</string>
-    <string name="snoozeAction">Recordar después</string>
+    <string name="snoozeAction">POSPONER</string>
     <string name="tiempo_finalizado">TIEMPO FINALIZADO</string>
     <string name="fecha_estimada">Fecha estimada: </string>
     <string name="faltan">Faltan</string>
@@ -102,12 +102,12 @@
     <string name="Tarea">Tarea</string>
     <string name="guardada">guardada</string>
     <string name="Se_eliminarán_todos_las_tareas_relacioandas_a_este_proyecto">Todas las tareas relacionadas con este proyecto serán eliminadas.</string>
-    <string name="title_activity_main">Proyectos</string>
+    <string name="title_activity_main">To do: Manager</string>
     <string name="proyect_deleted">Proyecto eliminado</string>
     <string name="task_delete">Tarea eliminada</string>
     <string name="Finished_project">Proyecto terminado</string>
     <string name="categories">Categorías</string>
-    <string name="unfinishTask">tareas sin terminar</string>
+    <string name="unfinishTask">Tareas sin terminar</string>
     <string name="youNeedToCreateAProjectBefore">Se necesita crear un proyecto antes</string>
     <string name="youNeedToCreateAHaveCategories">Se necesita tener al menos una categoría creada</string>
     <string name="ThereAreNoPending">No hay pendientes</string>
@@ -118,4 +118,6 @@
     <string name="finish">Terminar</string>
     <string name="FINISH">TERMINAR</string>
     <string name="_24Horas">24 horas</string>
+    <string name="editProyect">Editar proyecto</string>
+    <string name="filterList">Filtar lista</string>
 </resources>

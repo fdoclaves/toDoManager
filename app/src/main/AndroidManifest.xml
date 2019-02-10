@@ -54,6 +54,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -85,7 +86,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.faaya.fernandoaranaandrade.demo.ListTaskTypeActivity" />
         </activity>
-        <activity android:name=".ListTaskTypeActivity"
+        <activity
+            android:name=".ListTaskTypeActivity"
             android:label="@string/categories">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -125,6 +127,11 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.faaya.fernandoaranaandrade.demo.AboutMeActivity" />
+        </activity>
+        <activity android:name=".TaskListProyectActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.faaya.fernandoaranaandrade.demo.MainActivity" />
         </activity>
     </application>
 

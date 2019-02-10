@@ -39,7 +39,7 @@
     <string name="proyect">PROYECT</string>
     <string name="tasks_">TASKS</string>
     <string name="task_">TASK</string>
-    <string name="title_activity_main">To Do Manager</string>
+    <string name="title_activity_main">To do: Manager</string>
     <string name="title_activity_calendar">CALENDAR</string>
     <string name="calendar_minus">Calendar</string>
     <string name="changeColorRed">Change to red:</string>
@@ -117,7 +117,7 @@
     <string name="proyect_deleted">Proyect deleted</string>
     <string name="task_delete">Task deleted</string>
     <string name="categories">Categories</string>
-    <string name="unfinishTask">unfinished tasks</string>
+    <string name="unfinishTask">Unfinished tasks</string>
     <string name="youNeedToCreateAProjectBefore">You need to create a project before</string>
     <string name="youNeedToCreateAHaveCategories">You need to have at least one category created</string>
     <string name="ThereAreNoPending">There are no pendings</string>
@@ -127,4 +127,6 @@
     <string name="finish">Finish</string>
     <string name="_24Horas">24 hours</string>
     <string name="FINISH">FINISH</string>
+    <string name="editProyect">Edit proyect</string>
+    <string name="filterList">Filter list</string>
 </resources>
