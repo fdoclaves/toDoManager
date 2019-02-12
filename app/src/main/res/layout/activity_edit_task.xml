@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -216,6 +217,9 @@
                 android:background="@color/colorPrimary"
                 android:onClick="edit_notification"
                 android:text="@string/notificationSettings"
+                android:drawableStart="@drawable/ic_action_alarm_white"
+                android:drawablePadding="5dp"
+                android:padding="5dp"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"

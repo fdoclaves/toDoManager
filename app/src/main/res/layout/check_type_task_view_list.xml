@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/relaviteLayoutProyect"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_all_task_"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="10dp">
 
 
-    <LinearLayout
+    <CheckBox
+        android:id="@+id/checkBoxTypeTask"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <CheckBox
-            android:id="@+id/checkBoxTypeTask"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="10dp"
-            android:text="CheckBox" />
-
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="8dp"
+        android:buttonTint="@color/colorPrimary"
+        android:text="CheckBox"
+        android:textColor="@color/colorPrimary"
+        android:textSize="22sp" />
 
 
-</RelativeLayout>
+</LinearLayout>

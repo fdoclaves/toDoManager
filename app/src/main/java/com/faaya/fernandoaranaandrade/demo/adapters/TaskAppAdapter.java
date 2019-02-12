@@ -3,6 +3,7 @@ package com.faaya.fernandoaranaandrade.demo.adapters;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.text.Layout;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import com.faaya.fernandoaranaandrade.demo.Beans.SettingsEnum;
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskApp;
 import com.faaya.fernandoaranaandrade.demo.R;
 import com.faaya.fernandoaranaandrade.demo.database.Queries;
+import com.faaya.fernandoaranaandrade.demo.utils.HourUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -69,7 +71,7 @@ public class TaskAppAdapter extends ArrayAdapter<TaskApp> {
         spanString.setSpan(new StyleSpan(Typeface.BOLD), 0, spanString.length(), 0);
         nameTextView.setText(spanString);
         Date endDate = new Date(taskApp.getDateEnd());
-        startTextView.setText(fecha_estimada + simpleDateFormat.format(endDate));
+        startTextView.setText(simpleDateFormat.format(endDate));
         typeTextView.setText(queries.getTaskTypeById(taskApp.getIdType()).getName().toUpperCase());
         Proyect proyect = queries.getByIdProyect(taskApp.getProyectId());
         proyectTextView.setText(proyect.getName().toUpperCase());
@@ -97,7 +99,19 @@ public class TaskAppAdapter extends ArrayAdapter<TaskApp> {
                 linearLayout.setBackgroundColor(color);
             }
         }
+        if((taskApp.getRealDate() == null || taskApp.getRealDate() == 0) && taskApp.getActiveNotification().equals(SettingsEnum.ON.toString()) && isAfterTodayDate(taskApp)){
+            TextView textViewInfo = rowView.findViewById(R.id.textViewNotificationInfo);
+            textViewInfo.setText(taskApp.getDateNotification());
+        } else {
+            LinearLayout layout = rowView.findViewById(R.id.layoutNotificationInfo);
+            layout.setVisibility(View.INVISIBLE);
+        }
         return rowView;
+    }
+
+    private boolean isAfterTodayDate(TaskApp taskApp) {
+        Long alarmTime = HourUtils.getCalendar(taskApp.getDateNotification(), taskApp.getDateEnd());
+        return new Date().before(new Date(alarmTime));
     }
 
     private int getColor(TaskApp taskApp) {

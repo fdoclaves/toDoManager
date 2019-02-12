@@ -38,7 +38,16 @@ public class TaskType implements Serializable {
         this.id = id;
     }
 
+    @Override
     public String toString() {
         return name;
+    }
+
+    @Override
+    public boolean equals(Object other){
+        if(other instanceof TaskType){
+            return getId().longValue() == ((TaskType)other).getId().longValue();
+        }
+        return false;
     }
 }

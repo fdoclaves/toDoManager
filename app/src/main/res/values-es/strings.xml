@@ -120,4 +120,6 @@
     <string name="_24Horas">24 horas</string>
     <string name="editProyect">Editar proyecto</string>
     <string name="filterList">Filtar lista</string>
+    <string name="ThereAreNoTasksToFilter">No hay tareas a filtar</string>
+    <string name="ThereAreNoTasks">No hay tareas</string>
 </resources>

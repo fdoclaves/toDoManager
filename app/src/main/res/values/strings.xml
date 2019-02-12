@@ -83,7 +83,7 @@
     <string name="tiempo_para_recordar_despues">Snooze:</string>
     <string name="proyectoGuardado">Saved proyect</string>
     <string name="eliminar_definitivamente">Delete</string>
-    <string name="tiempo_finalizado">TIME IS UP</string>
+    <string name="tiempo_finalizado">TIME IS OVER</string>
     <string name="Finished_project">Finished project</string>
     <string name="snoozeAction">SNOOZE</string>
     <string name="faltan">" "</string>
@@ -129,4 +129,6 @@
     <string name="FINISH">FINISH</string>
     <string name="editProyect">Edit proyect</string>
     <string name="filterList">Filter list</string>
+    <string name="ThereAreNoTasksToFilter">There are no tasks to filter</string>
+    <string name="ThereAreNoTasks">There are no tasks</string>
 </resources>

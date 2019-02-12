@@ -26,7 +26,6 @@ public class FilterTaskDialogFragment extends DialogFragment {
     private Button cancelButton;
     private OkActionFilter okAction;
     private ListView listViewCheckTypes;
-    private Queries queries;
     private Switch switchListCheck;
     private List<TaskType> checkedBefore;
     private List<TaskType> checkedCurrent;
@@ -76,7 +75,6 @@ public class FilterTaskDialogFragment extends DialogFragment {
             }
         });
         listViewCheckTypes = view.findViewById(R.id.listViewCheckTypes);
-        queries = new Queries(view.getContext());
         listViewCheckTypes.setAdapter(new CheckTypeTaskAppAdapter(view.getContext(), allTaskType, checkedCurrent));
         String title = getArguments().getString(TITLE, "");
         getDialog().setTitle(title);

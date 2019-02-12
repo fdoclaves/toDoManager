@@ -180,6 +180,7 @@ public class EditTaskActivity extends AppCompatActivity {
                 } else {
                     realDataTaskButton.setText(getString(R.string.addDate));
                     realDataTaskButton.setVisibility(View.INVISIBLE);
+                    taskApp.setRealDate(null);
                 }
             }
         });
@@ -370,6 +371,8 @@ public class EditTaskActivity extends AppCompatActivity {
             if(fromActivity.contains("TaskListProyectActivity")){
                 newIntent = new Intent(this, TaskListProyectActivity.class);
                 newIntent.putExtra(TaskEnum.ID_PROYECT.toString(), idProyectCurrentIntent);
+                Serializable serializable = getIntent().getSerializableExtra(TaskListProyectActivity.FILTER_BEAN);
+                newIntent.putExtra(TaskListProyectActivity.FILTER_BEAN, serializable);
             }
             if(fromActivity.contains("CalendarActivity")){
                 newIntent = new Intent(this, CalendarActivity.class);
@@ -457,6 +460,7 @@ public class EditTaskActivity extends AppCompatActivity {
     public void edit_semaforo(View view) {
         Intent intent = new Intent(this, EditSemaforoTaskActivity.class);
         intent.putExtra(EditSemaforoTaskActivity.TASK, taskApp);
+        intent.putExtra(EditTaskActivity.FROM_ACTIVITY, getIntent().getStringExtra(FROM_ACTIVITY));
         fillIBackIntent(intent);
         startActivity(intent);
     }
@@ -464,6 +468,7 @@ public class EditTaskActivity extends AppCompatActivity {
     public void edit_notification(View view) {
         Intent intent = new Intent(this, NotificationsSettingsTaskActivity.class);
         intent.putExtra(NotificationsSettingsTaskActivity.TASK, taskApp);
+        intent.putExtra(EditTaskActivity.FROM_ACTIVITY, getIntent().getStringExtra(FROM_ACTIVITY));
         fillIBackIntent(intent);
         startActivity(intent);
     }

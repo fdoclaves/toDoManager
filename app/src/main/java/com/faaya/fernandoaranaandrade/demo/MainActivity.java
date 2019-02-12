@@ -1,9 +1,6 @@
 package com.faaya.fernandoaranaandrade.demo;
 
-import android.app.ActivityManager;
-import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
@@ -156,7 +153,10 @@ public class MainActivity extends AppCompatActivity
         editNameDialogFragment.setOkAction(new OkAction() {
             @Override
             public void doAction() {
-                System.exit(0);
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                intent.addCategory(Intent.CATEGORY_HOME);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
             }
         });
         editNameDialogFragment.show(fm, "fragment_edit_name");

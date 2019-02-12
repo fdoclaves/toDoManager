@@ -69,6 +69,10 @@ public class EditSemaforoTaskActivity extends SuperEditSemaforoActivity {
         if (idProyectCurrentIntent != 0) {
             newIntent.putExtra(TaskEnum.ID_PROYECT.toString(), idProyectCurrentIntent);
         }
+        String fromActivity = currentIntent.getStringExtra(EditTaskActivity.FROM_ACTIVITY);
+        if(fromActivity != null){
+            newIntent.putExtra(EditTaskActivity.FROM_ACTIVITY, fromActivity);
+        }
     }
 
     private String getText(Spinner spinner, EditText editText) {

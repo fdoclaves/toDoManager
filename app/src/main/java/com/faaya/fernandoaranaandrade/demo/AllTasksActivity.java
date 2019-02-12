@@ -102,7 +102,6 @@ public class AllTasksActivity extends AppCompatActivity {
         typeSpinner.setSelection(0);
         Intent intent = getIntent();
         fillData(intent, typesValues, allProyects, rangeTimeValues);
-        filter();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -241,4 +240,11 @@ public class AllTasksActivity extends AppCompatActivity {
     private void showMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        filter();
+    }
+
 }

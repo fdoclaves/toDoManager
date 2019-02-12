@@ -38,7 +38,7 @@ public class CheckTypeTaskAppAdapter extends ArrayAdapter<TaskType> {
                 break;
             }
         }
-        checkBox.setText(taskType.getName());
+        checkBox.setText(taskType.getName().toUpperCase());
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

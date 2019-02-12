@@ -33,13 +33,6 @@ public class CalendarActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
-        Calendar calendar = Calendar.getInstance();
-        year = calendar.get(Calendar.YEAR);
-        month = calendar.get(Calendar.MONTH);
-        dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-        queries = new Queries(this);
-        Long endRangeDateStart = getStartDay(calendar);
-        Long endRangeDateFinish = getEndDay(calendar);
         CalendarView calendarView = findViewById(R.id.calendarView);
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
 
@@ -73,7 +66,6 @@ public class CalendarActivity extends AppCompatActivity {
                 goToEditActivity(taskList.get(position).getId());
             }
         });
-        fillProyectSpinnerWithData(queries.selectTaskByIdProyectEndDateAndType(null, endRangeDateStart, endRangeDateFinish, null));
     }
 
     private void fillProyectSpinnerWithData(List<TaskApp> taskApps) {
@@ -123,6 +115,19 @@ public class CalendarActivity extends AppCompatActivity {
         intent.putExtra(TaskEnum.END_DAY.toString(), calendar);
         intent.putExtra(EditTaskActivity.FROM_ACTIVITY, this.getClass().getName());
         startActivity(intent);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        Calendar calendar = Calendar.getInstance();
+        year = calendar.get(Calendar.YEAR);
+        month = calendar.get(Calendar.MONTH);
+        dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        queries = new Queries(this);
+        Long endRangeDateStart = getStartDay(calendar);
+        Long endRangeDateFinish = getEndDay(calendar);
+        fillProyectSpinnerWithData(queries.selectTaskByIdProyectEndDateAndType(null, endRangeDateStart, endRangeDateFinish, null));
     }
 
 }

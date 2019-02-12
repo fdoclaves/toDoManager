@@ -286,21 +286,6 @@ public class EditProyectActivity extends AppCompatActivity {
         finish();
     }
 
-    public void add_task_edit(View view) throws ParseException {
-        if(isNew()){
-            if (isCorrectData()) {
-                fillProyectData();
-                proyect = queries.saveProyect(proyect);
-                showMessage(getString(R.string.proyectoGuardado));
-            } else {
-                return;
-            }
-        }
-        Intent intent = new Intent(this, AllTasksActivity.class);
-        intent.putExtra(TaskEnum.ID_PROYECT.toString(), proyect.getId());
-        startActivity(intent);
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

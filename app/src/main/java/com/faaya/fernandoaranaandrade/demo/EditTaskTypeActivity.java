@@ -44,7 +44,7 @@ public class EditTaskTypeActivity extends AppCompatActivity {
             taskType.setName(nameEditText.getText().toString());
             queries.saveOrUpdate(taskType);
             showMessage(getString(R.string.se_guardo_correctamente));
-            goToSettinsActivity();
+            exit();
         } else {
             showMessage(getString(R.string.el_nombre_no_es_valido));
         }
@@ -63,14 +63,14 @@ public class EditTaskTypeActivity extends AppCompatActivity {
                 queries.deleteNotificationByTaskType(taskType.getId());
                 queries.deleteTaskType(taskType.getId());
                 queries.deleteTaskByTaskType(taskType.getId());
-                goToSettinsActivity();
+                exit();
             }
         });
         editNameDialogFragment.show(fm, "fragment_edit_task_type");
     }
 
-    private void goToSettinsActivity() {
-        Intent intent = new Intent(this, SettingsActivity.class);
+    private void exit() {
+        Intent intent = new Intent(this, ListTaskTypeActivity.class);
         startActivity(intent);
         finish();
     }
