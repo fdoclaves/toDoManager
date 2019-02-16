@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -32,7 +34,6 @@ import com.faaya.fernandoaranaandrade.demo.utils.HourUtils;
 
 import java.io.Serializable;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -57,7 +58,7 @@ public class EditTaskActivity extends AppCompatActivity {
 
     Button notificationButton;
 
-    ImageButton deleteTaskEditImageButton;
+    Button buttonDelete;
 
     EditText commentsTaskEditText;
 
@@ -71,16 +72,29 @@ public class EditTaskActivity extends AppCompatActivity {
 
     long idProyectCurrentIntent;
 
+    Button hourButton;
+
+    ImageButton cleanDate, cleanHour;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_task);
         queries = new Queries(this);
+        Intent intent = getIntent();
+        setTask(intent);
+        setContentView(R.layout.activity_edit_task);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         typesSpinner = findViewById(R.id.proyectsSpinnerAll);
         proyectSpinner = findViewById(R.id.proyectSpinner);
         nameTaskEditText = findViewById(R.id.nameTaskEditText);
         dateEndTaskButton = findViewById(R.id.buttonEstimateDate);
         realDataTaskButton = findViewById(R.id.buttonRealDate);
+        hourButton = findViewById(R.id.buttonHour);
+        cleanDate = findViewById(R.id.imageButtonCleanDate);
+        cleanHour = findViewById(R.id.imageViewCleanHour);
         commentsTaskEditText = findViewById(R.id.commentsTaskEditText);
         notificationButton = findViewById(R.id.button7);
         commentsTaskEditText.setOnTouchListener(new View.OnTouchListener() {
@@ -95,8 +109,6 @@ public class EditTaskActivity extends AppCompatActivity {
                 return false;
             }
         });
-        Intent intent = getIntent();
-        setTask(intent);
         List<TaskType> typesValues = queries.getAllTaskTypes();
         typesValues.add(new TaskType(""));
         typesSpinner.setAdapter(new ArrayAdapter<TaskType>(this, R.layout.spinner18, typesValues));
@@ -111,8 +123,8 @@ public class EditTaskActivity extends AppCompatActivity {
         checkBoxEditTask = findViewById(R.id.checkBoxEditTask);
         fillData(typesValues, proyects);
         if (isNew()) {
-            deleteTaskEditImageButton = findViewById(R.id.deleteTaskEditImageButton);
-            deleteTaskEditImageButton.setVisibility(View.INVISIBLE);
+            buttonDelete = findViewById(R.id.buttonDelete);
+            buttonDelete.setVisibility(View.INVISIBLE);
         }
 
         typesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -177,16 +189,26 @@ public class EditTaskActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
-                    realDataTaskButton.setVisibility(View.VISIBLE);
-                    String date = DateEnum.dateSimpleDateFormat.format(new Date());
-                    realDataTaskButton.setText(date);
+                    finishTask();
                 } else {
-                    realDataTaskButton.setText(getString(R.string.addDate));
-                    realDataTaskButton.setVisibility(View.INVISIBLE);
-                    taskApp.setRealDate(null);
+                    unfinishTask();
                 }
             }
         });
+    }
+
+    private void unfinishTask() {
+        realDataTaskButton.setText(getString(R.string.setDate));
+        realDataTaskButton.setVisibility(View.INVISIBLE);
+        taskApp.setRealDate(null);
+    }
+
+    private void finishTask() {
+        realDataTaskButton.setVisibility(View.VISIBLE);
+        Date finishDate = new Date();
+        String date = DateEnum.dateSimpleDateFormat.format(finishDate);
+        realDataTaskButton.setText(date);
+        taskApp.setRealDate(finishDate.getTime());
     }
 
     private void fillData(List<TaskType> typesValues, List<Proyect> proyects) {
@@ -194,8 +216,16 @@ public class EditTaskActivity extends AppCompatActivity {
         if(taskApp.getName() != null){
             nameTaskEditText.setText(taskApp.getName());
         }
-        if(taskApp.getDateEnd() != null){
-            dateEndTaskButton.setText(DateEnum.dateSimpleDateFormat.format(new Date(taskApp.getDateEnd())));
+        if(taskApp.getDateEnd() != null && taskApp.getDateEnd() != 0){
+            Date date = new Date(taskApp.getDateEnd());
+            dateEndTaskButton.setText(DateEnum.dateSimpleDateFormat.format(date));
+            if(!isBegingDate()){
+                hourButton.setText(DateEnum.hourSimpleDateFormat.format(date));
+            }
+            fillCleanButtons();
+        } else {
+            hourButton.setVisibility(View.INVISIBLE);
+            fillCleanButtons();
         }
         if (taskApp.getRealDate() != null && taskApp.getRealDate().longValue() != 0) {
             checkBoxEditTask.setChecked(true);
@@ -220,6 +250,31 @@ public class EditTaskActivity extends AppCompatActivity {
             notificationButton.setText(taskApp.getDateNotification());
         }
 
+    }
+
+    private void fillCleanButtons() {
+        if(hasEndDate(taskApp.getDateEnd())){
+            cleanHour.setVisibility(View.VISIBLE);
+            if(isBegingDate()){
+                cleanHour.setVisibility(View.INVISIBLE);
+            } else {
+                cleanHour.setVisibility(View.VISIBLE);
+            }
+            cleanDate.setVisibility(View.VISIBLE);
+        } else {
+            cleanHour.setVisibility(View.INVISIBLE);
+            cleanDate.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private boolean isBegingDate() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(taskApp.getDateEnd());
+        return calendar.get(Calendar.HOUR_OF_DAY) == 0 && calendar.get(Calendar.MINUTE) == 0;
+    }
+
+    private boolean hasEndDate(Long dateEnd) {
+        return dateEnd != null && dateEnd.longValue() != 0;
     }
 
     private void fillProyectData(List<Proyect> proyects, Long idProyect) {
@@ -260,10 +315,10 @@ public class EditTaskActivity extends AppCompatActivity {
         editNameDialogFragment.show(fm, "fragment_edit_name");
     }
 
-    public void save(View view) {
+    private void save() {
         try {
             if (isCorrectData()) {
-                saveData();
+                saveDataAndNotification();
                 showMessage(getString(R.string.Tarea) + " " + taskApp.getName().toUpperCase() + " " + getString(R.string.guardada));
                 exit();
             }
@@ -272,50 +327,56 @@ public class EditTaskActivity extends AppCompatActivity {
         }
     }
 
-    private void saveData() throws ParseException {
+    private void saveDataAndNotification() throws ParseException {
         fillTaskType();
         fillProyectId();
         fillName();
         fillDateEnd();
-        fillRealDate();
         fillComments();
         queries.saveOrUpdateTaskApp(taskApp);
 
-        if(taskApp.getActiveNotification() != null && taskApp.getActiveNotification().equals(SettingsEnum.ON.toString()) && taskApp.getRealDate() == null){
-            Long id = taskApp.getId();
-            if(id == null){
-                id = queries.getByIdProyectAndName(taskApp.getProyectId(), taskApp.getName()).getId();
-            }
-            Long alarmTime = HourUtils.getCalendar(taskApp.getDateNotification(), taskApp.getDateEnd());
-            System.out.println("Fecha notificación:" + new Date(alarmTime));
-            queries.saveUpdateOrDeleteNotifications(true, new NotificationsApp(alarmTime, id));
+        Long idTask = taskApp.getId();
+        if(idTask == null){
+            idTask = queries.getByIdProyectAndName(taskApp.getProyectId(), taskApp.getName()).getId();
+        }
+        if(isNotificationActive()){
+            Long alarmTime = HourUtils.getCalendar(taskApp.getDateNotification());
+            queries.saveUpdateOrDeleteNotifications(true, new NotificationsApp(alarmTime, idTask));
             Util.scheduleNotification(this,queries,alarmTime);
+            System.out.println("Fecha notificación:" + new Date(alarmTime));
+        } else {
+            queries.deleteNotificationByIdTask(idTask);
         }
 
+    }
+
+    private boolean isNotificationActive() {
+        return taskApp.getActiveNotification() != null && taskApp.getActiveNotification().equals(SettingsEnum.ON.toString());
     }
 
     private void fillComments() {
         taskApp.setComments(commentsTaskEditText.getText().toString());
     }
 
-    private void fillRealDate() {
-        try {
-            if (isValidDate(realDataTaskButton)) {
-                Date realDate = DateEnum.dateSimpleDateFormat.parse(realDataTaskButton.getText().toString());
-                taskApp.setRealDate(realDate.getTime());
-            } else {
-                taskApp.setRealDate(null);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     private void fillDateEnd() {
         try {
-            if (isValidDate(dateEndTaskButton)) {
+            if (!dateEndTaskButton.getText().toString().equalsIgnoreCase(getString(R.string.setDate))) {
                 Date dateEnd = DateEnum.dateSimpleDateFormat.parse(dateEndTaskButton.getText().toString());
-                taskApp.setDateEnd(dateEnd.getTime());
+                String hourString = hourButton.getText().toString();
+                if(hourString.equalsIgnoreCase(getString(R.string.setHour))){
+                    taskApp.setDateEnd(dateEnd.getTime());
+                } else {
+                    Date hourDate = DateEnum.hourSimpleDateFormat.parse(hourString);
+                    Calendar hourCalendar = Calendar.getInstance();
+                    hourCalendar.setTime(hourDate);
+                    Calendar dateCalendar = Calendar.getInstance();
+                    dateCalendar.setTime(dateEnd);
+                    dateCalendar.set(Calendar.HOUR_OF_DAY, hourCalendar.get(Calendar.HOUR_OF_DAY));
+                    dateCalendar.set(Calendar.MINUTE, hourCalendar.get(Calendar.MINUTE));
+                    System.out.println(dateCalendar.getTime());
+                    taskApp.setDateEnd(dateCalendar.getTimeInMillis());
+                }
+                hourButton.setVisibility(View.VISIBLE);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -347,15 +408,7 @@ public class EditTaskActivity extends AppCompatActivity {
             showMessage(getString(R.string.El_nombre_no_puede_estar_vacio));
             return false;
         }
-        if (!isValidDate(dateEndTaskButton)) {
-            showMessage(getString(R.string.No_se_a_configurado_la_fecha_estimada));
-            return false;
-        }
         return true;
-    }
-
-    private boolean isValidDate(Button button) {
-        return button.getText().toString().matches(DATE_REGEX);
     }
 
     private void showMessage(String message) {
@@ -427,6 +480,20 @@ public class EditTaskActivity extends AppCompatActivity {
         }
     }
 
+    public void set_hour(View view) {
+        String textButton = hourButton.getText().toString();
+        HourDialogFragment dialogFragment = HourDialogFragment.newInstance(" ", textButton);
+        dialogFragment.setOkActionDate(new OkActionDate() {
+            @Override
+            public void doAction(Calendar calendar) {
+                hourButton.setText(DateEnum.hourSimpleDateFormat.format(calendar.getTime()));
+                fillDateEnd();
+                fillCleanButtons();
+            }
+        });
+        dialogFragment.show(getSupportFragmentManager(), "fragment_edit_hour");
+    }
+
     public void set_date(View view) {
         String textButton = null;
         if (dateEndTaskButton.getText().toString().matches(DATE_REGEX)) {
@@ -438,6 +505,7 @@ public class EditTaskActivity extends AppCompatActivity {
             public void doAction(Calendar calendar) {
                 dateEndTaskButton.setText(DateEnum.dateSimpleDateFormat.format(calendar.getTime()));
                 fillDateEnd();
+                fillCleanButtons();
             }
         });
         dateDialogFragment.show(getSupportFragmentManager(), "fragment_edit_date");
@@ -452,14 +520,36 @@ public class EditTaskActivity extends AppCompatActivity {
         dateDialogFragment.setOkActionDate(new OkActionDate() {
             @Override
             public void doAction(Calendar calendar) {
-                realDataTaskButton.setText(DateEnum.dateSimpleDateFormat.format(calendar.getTime()));
-                fillRealDate();
+                try {
+                    realDataTaskButton.setText(DateEnum.dateSimpleDateFormat.format(calendar.getTime()));
+                    taskApp.setRealDate(calendar.getTimeInMillis());
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         });
         dateDialogFragment.show(getSupportFragmentManager(), "fragment_edit_date");
     }
 
-    public void edit_semaforo(View view) {
+    public void clean_date(View view) {
+        taskApp.setDateEnd(null);
+        dateEndTaskButton.setText(getString(R.string.setDate));
+        hourButton.setText(getString(R.string.setHour));
+        hourButton.setVisibility(View.INVISIBLE);
+        fillCleanButtons();
+    }
+
+    public void clean_hour(View view) {
+        hourButton.setText(getString(R.string.setHour));
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(taskApp.getDateEnd());
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        taskApp.setDateEnd(calendar.getTimeInMillis());
+        fillCleanButtons();
+    }
+
+    public void edit_semaforo() {
         Intent newIntent = new Intent(this, EditSemaforoTaskActivity.class);
         newIntent.putExtra(EditSemaforoTaskActivity.TASK, taskApp);
         newIntent.putExtra(EditTaskActivity.FROM_ACTIVITY, getIntent().getStringExtra(FROM_ACTIVITY));
@@ -487,7 +577,28 @@ public class EditTaskActivity extends AppCompatActivity {
             case android.R.id.home:
                 exit();
                 return true;
+            case R.id.saveTool:
+                save();
+                return true;
+            case R.id.colorTool:
+                edit_semaforo();
+                return true;
+            case R.id.finishTool:
+                taskApp.setRealDate(new Date().getTime());
+                save();
+                return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        if(taskApp != null && taskApp.getId() != null && (taskApp.getRealDate() == null || taskApp.getRealDate() == 0)){
+            getMenuInflater().inflate(R.menu.tool_bar_edit_task, menu);
+        } else {
+            getMenuInflater().inflate(R.menu.tool_bar_edit_task_sin_finish, menu);
+        }
+        return true;
     }
 }

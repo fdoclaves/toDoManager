@@ -145,19 +145,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
-        android:id="@+id/imageButtonSaveSemaforo"
-        android:layout_width="64dp"
-        android:scaleType="fitCenter"
-        android:layout_height="60dp"
+    <Button
+        android:id="@+id/buttonSaveSemaforo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:background="@color/colorPrimary"
+        android:drawableStart="@android:drawable/ic_menu_save"
         android:onClick="save_semaforo"
-        android:src="@android:drawable/ic_menu_save"
+        android:padding="8dp"
+        android:text="@string/save"
+        android:textColor="@color/colorWhite"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:src="@android:drawable/ic_menu_save" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/textView14"

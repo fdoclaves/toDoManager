@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Spinner;
 
 import com.faaya.fernandoaranaandrade.demo.Beans.SettingsEnum;
@@ -20,13 +20,12 @@ public class EditSemaforoTaskActivity extends SuperEditSemaforoActivity {
 
     private TaskApp taskApp;
 
-    private ImageButton imageButton;
+    private Button imageButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        imageButton = findViewById(R.id.imageButtonSaveSemaforo);
-        imageButton.setImageResource(R.drawable.ic_keyboard_backspace);
+        imageButton = findViewById(R.id.buttonSaveSemaforo);
         imageButton.setVisibility(View.INVISIBLE);
     }
 

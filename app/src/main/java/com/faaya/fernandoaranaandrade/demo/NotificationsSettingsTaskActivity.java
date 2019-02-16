@@ -6,18 +6,14 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.Spinner;
+import android.widget.CompoundButton;
 import android.widget.Switch;
 
 import com.faaya.fernandoaranaandrade.demo.Beans.DateEnum;
 import com.faaya.fernandoaranaandrade.demo.Beans.SettingsEnum;
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskApp;
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskEnum;
-import com.faaya.fernandoaranaandrade.demo.utils.HourUtils;
 
 import java.io.Serializable;
 import java.text.ParseException;
@@ -30,13 +26,10 @@ public class NotificationsSettingsTaskActivity extends AppCompatActivity {
 
     Button hourButton;
     Switch aSwitch;
-    private ImageButton imageButton;
     private TaskApp taskApp;
     private Button buttonDateNotification;
-    private Spinner spinnerNotification;
     private String estimatedDate;
     private String specifyDate;
-    private String hourSetting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,37 +37,41 @@ public class NotificationsSettingsTaskActivity extends AppCompatActivity {
         setContentView(R.layout.activity_notifications_settings_task);
         estimatedDate = getString(R.string.estimatedDate);
         specifyDate = getString(R.string.specifyDate);
-        spinnerNotification = findViewById(R.id.spinnerNotification);
-        imageButton = findViewById(R.id.imageButtonNotificationSave);
-        imageButton.setImageResource(R.drawable.ic_keyboard_backspace);
-        imageButton.setVisibility(View.INVISIBLE);
         hourButton = findViewById(R.id.notifacionButton);
         buttonDateNotification = findViewById(R.id.buttonDateNotification);
         aSwitch = findViewById(R.id.switchNotification);
-        taskApp = (TaskApp) getIntent().getSerializableExtra(TASK);
-        final String[] rangeTimeValues = {estimatedDate, getString(R.string.specifyDate)};
-        spinnerNotification.setAdapter(new ArrayAdapter<String>(this, R.layout.spinner18, rangeTimeValues));
-        AdapterView.OnItemSelectedListener listener = new AdapterView.OnItemSelectedListener() {
+
+        aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                if (rangeTimeValues[position].equals(estimatedDate)) {
-                    buttonDateNotification.setVisibility(View.INVISIBLE);
-                } else {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    hourButton.setVisibility(View.VISIBLE);
                     buttonDateNotification.setVisibility(View.VISIBLE);
+                    if(taskApp.getDateEnd() != null && taskApp.getDateEnd() != 0){
+                        Date date = new Date(taskApp.getDateEnd());
+                        buttonDateNotification.setText(DateEnum.dateSimpleDateFormat.format(date));
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTimeInMillis(taskApp.getDateEnd());
+                        if(calendar.get(Calendar.HOUR_OF_DAY) != 0 && calendar.get(Calendar.MINUTE) != 0){
+                            hourButton.setText(DateEnum.hourSimpleDateFormat.format(date));
+                        }
+                    }
+                } else {
+                    hourButton.setVisibility(View.INVISIBLE);
+                    buttonDateNotification.setVisibility(View.INVISIBLE);
                 }
             }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-
-            }
-
-        };
-        spinnerNotification.setOnItemSelectedListener(listener);
-        fillSwitch();
-        fillHourButton();
-        fillSpinner(rangeTimeValues);
-        fillDateButton();
+        });
+        taskApp = (TaskApp) getIntent().getSerializableExtra(TASK);
+        if (isActive()) {
+            aSwitch.setChecked(true);
+            fillHourButton();
+            fillDateButton();
+        } else {
+            aSwitch.setChecked(false);
+            hourButton.setVisibility(View.INVISIBLE);
+            buttonDateNotification.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void fillDateButton() {
@@ -82,21 +79,11 @@ public class NotificationsSettingsTaskActivity extends AppCompatActivity {
         if (dateNotification == null || !dateNotification.matches(DateEnum.FULL_DATE_REGEX)) {
             buttonDateNotification.setVisibility(View.INVISIBLE);
         } else {
-            try{
+            try {
                 String date = DateEnum.dateSimpleDateFormat.format(DateEnum.fullDateSimpleDateFormat.parse(dateNotification));
                 buttonDateNotification.setText(date);
-            } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
-            }
-        }
-    }
-
-    private void fillSpinner(String[] rangeTimeValues) {
-        if (taskApp.getDateNotification() != null && taskApp.getDateNotification().matches(DateEnum.FULL_DATE_REGEX)) {
-            for (int i = 0; i < rangeTimeValues.length; i++) {
-                if (rangeTimeValues[i].equals(specifyDate)) {
-                    spinnerNotification.setSelection(i);
-                }
             }
         }
     }
@@ -116,20 +103,13 @@ public class NotificationsSettingsTaskActivity extends AppCompatActivity {
         }
     }
 
-    private void fillSwitch() {
+    private boolean isActive() {
         String active = taskApp.getActiveNotification();
-        if ((active != null && active.equals(SettingsEnum.ON.toString())) || taskApp.getDateNotification() == null) {
-            aSwitch.setChecked(true);
-        } else {
-            aSwitch.setChecked(false);
-        }
+        return active != null && active.equals(SettingsEnum.ON.toString());
     }
 
     public void set_hour(View view) {
-        String textButton = null;
-        if (hourButton.getText().toString().matches(DateEnum.HOUR_REGEX)) {
-            textButton = hourButton.getText().toString();
-        }
+        String textButton = hourButton.getText().toString();
         HourDialogFragment dialogFragment = HourDialogFragment.newInstance(" ", textButton);
         dialogFragment.setOkActionDate(new OkActionDate() {
             @Override
@@ -160,50 +140,45 @@ public class NotificationsSettingsTaskActivity extends AppCompatActivity {
     }
 
     private void saveData(View view) {
-        if (aSwitch.isChecked()) {
-            if (hourButton.getText().toString().equals(getString(R.string.setHour))) {
-                Snackbar.make(view, getString(R.string.youNeedToSetHour), Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                return;
-            }
-            String selectedItem = (String) spinnerNotification.getSelectedItem();
-            if (selectedItem.equals(specifyDate) && !buttonDateNotification.getText().toString().matches(DateEnum.DATE_REGEX)) {
-                Snackbar.make(view, getString(R.string.youNeedToSetDate), Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                return;
-            }
-            taskApp.setActiveNotification(SettingsEnum.ON.toString());
-            if (selectedItem.equals(estimatedDate)) {
-                taskApp.setDateNotification(hourButton.getText().toString());
-            }
-            if(selectedItem.equals(specifyDate)){
-                try {
-                    Calendar calendarHour = Calendar.getInstance();
-                    calendarHour.setTime(DateEnum.hourSimpleDateFormat.parse(hourButton.getText().toString()));
-                    Calendar calendarDate = Calendar.getInstance();
-                    calendarDate.setTime(DateEnum.dateSimpleDateFormat.parse(buttonDateNotification.getText().toString()));
-                    Calendar calendarFull = Calendar.getInstance();
-                    calendarFull.set(Calendar.DAY_OF_MONTH, calendarDate.get(Calendar.DAY_OF_MONTH));
-                    calendarFull.set(Calendar.MONTH, calendarDate.get(Calendar.MONTH));
-                    calendarFull.set(Calendar.YEAR, calendarDate.get(Calendar.YEAR));
-                    calendarFull.set(Calendar.HOUR_OF_DAY, calendarHour.get(Calendar.HOUR_OF_DAY));
-                    calendarFull.set(Calendar.MINUTE, calendarHour.get(Calendar.MINUTE));
-                    String dateNotification = DateEnum.fullDateSimpleDateFormat.format(calendarFull.getTime());
-                    System.out.println(dateNotification);
-                    taskApp.setDateNotification(dateNotification);
-                } catch (Exception e){
-                    e.printStackTrace();
+        try {
+            if (aSwitch.isChecked()) {
+                if (hourButton.getText().toString().equalsIgnoreCase(getString(R.string.setHour))) {
+                    Snackbar.make(view, getString(R.string.youNeedToSetHour), Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                    return;
                 }
+                if (buttonDateNotification.getText().toString().equalsIgnoreCase(getString(R.string.setDate))) {
+                    Snackbar.make(view, getString(R.string.youNeedToSetDate), Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                    return;
+                }
+                taskApp.setActiveNotification(SettingsEnum.ON.toString());
+                taskApp.setDateNotification(hourButton.getText().toString());
+                Calendar calendarHour = Calendar.getInstance();
+                calendarHour.setTime(DateEnum.hourSimpleDateFormat.parse(hourButton.getText().toString()));
+                Calendar calendarDate = Calendar.getInstance();
+                calendarDate.setTime(DateEnum.dateSimpleDateFormat.parse(buttonDateNotification.getText().toString()));
+                Calendar calendarFull = Calendar.getInstance();
+                calendarFull.set(Calendar.DAY_OF_MONTH, calendarDate.get(Calendar.DAY_OF_MONTH));
+                calendarFull.set(Calendar.MONTH, calendarDate.get(Calendar.MONTH));
+                calendarFull.set(Calendar.YEAR, calendarDate.get(Calendar.YEAR));
+                calendarFull.set(Calendar.HOUR_OF_DAY, calendarHour.get(Calendar.HOUR_OF_DAY));
+                calendarFull.set(Calendar.MINUTE, calendarHour.get(Calendar.MINUTE));
+                String dateNotification = DateEnum.fullDateSimpleDateFormat.format(calendarFull.getTime());
+                System.out.println(dateNotification);
+                taskApp.setDateNotification(dateNotification);
+            } else {
+                taskApp.setActiveNotification(SettingsEnum.OFF.toString());
+                taskApp.setDateNotification(null);
             }
-        } else {
-            taskApp.setActiveNotification(SettingsEnum.OFF.toString());
-            taskApp.setDateNotification(null);
+            Intent newIntent = new Intent(this, EditTaskActivity.class);
+            newIntent.putExtra(TASK, taskApp);
+            Serializable serializable = getIntent().getSerializableExtra(TaskListProyectActivity.FILTER_BEAN);
+            newIntent.putExtra(TaskListProyectActivity.FILTER_BEAN, serializable);
+            fillIBackIntent(newIntent, getIntent());
+            startActivity(newIntent);
+            finish();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        Intent newIntent = new Intent(this, EditTaskActivity.class);
-        newIntent.putExtra(TASK, taskApp);
-        Serializable serializable = getIntent().getSerializableExtra(TaskListProyectActivity.FILTER_BEAN);
-        newIntent.putExtra(TaskListProyectActivity.FILTER_BEAN, serializable);
-        fillIBackIntent(newIntent, getIntent());
-        startActivity(newIntent);
-        finish();
     }
 
     private void fillIBackIntent(final Intent newIntent, final Intent currentIntent) {
@@ -220,7 +195,7 @@ public class NotificationsSettingsTaskActivity extends AppCompatActivity {
             newIntent.putExtra(TaskEnum.ID_PROYECT.toString(), idProyectCurrentIntent);
         }
         String fromActivity = currentIntent.getStringExtra(EditTaskActivity.FROM_ACTIVITY);
-        if(fromActivity != null){
+        if (fromActivity != null) {
             newIntent.putExtra(EditTaskActivity.FROM_ACTIVITY, fromActivity);
         }
     }

@@ -78,7 +78,7 @@
     <string name="TODOS">ALL</string>
     <string name="Tarea">Task</string>
     <string name="guardada">saved</string>
-    <string name="addDate">Set date</string>
+    <string name="setDate">Set date</string>
     <string name="salir_definitivamente">Exit</string>
     <string name="tiempo_para_recordar_despues">Snooze:</string>
     <string name="proyectoGuardado">Saved proyect</string>
@@ -95,7 +95,7 @@
     <string name="notificationsActive">Active notifications:</string>
     <string name="fechaEstimada">Date to do task:</string>
     <string name="notificationSettings">Set notification</string>
-    <string name="addTaskType">Add category</string>
+    <string name="TaskTypeList">Categories list</string>
     <string name="pendientesDelDia">Only today:</string>
     <string name="El_nombre_no_puede_estar_vacio">Name is empty</string>
     <string name="El_rango_es_inválido">Invalid range</string>
@@ -121,7 +121,7 @@
     <string name="youNeedToCreateAProjectBefore">You need to create a project before</string>
     <string name="youNeedToCreateAHaveCategories">You need to have at least one category created</string>
     <string name="ThereAreNoPending">There are no pendings</string>
-    <string name="estimatedDate">On estimated date</string>
+    <string name="estimatedDate">On task date</string>
     <string name="specifyDate">Set date</string>
     <string name="youNeedToSetDate">You need to set date</string>
     <string name="finish">Finish</string>
@@ -132,7 +132,7 @@
     <string name="ThereAreNoTasksToFilter">There are no tasks to filter</string>
     <string name="ThereAreNoTasks">There are no tasks</string>
     <string name="notificationsSettings">Notification settings</string>
-    <string name="alertDeleteCategory">%d tasks with this category will be delete</string>
+    <string name="alertDeleteCategory">Delete category (%d tasks will be delete)</string>
     <string name="addNotification">Add notification</string>
     <string name="setHour">Set hour</string>
     <string name="youNeedToSetHour">You need to set hour</string>
@@ -142,4 +142,6 @@
     <string name="date">date</string>
     <string name="finish_order">finish</string>
     <string name="orderBy">Order by:</string>
+    <string name="delete">Delete</string>
+    <string name="save">Save</string>
 </resources>

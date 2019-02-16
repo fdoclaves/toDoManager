@@ -1,14 +1,17 @@
 package com.faaya.fernandoaranaandrade.demo.adapters;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -44,6 +47,8 @@ public class ProyectAdapter extends ArrayAdapter<Proyect> {
         this.proyect_finished = context.getString(R.string.Finished_project);
         this.map = StringUtils.getMap(context);
         this.queries = new Queries(context);
+        GREEN_R = context.getResources().getColor(R.color.colorPrimaryDark);
+        RED_R = context.getResources().getColor(R.color.colorRed);
     }
 
     @Override
@@ -69,10 +74,26 @@ public class ProyectAdapter extends ArrayAdapter<Proyect> {
                     textView1.setTextColor(RED_R);
                     textView1.setText(getBoldText(this.tiempo_finalizado + " - " + context.getString(R.string.unfinishTask) + ": " + countTaskWithoutRealDate));
                     relativeLayout.setBackgroundColor(RED);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        ImageView imageView = rowView.findViewById(R.id.imageViewSandClock);
+                        imageView.setImageTintList(rowView.getResources().getColorStateList(R.color.colorRed));
+                    }
                 } else {
                     textView1.setTextColor(GREEN_R);
                     textView1.setText(getBoldText(this.proyect_finished));
                     relativeLayout.setBackgroundColor(GREEN);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        ImageView imageView = rowView.findViewById(R.id.imageViewSandClock);
+                        imageView.setImageDrawable(rowView.getResources().getDrawable(R.drawable.ic_check));
+                        imageView.setImageTintList(rowView.getResources().getColorStateList(R.color.colorPrimaryDark));
+                    }
+                }
+            } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    ColorStateList colorStateList = rowView.getResources().getColorStateList(R.color.colorGray);
+                    textView1.setTextColor(colorStateList);
+                    ImageView imageView = rowView.findViewById(R.id.imageViewSandClock);
+                    imageView.setImageTintList(colorStateList);
                 }
             }
         } catch (ParseException e) {

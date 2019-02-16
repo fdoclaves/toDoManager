@@ -138,6 +138,10 @@ public class MainActivity extends AppCompatActivity
             goToSettings();
             return true;
         }
+        if (id == R.id.action_exit) {
+            exit();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }

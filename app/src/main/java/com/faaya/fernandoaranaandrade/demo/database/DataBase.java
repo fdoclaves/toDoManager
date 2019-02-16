@@ -1,11 +1,17 @@
 package com.faaya.fernandoaranaandrade.demo.database;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.faaya.fernandoaranaandrade.demo.Beans.DateEnum;
 import com.faaya.fernandoaranaandrade.demo.Beans.SettingsEnum;
+import com.faaya.fernandoaranaandrade.demo.Beans.TaskApp;
 import com.faaya.fernandoaranaandrade.demo.R;
+
+import java.util.Calendar;
 
 public class DataBase extends SQLiteOpenHelper {
 
@@ -86,6 +92,34 @@ public class DataBase extends SQLiteOpenHelper {
                 db.execSQL(notificationsTable);
             case 2:
                 db.execSQL("INSERT INTO SETTINGS(KEYWORD,VALUE) VALUES ('" + SettingsEnum.TIME_SNOOZE.toString() +"','15M')");
+            case 3:
+                changeAlams(db);
+        }
+    }
+
+    private void changeAlams(SQLiteDatabase db) {
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TASK_TABLE, new String[0]);
+        if (cursor.moveToFirst()) {
+            do {
+                TaskApp taskApp = new TaskApp(cursor);
+                String dateNotification = null;
+                try {
+                    Calendar fullCalendar = Calendar.getInstance();
+                    fullCalendar.setTimeInMillis(taskApp.getDateEnd());
+                    Calendar alarmCalendar = Calendar.getInstance();
+                    alarmCalendar.setTime(DateEnum.hourSimpleDateFormat.parse(taskApp.getDateNotification()));
+                    fullCalendar.set(Calendar.HOUR_OF_DAY, alarmCalendar.get(Calendar.HOUR_OF_DAY));
+                    fullCalendar.set(Calendar.MINUTE, alarmCalendar.get(Calendar.MINUTE));
+                    dateNotification = DateEnum.fullDateSimpleDateFormat.format(fullCalendar.getTime());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(DATE_NOTIFICATION, dateNotification);
+                String[] values = new String[1];
+                values[0] = taskApp.getId().toString();
+                db.update(TASK_TABLE, contentValues, "ID = ?", values);
+            } while (cursor.moveToNext());
         }
     }
 }

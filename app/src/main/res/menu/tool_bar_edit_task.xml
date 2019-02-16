@@ -1,15 +1,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/editProyectTool"
-        android:icon="@drawable/ic_action_edit"
-        app:showAsAction="ifRoom"
-        android:title="@string/editProyect">
+        android:id="@+id/saveTool"
+        android:icon="@drawable/ic_action_save"
+        app:showAsAction="always"
+        android:title="@string/save">
     </item>
     <item
-        android:id="@+id/filterEditProyectTool"
-        android:icon="@drawable/ic_action_filter"
+        android:id="@+id/finishTool"
+        android:icon="@drawable/ic_check"
         app:showAsAction="ifRoom"
-        android:title="@string/filterList">
+        android:title="@string/finish">
+    </item>
+    <item
+        android:id="@+id/colorTool"
+        android:icon="@drawable/ic_color_lens_white"
+        app:showAsAction="never"
+        android:title="@string/edit_colors_tasks_title">
     </item>
 </menu>

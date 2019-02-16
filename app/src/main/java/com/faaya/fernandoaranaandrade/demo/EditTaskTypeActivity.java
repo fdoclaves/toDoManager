@@ -5,8 +5,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskType;
@@ -20,7 +20,7 @@ public class EditTaskTypeActivity extends AppCompatActivity {
 
     private TaskType taskType;
 
-    private ImageButton deleteButton;
+    private Button deleteButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,19 +1,23 @@
 package com.faaya.fernandoaranaandrade.demo.adapters;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.faaya.fernandoaranaandrade.demo.Beans.DateColor;
+import com.faaya.fernandoaranaandrade.demo.Beans.DateEnum;
 import com.faaya.fernandoaranaandrade.demo.Beans.Proyect;
 import com.faaya.fernandoaranaandrade.demo.Beans.SettingsEnum;
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskApp;
@@ -21,13 +25,12 @@ import com.faaya.fernandoaranaandrade.demo.R;
 import com.faaya.fernandoaranaandrade.demo.database.Queries;
 import com.faaya.fernandoaranaandrade.demo.utils.HourUtils;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 public class TaskAppAdapter extends ArrayAdapter<TaskApp> {
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
     private final Context context;
     private final List<TaskApp> values;
     private Queries queries;
@@ -62,41 +65,62 @@ public class TaskAppAdapter extends ArrayAdapter<TaskApp> {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView;
         TaskApp taskApp = values.get(position);
-        boolean hasNotification = hasNotification(taskApp);
-        if(hasNotification){
-           if(sameProyect){
-               rowView = inflater.inflate(R.layout.task_view_list_without_proyect, parent, false);
-           } else {
-               rowView = inflater.inflate(R.layout.task_view_list, parent, false);
-           }
-        } else {
-            if(sameProyect){
-                rowView = inflater.inflate(R.layout.task_view_list_without_notification_and_proyect, parent, false);
-            } else {
-                rowView = inflater.inflate(R.layout.task_view_list_without_notification, parent, false);
-            }
-        }
+        boolean activeNotifications = isActiveNotifications(taskApp);
+        boolean isUnfinished = isUnfinished(taskApp);
+        boolean hasEndDate = hasEndDate(taskApp);
+        int layout = getLayout(activeNotifications, hasEndDate);
+        rowView = inflater.inflate(layout, parent, false);
         TextView nameTextView = rowView.findViewById(R.id.name_task);
-        TextView startTextView = rowView.findViewById(R.id.start_label_task);
         TextView typeTextView = rowView.findViewById(R.id.textView_type);
+        typeTextView.setText(queries.getTaskTypeById(taskApp.getIdType()).getName().toUpperCase());
         if(!sameProyect){
             TextView proyectTextView = rowView.findViewById(R.id.textView_proyect);
             Proyect proyect = queries.getByIdProyect(taskApp.getProyectId());
             proyectTextView.setText(proyect.getName().toUpperCase());
         }
 
-
-
         SpannableString spanString = new SpannableString(taskApp.getName().toUpperCase());
         spanString.setSpan(new StyleSpan(Typeface.BOLD), 0, spanString.length(), 0);
         nameTextView.setText(spanString);
-        Date endDate = new Date(taskApp.getDateEnd());
-        startTextView.setText(simpleDateFormat.format(endDate));
-        typeTextView.setText(queries.getTaskTypeById(taskApp.getIdType()).getName().toUpperCase());
+        if(hasEndDate){
+            TextView startTextView = rowView.findViewById(R.id.start_label_task);
+            Date endDate = new Date(taskApp.getDateEnd());
+            String dateString;
+            if(isBegingDate(taskApp.getDateEnd())){
+                dateString = DateEnum.dateSimpleDateFormat.format(endDate);
+            } else {
+                dateString = DateEnum.fullDateSimpleDateFormat.format(endDate);
+            }
+            startTextView.setText(dateString);
+            putColor(rowView, taskApp, nameTextView, isUnfinished);
+        } else {
+            strikeThruText(taskApp, nameTextView, isUnfinished);
+        }
+        if(activeNotifications){
+            TextView textViewInfo = rowView.findViewById(R.id.textViewNotificationInfo);
+            textViewInfo.setText(taskApp.getDateNotification());
+            if(!isAfterTodayDate(taskApp)){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    ColorStateList colorStateList = rowView.getResources().getColorStateList(R.color.colorGray);
+                    textViewInfo.setTextColor(colorStateList);
+                    ImageView imageView = rowView.findViewById(R.id.imageViewClock);
+                    imageView.setImageTintList(colorStateList);
+                }
+            }
+        }
+        return rowView;
+    }
 
+    private boolean isBegingDate(Long dateEnd) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(dateEnd);
+        return calendar.get(Calendar.HOUR_OF_DAY) == 0 && calendar.get(Calendar.MINUTE) == 0;
+    }
+
+    private void putColor(View rowView, TaskApp taskApp, TextView nameTextView, boolean isUnfinished) {
         if (taskApp.getActiveSemaforo().equals(SettingsEnum.ON.toString())) {
             LinearLayout linearLayout = rowView.findViewById(R.id.layout_all_task_);
-            if (isUnfinished(taskApp)) {
+            if (isUnfinished) {
                 int color = getColor(taskApp);
                 linearLayout.setBackgroundColor(color);
                 if(color == RED){
@@ -117,26 +141,57 @@ public class TaskAppAdapter extends ArrayAdapter<TaskApp> {
                 linearLayout.setBackgroundColor(color);
             }
         } else {
-            if(!isUnfinished(taskApp)){
-                spanString = new SpannableString(taskApp.getName().toUpperCase());
-                spanString.setSpan(new StyleSpan(Typeface.ITALIC), 0, spanString.length(), 0);
-                nameTextView.setText(spanString);
-                nameTextView.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+            strikeThruText(taskApp, nameTextView, isUnfinished);
+        }
+    }
+
+    private void strikeThruText(TaskApp taskApp, TextView nameTextView, boolean isUnfinished) {
+        if(!isUnfinished){
+            SpannableString spanString = new SpannableString(taskApp.getName().toUpperCase());
+            spanString.setSpan(new StyleSpan(Typeface.ITALIC), 0, spanString.length(), 0);
+            nameTextView.setText(spanString);
+            nameTextView.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+        }
+    }
+
+    private boolean hasEndDate(TaskApp taskApp) {
+        return taskApp.getDateEnd() != null && taskApp.getDateEnd().longValue() != 0l;
+    }
+
+    private int getLayout(boolean activeNotifications, boolean hasEndDate) {
+        if(hasEndDate){
+            if(activeNotifications){
+                if(sameProyect){
+                    return R.layout.task_view_list_without_proyect;
+                } else {
+                    return R.layout.task_view_list;
+                }
+            } else {
+                if(sameProyect){
+                    return R.layout.task_view_list_without_notification_and_proyect;
+                } else {
+                    return R.layout.task_view_list_without_notification;
+                }
+            }
+        } else {
+            if(activeNotifications){
+                if(sameProyect){
+                    return R.layout.task_view_list_without_proyect_sin_fecha;
+                } else {
+                    return R.layout.task_view_list_sin_fecha;
+                }
+            } else {
+                if(sameProyect){
+                    return R.layout.task_view_list_without_notification_and_proyect_sin_fecha;
+                } else {
+                    return R.layout.task_view_list_without_notification_sin_fecha;
+                }
             }
         }
-        if(hasNotification){
-            TextView textViewInfo = rowView.findViewById(R.id.textViewNotificationInfo);
-            textViewInfo.setText(taskApp.getDateNotification());
-        }
-        return rowView;
     }
 
     private boolean isUnfinished(TaskApp taskApp) {
         return taskApp.getRealDate() == null || taskApp.getRealDate().longValue() == 0l;
-    }
-
-    private boolean hasNotification(TaskApp taskApp) {
-        return isUnfinished(taskApp) && isActiveNotifications(taskApp) && isAfterTodayDate(taskApp);
     }
 
     private boolean isActiveNotifications(TaskApp taskApp) {
@@ -144,7 +199,7 @@ public class TaskAppAdapter extends ArrayAdapter<TaskApp> {
     }
 
     private boolean isAfterTodayDate(TaskApp taskApp) {
-        Long alarmTime = HourUtils.getCalendar(taskApp.getDateNotification(), taskApp.getDateEnd());
+        Long alarmTime = HourUtils.getCalendar(taskApp.getDateNotification());
         return new Date().before(new Date(alarmTime));
     }
 

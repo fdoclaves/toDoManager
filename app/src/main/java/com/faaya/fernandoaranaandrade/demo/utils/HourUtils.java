@@ -22,10 +22,7 @@ public class HourUtils {
         return hourAndMinuts.format(date);
     }
 
-    public static Long getCalendar(String text, Long dateEnd){
-        if(text.matches(DateEnum.HOUR_REGEX)){
-            return getCalendarByHour(text,dateEnd);
-        }
+    public static Long getCalendar(String text){
         try {
             return DateEnum.fullDateSimpleDateFormat.parse(text).getTime();
         } catch (ParseException e) {

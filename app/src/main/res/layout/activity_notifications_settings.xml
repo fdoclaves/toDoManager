@@ -6,18 +6,23 @@
     android:layout_height="match_parent"
     tools:context=".NotificationsSettingsActivity">
 
-    <ImageButton
-        android:id="@+id/imageButtonNotificationSaveGeneral"
-        android:layout_width="53dp"
-        android:layout_height="51dp"
+    <Button
+        android:id="@+id/button9"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:background="@color/colorPrimary"
+        android:drawableStart="@android:drawable/ic_menu_save"
         android:onClick="save"
-        android:scaleType="fitCenter"
+        android:padding="8dp"
+        android:text="@string/save"
+        android:textColor="@color/colorWhite"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_save" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <LinearLayout
         android:id="@+id/layoutSnoozeGeneral"
