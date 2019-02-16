@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskApp;
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskType;
@@ -74,7 +75,6 @@ public class PendientesActivity extends AppCompatActivity {
         });
         Intent intent = getIntent();
         fillData(intent);
-        filter();
     }
 
     private void filter() {
@@ -86,13 +86,21 @@ public class PendientesActivity extends AppCompatActivity {
         }
         taskToday.clear();
         taskToday.addAll(allTask);
-        listView.setAdapter(new TaskAppAdapter(this, allTask));
+        listView.setAdapter(new TaskAppAdapter(this, allTask, false));
         if(taskToday.size() == 0){
             View parentLayout = findViewById(android.R.id.content);
             Snackbar.make(parentLayout, getString(R.string.ThereAreNoPending), Snackbar.LENGTH_LONG).setAction("Action", null).show();
 
+        } else {
+            String message = getString(R.string.hayTareas);
+            showMessage(String.format(message, taskToday.size()));
         }
     }
+
+    private void showMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
 
     private long getEndDate() {
         Calendar calendarEnd = Calendar.getInstance();
@@ -122,5 +130,11 @@ public class PendientesActivity extends AppCompatActivity {
         Intent intent = new Intent(this, EditTaskActivity.class);
         intent.putExtra(MainActivity.ID_TASK, id);
         startActivity(intent);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        filter();
     }
 }

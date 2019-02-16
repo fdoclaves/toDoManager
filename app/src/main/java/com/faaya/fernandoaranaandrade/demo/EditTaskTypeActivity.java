@@ -55,8 +55,11 @@ public class EditTaskTypeActivity extends AppCompatActivity {
     }
 
     public void deleteTaskType(View view) {
+        Integer count = queries.getCountTaskByTypeTask(taskType.getId());
         FragmentManager fm = getSupportFragmentManager();
-        EditNameDialogFragment editNameDialogFragment = EditNameDialogFragment.newInstance(getString(R.string.se_eliminaran_TODAS_la_tareas_de_este_tipo));
+        String title = getString(R.string.alertDeleteCategory);
+        String format = String.format(title, count);
+        EditNameDialogFragment editNameDialogFragment = EditNameDialogFragment.newInstance(format);
         editNameDialogFragment.setOkAction(new OkAction() {
             @Override
             public void doAction() {

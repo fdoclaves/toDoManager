@@ -12,6 +12,8 @@ import com.faaya.fernandoaranaandrade.demo.Beans.SettingsEnum;
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskApp;
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskEnum;
 
+import java.io.Serializable;
+
 public class EditSemaforoTaskActivity extends SuperEditSemaforoActivity {
 
     public static final String TASK = "TASK";
@@ -49,10 +51,12 @@ public class EditSemaforoTaskActivity extends SuperEditSemaforoActivity {
     }
 
     private void exit() {
-        Intent intent = new Intent(this, EditTaskActivity.class);
-        intent.putExtra(TASK, taskApp);
-        fillIBackIntent(intent, getIntent());
-        startActivity(intent);
+        Intent newIntent = new Intent(this, EditTaskActivity.class);
+        newIntent.putExtra(TASK, taskApp);
+        Serializable serializable = getIntent().getSerializableExtra(TaskListProyectActivity.FILTER_BEAN);
+        newIntent.putExtra(TaskListProyectActivity.FILTER_BEAN, serializable);
+        fillIBackIntent(newIntent, getIntent());
+        startActivity(newIntent);
         finish();
     }
 

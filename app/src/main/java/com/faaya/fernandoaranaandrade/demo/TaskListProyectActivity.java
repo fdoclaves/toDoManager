@@ -1,6 +1,7 @@
 package com.faaya.fernandoaranaandrade.demo;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
@@ -10,7 +11,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.faaya.fernandoaranaandrade.demo.Beans.Proyect;
@@ -37,6 +40,8 @@ public class TaskListProyectActivity extends AppCompatActivity {
     private Boolean unfishedTask;
     private List<TaskType> allTaskType;
     private Integer countAllTask;
+    private Spinner spinnerFilterOrder;
+    private String orderBy;
 
     ListView listView;
     List<TaskApp> allTask = new ArrayList<>();
@@ -55,8 +60,10 @@ public class TaskListProyectActivity extends AppCompatActivity {
         allTaskType = queries.getAllTaskTypes();
         if(checked == null){
             checked = new ArrayList<>();
+            checked.addAll(allTaskType);
         }
         proyect = queries.getByIdProyect(idProyect);
+        spinnerFilterOrder = findViewById(R.id.spinnerFilterOrder);
         if(proyect == null){
             setTitle(getString(R.string.proyect).toUpperCase());
         } else {
@@ -72,8 +79,10 @@ public class TaskListProyectActivity extends AppCompatActivity {
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                StringBuffer title = new StringBuffer(getString(R.string.eliminar_definitivamente));
+                title.append(" \"" + allTask.get(position).getName()+"\"");
                 FragmentManager fm = getSupportFragmentManager();
-                EditNameDialogFragment editNameDialogFragment = EditNameDialogFragment.newInstance(getString(R.string.eliminar_definitivamente));
+                EditNameDialogFragment editNameDialogFragment = EditNameDialogFragment.newInstance(title.toString());
                 editNameDialogFragment.setOkAction(new OkAction() {
                     @Override
                     public void doAction() {
@@ -97,10 +106,37 @@ public class TaskListProyectActivity extends AppCompatActivity {
         });
         Serializable serializable = currentIntent.getSerializableExtra(FILTER_BEAN);
         if(serializable != null && serializable instanceof TaskListProyectBean){
-            TaskListProyectBean taskListProyectBean = (TaskListProyectBean) serializable;
-            checked = taskListProyectBean.getChecked();
-            unfishedTask = taskListProyectBean.getUnfishedTask();
+            fillFromSerializable(serializable);
         }
+        String[] orderFilters = {getString(R.string.creation), getString(R.string.tag), getString(R.string.date), getString(R.string.finish_order)};
+        spinnerFilterOrder.setAdapter(new ArrayAdapter<String>(this, R.layout.spinner18, orderFilters));
+        spinnerFilterOrder.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                orderBy = (String) spinnerFilterOrder.getSelectedItem();
+                filter(checked,unfishedTask);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+
+            }
+        });
+        if(orderBy != null){
+            for (int index = 0; index < orderFilters.length; index++) {
+                if(orderFilters[index].equals(orderBy)){
+                    spinnerFilterOrder.setSelection(index);
+                    break;
+                }
+            }
+        }
+    }
+
+    private void fillFromSerializable(Serializable serializable) {
+        TaskListProyectBean taskListProyectBean = (TaskListProyectBean) serializable;
+        checked = taskListProyectBean.getChecked();
+        unfishedTask = taskListProyectBean.getUnfishedTask();
+        orderBy = taskListProyectBean.getOrderBy();
     }
 
     private void goToEditTask(View view){
@@ -111,23 +147,33 @@ public class TaskListProyectActivity extends AppCompatActivity {
         Intent intent = new Intent(this, EditTaskActivity.class);
         intent.putExtra(TaskEnum.ID_PROYECT.toString(), proyect.getId());
         intent.putExtra(EditTaskActivity.FROM_ACTIVITY, this.getClass().getName());
+        intent.putExtra(FILTER_BEAN, buildSerializable());
         startActivity(intent);
+        finish();
+    }
+
+    @NonNull
+    private TaskListProyectBean buildSerializable() {
+        return new TaskListProyectBean(checked, unfishedTask, orderBy);
     }
 
     private void filter(List<TaskType> checked, Boolean unfishedTask) {
-        List<TaskApp> taskApps = queries.selectTaskByIdProyectEndDateAndType(idProyect, null, null, checked, unfishedTask);
+        List<TaskApp> taskApps = queries.selectTaskByIdProyectEndDateAndType(idProyect, null, null, checked, unfishedTask, orderBy);
         fillProyectSpinnerWithData(taskApps);
         if(taskApps.size() == 0){
             View view = findViewById(android.R.id.content);
             Snackbar.make(view, getString(R.string.ThereAreNoTasks), Snackbar.LENGTH_LONG).setAction("Action", null).show();
             return;
+        } else {
+            String message = getString(R.string.hayTareas);
+            showMessage(String.format(message, taskApps.size()));
         }
     }
 
     private void fillProyectSpinnerWithData(List<TaskApp> taskApps) {
         allTask.clear();
         allTask.addAll(taskApps);
-        listView.setAdapter(new TaskAppAdapter(this, taskApps));
+        listView.setAdapter(new TaskAppAdapter(this, taskApps, true));
     }
 
     private void showMessage(String message) {
@@ -139,8 +185,9 @@ public class TaskListProyectActivity extends AppCompatActivity {
         intent.putExtra(MainActivity.ID_TASK, id);
         intent.putExtra(EditTaskActivity.FROM_ACTIVITY, this.getClass().getName());
         intent.putExtra(TaskEnum.ID_PROYECT.toString(), proyect.getId());
-        intent.putExtra(FILTER_BEAN, new TaskListProyectBean(checked, unfishedTask));
+        intent.putExtra(FILTER_BEAN, buildSerializable());
         startActivity(intent);
+        finish();
     }
 
     private void filterList(){
@@ -198,6 +245,20 @@ public class TaskListProyectActivity extends AppCompatActivity {
         filter(checked, unfishedTask);
         if(countAllTask == null){
             countAllTask = allTask.size();
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState){
+        savedInstanceState.putSerializable(FILTER_BEAN, buildSerializable());
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null){
+            fillFromSerializable(savedInstanceState.getSerializable(FILTER_BEAN));
         }
     }
 }

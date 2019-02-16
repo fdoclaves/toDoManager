@@ -19,6 +19,7 @@ import com.faaya.fernandoaranaandrade.demo.Beans.TaskApp;
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskEnum;
 import com.faaya.fernandoaranaandrade.demo.utils.HourUtils;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
@@ -35,6 +36,7 @@ public class NotificationsSettingsTaskActivity extends AppCompatActivity {
     private Spinner spinnerNotification;
     private String estimatedDate;
     private String specifyDate;
+    private String hourSetting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,7 +118,7 @@ public class NotificationsSettingsTaskActivity extends AppCompatActivity {
 
     private void fillSwitch() {
         String active = taskApp.getActiveNotification();
-        if (active != null && active.equals(SettingsEnum.ON.toString())) {
+        if ((active != null && active.equals(SettingsEnum.ON.toString())) || taskApp.getDateNotification() == null) {
             aSwitch.setChecked(true);
         } else {
             aSwitch.setChecked(false);
@@ -158,42 +160,49 @@ public class NotificationsSettingsTaskActivity extends AppCompatActivity {
     }
 
     private void saveData(View view) {
-        String selectedItem = (String) spinnerNotification.getSelectedItem();
-        if (selectedItem.equals(specifyDate) && !buttonDateNotification.getText().toString().matches(DateEnum.DATE_REGEX)) {
-            Snackbar.make(view, getString(R.string.youNeedToSetDate), Snackbar.LENGTH_LONG).setAction("Action", null).show();
-            return;
-        }
         if (aSwitch.isChecked()) {
+            if (hourButton.getText().toString().equals(getString(R.string.setHour))) {
+                Snackbar.make(view, getString(R.string.youNeedToSetHour), Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                return;
+            }
+            String selectedItem = (String) spinnerNotification.getSelectedItem();
+            if (selectedItem.equals(specifyDate) && !buttonDateNotification.getText().toString().matches(DateEnum.DATE_REGEX)) {
+                Snackbar.make(view, getString(R.string.youNeedToSetDate), Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                return;
+            }
             taskApp.setActiveNotification(SettingsEnum.ON.toString());
+            if (selectedItem.equals(estimatedDate)) {
+                taskApp.setDateNotification(hourButton.getText().toString());
+            }
+            if(selectedItem.equals(specifyDate)){
+                try {
+                    Calendar calendarHour = Calendar.getInstance();
+                    calendarHour.setTime(DateEnum.hourSimpleDateFormat.parse(hourButton.getText().toString()));
+                    Calendar calendarDate = Calendar.getInstance();
+                    calendarDate.setTime(DateEnum.dateSimpleDateFormat.parse(buttonDateNotification.getText().toString()));
+                    Calendar calendarFull = Calendar.getInstance();
+                    calendarFull.set(Calendar.DAY_OF_MONTH, calendarDate.get(Calendar.DAY_OF_MONTH));
+                    calendarFull.set(Calendar.MONTH, calendarDate.get(Calendar.MONTH));
+                    calendarFull.set(Calendar.YEAR, calendarDate.get(Calendar.YEAR));
+                    calendarFull.set(Calendar.HOUR_OF_DAY, calendarHour.get(Calendar.HOUR_OF_DAY));
+                    calendarFull.set(Calendar.MINUTE, calendarHour.get(Calendar.MINUTE));
+                    String dateNotification = DateEnum.fullDateSimpleDateFormat.format(calendarFull.getTime());
+                    System.out.println(dateNotification);
+                    taskApp.setDateNotification(dateNotification);
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
         } else {
             taskApp.setActiveNotification(SettingsEnum.OFF.toString());
+            taskApp.setDateNotification(null);
         }
-        if (selectedItem.equals(estimatedDate)) {
-            taskApp.setDateNotification(hourButton.getText().toString());
-        }
-        if(selectedItem.equals(specifyDate)){
-            try {
-                Calendar calendarHour = Calendar.getInstance();
-                calendarHour.setTime(DateEnum.hourSimpleDateFormat.parse(hourButton.getText().toString()));
-                Calendar calendarDate = Calendar.getInstance();
-                calendarDate.setTime(DateEnum.dateSimpleDateFormat.parse(buttonDateNotification.getText().toString()));
-                Calendar calendarFull = Calendar.getInstance();
-                calendarFull.set(Calendar.DAY_OF_MONTH, calendarDate.get(Calendar.DAY_OF_MONTH));
-                calendarFull.set(Calendar.MONTH, calendarDate.get(Calendar.MONTH));
-                calendarFull.set(Calendar.YEAR, calendarDate.get(Calendar.YEAR));
-                calendarFull.set(Calendar.HOUR_OF_DAY, calendarHour.get(Calendar.HOUR_OF_DAY));
-                calendarFull.set(Calendar.MINUTE, calendarHour.get(Calendar.MINUTE));
-                String dateNotification = DateEnum.fullDateSimpleDateFormat.format(calendarFull.getTime());
-                System.out.println(dateNotification);
-                taskApp.setDateNotification(dateNotification);
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-        Intent intent = new Intent(this, EditTaskActivity.class);
-        intent.putExtra(TASK, taskApp);
-        fillIBackIntent(intent, getIntent());
-        startActivity(intent);
+        Intent newIntent = new Intent(this, EditTaskActivity.class);
+        newIntent.putExtra(TASK, taskApp);
+        Serializable serializable = getIntent().getSerializableExtra(TaskListProyectActivity.FILTER_BEAN);
+        newIntent.putExtra(TaskListProyectActivity.FILTER_BEAN, serializable);
+        fillIBackIntent(newIntent, getIntent());
+        startActivity(newIntent);
         finish();
     }
 

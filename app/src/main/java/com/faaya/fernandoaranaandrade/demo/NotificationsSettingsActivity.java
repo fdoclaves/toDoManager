@@ -21,7 +21,6 @@ import java.util.Map;
 
 public class NotificationsSettingsActivity extends AppCompatActivity {
 
-    public static final String REGEX = "^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9] ((AM)|(PM))$$";
     public static final String HORAS = "H";
     public static final String MINUTOS = "M";
     public static final String _5MINUTOS = "5M";
@@ -29,10 +28,7 @@ public class NotificationsSettingsActivity extends AppCompatActivity {
     public static final String _30MINUTOS = "30M";
     public static final String _1HORA = "1H";
     public static final String _24HORAS = "24H";
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a");
 
-    private Button hourButton;
-    private Switch aSwitch;
     private Queries queries;
     private Spinner tiempoSpinner;
     Map<String, String> map = new HashMap<>();
@@ -52,13 +48,7 @@ public class NotificationsSettingsActivity extends AppCompatActivity {
         map.put(list.get(3),_1HORA);
         map.put(list.get(4), _24HORAS);
         setContentView(R.layout.activity_notifications_settings);
-        hourButton = findViewById(R.id.notifacionButtonGeneral);
         queries = new Queries(this);
-        aSwitch = findViewById(R.id.switchNotificationGeneral);
-        String activeNotification = queries.getValueByProperty(SettingsEnum.ACTIVE_NOTIFICTION);
-        aSwitch.setChecked(activeNotification.equals(SettingsEnum.ON.toString()));
-        String hourNotification = queries.getValueByProperty(SettingsEnum.DATE_NOTIFICATION);
-        hourButton.setText(hourNotification);
         tiempoSpinner = findViewById(R.id.spinnerHorasMinutosGeneral);
         tiempoSpinner.setAdapter(new ArrayAdapter<String>(this, R.layout.spinner18, list));
         fillSnooze();
@@ -77,28 +67,7 @@ public class NotificationsSettingsActivity extends AppCompatActivity {
         }
     }
 
-    public void set_hour(View view) {
-        String textButton = null;
-        if(hourButton.getText().toString().matches(REGEX)){
-            textButton = hourButton.getText().toString();
-        }
-        HourDialogFragment dialogFragment = HourDialogFragment.newInstance(" ", textButton);
-        dialogFragment.setOkActionDate(new OkActionDate() {
-            @Override
-            public void doAction(Calendar calendar) {
-                hourButton.setText(simpleDateFormat.format(calendar.getTime()));
-            }
-        });
-        dialogFragment.show(getSupportFragmentManager(), "fragment_edit_hour");
-    }
-
     public void save(View view) {
-        if (aSwitch.isChecked()) {
-            queries.saveProperty(SettingsEnum.ACTIVE_NOTIFICTION, SettingsEnum.ON.toString());
-        } else {
-            queries.saveProperty(SettingsEnum.ACTIVE_NOTIFICTION, SettingsEnum.OFF.toString());
-        }
-        queries.saveProperty(SettingsEnum.DATE_NOTIFICATION, hourButton.getText().toString());
         queries.saveProperty(SettingsEnum.TIME_SNOOZE, map.get(tiempoSpinner.getSelectedItem()));
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);

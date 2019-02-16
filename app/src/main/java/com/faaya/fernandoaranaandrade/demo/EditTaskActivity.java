@@ -55,6 +55,8 @@ public class EditTaskActivity extends AppCompatActivity {
 
     Button realDataTaskButton;
 
+    Button notificationButton;
+
     ImageButton deleteTaskEditImageButton;
 
     EditText commentsTaskEditText;
@@ -80,6 +82,7 @@ public class EditTaskActivity extends AppCompatActivity {
         dateEndTaskButton = findViewById(R.id.buttonEstimateDate);
         realDataTaskButton = findViewById(R.id.buttonRealDate);
         commentsTaskEditText = findViewById(R.id.commentsTaskEditText);
+        notificationButton = findViewById(R.id.button7);
         commentsTaskEditText.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -213,6 +216,9 @@ public class EditTaskActivity extends AppCompatActivity {
         } else {
             fillProyectData(proyects, taskApp.getProyectId());
         }
+        if (taskApp.getDateNotification() != null){
+            notificationButton.setText(taskApp.getDateNotification());
+        }
 
     }
 
@@ -275,20 +281,17 @@ public class EditTaskActivity extends AppCompatActivity {
         fillComments();
         queries.saveOrUpdateTaskApp(taskApp);
 
-        Long alarmTime = HourUtils.getCalendar(taskApp.getDateNotification(), taskApp.getDateEnd());
-        boolean active = false;
-        if(taskApp.getActiveNotification().equals(SettingsEnum.ON.toString()) && taskApp.getRealDate() == null){
-            active = true;
-        }
-        Long id = taskApp.getId();
-        if(id == null){
-            id = queries.getByIdProyectAndName(taskApp.getProyectId(), taskApp.getName()).getId();
-        }
-        System.out.println("Fecha notificación:" + new Date(alarmTime));
-        queries.saveUpdateOrDeleteNotifications(active, new NotificationsApp(alarmTime, id));
-        if(active){
+        if(taskApp.getActiveNotification() != null && taskApp.getActiveNotification().equals(SettingsEnum.ON.toString()) && taskApp.getRealDate() == null){
+            Long id = taskApp.getId();
+            if(id == null){
+                id = queries.getByIdProyectAndName(taskApp.getProyectId(), taskApp.getName()).getId();
+            }
+            Long alarmTime = HourUtils.getCalendar(taskApp.getDateNotification(), taskApp.getDateEnd());
+            System.out.println("Fecha notificación:" + new Date(alarmTime));
+            queries.saveUpdateOrDeleteNotifications(true, new NotificationsApp(alarmTime, id));
             Util.scheduleNotification(this,queries,alarmTime);
         }
+
     }
 
     private void fillComments() {
@@ -406,8 +409,7 @@ public class EditTaskActivity extends AppCompatActivity {
                 taskApp.setRedSemaforo(queries.getValueByProperty(SettingsEnum.RED_SEMAFORO));
                 taskApp.setActiveSemaforo(queries.getValueByProperty(SettingsEnum.ACTIVE));
                 taskApp.setRealSemaforo(queries.getValueByProperty(SettingsEnum.REAL_SEMAFORO));
-                taskApp.setActiveNotification(queries.getValueByProperty(SettingsEnum.ACTIVE_NOTIFICTION));
-                taskApp.setDateNotification(queries.getValueByProperty(SettingsEnum.DATE_NOTIFICATION));
+                taskApp.setActiveNotification(SettingsEnum.OFF.toString());
             } else {
                 taskApp = queries.getByIdTask(id);
                 if(taskApp == null){ //tarea eliminada (posiblemente viene de una notificacion)
@@ -458,19 +460,25 @@ public class EditTaskActivity extends AppCompatActivity {
     }
 
     public void edit_semaforo(View view) {
-        Intent intent = new Intent(this, EditSemaforoTaskActivity.class);
-        intent.putExtra(EditSemaforoTaskActivity.TASK, taskApp);
-        intent.putExtra(EditTaskActivity.FROM_ACTIVITY, getIntent().getStringExtra(FROM_ACTIVITY));
-        fillIBackIntent(intent);
-        startActivity(intent);
+        Intent newIntent = new Intent(this, EditSemaforoTaskActivity.class);
+        newIntent.putExtra(EditSemaforoTaskActivity.TASK, taskApp);
+        newIntent.putExtra(EditTaskActivity.FROM_ACTIVITY, getIntent().getStringExtra(FROM_ACTIVITY));
+        Serializable serializable = getIntent().getSerializableExtra(TaskListProyectActivity.FILTER_BEAN);
+        newIntent.putExtra(TaskListProyectActivity.FILTER_BEAN, serializable);
+        fillIBackIntent(newIntent);
+        startActivity(newIntent);
+        finish();
     }
 
     public void edit_notification(View view) {
-        Intent intent = new Intent(this, NotificationsSettingsTaskActivity.class);
-        intent.putExtra(NotificationsSettingsTaskActivity.TASK, taskApp);
-        intent.putExtra(EditTaskActivity.FROM_ACTIVITY, getIntent().getStringExtra(FROM_ACTIVITY));
-        fillIBackIntent(intent);
-        startActivity(intent);
+        Intent newIntent = new Intent(this, NotificationsSettingsTaskActivity.class);
+        newIntent.putExtra(NotificationsSettingsTaskActivity.TASK, taskApp);
+        newIntent.putExtra(EditTaskActivity.FROM_ACTIVITY, getIntent().getStringExtra(FROM_ACTIVITY));
+        Serializable serializable = getIntent().getSerializableExtra(TaskListProyectActivity.FILTER_BEAN);
+        newIntent.putExtra(TaskListProyectActivity.FILTER_BEAN, serializable);
+        fillIBackIntent(newIntent);
+        startActivity(newIntent);
+        finish();
     }
 
     @Override

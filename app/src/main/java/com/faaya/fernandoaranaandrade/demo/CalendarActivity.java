@@ -71,7 +71,7 @@ public class CalendarActivity extends AppCompatActivity {
     private void fillProyectSpinnerWithData(List<TaskApp> taskApps) {
         taskList.clear();
         taskList.addAll(taskApps);
-        listView.setAdapter(new TaskAppAdapter(this, taskList));
+        listView.setAdapter(new TaskAppAdapter(this, taskList, false));
     }
 
     private Long getEndDay(Calendar calendar) {

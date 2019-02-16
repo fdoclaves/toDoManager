@@ -65,7 +65,9 @@ public class AllTasksActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
                 FragmentManager fm = getSupportFragmentManager();
-                EditNameDialogFragment editNameDialogFragment = EditNameDialogFragment.newInstance(getString(R.string.eliminar_definitivamente));
+                StringBuffer title = new StringBuffer(getString(R.string.eliminar_definitivamente));
+                title.append(" \"" + taskToday.get(position).getName()+"\"");
+                EditNameDialogFragment editNameDialogFragment = EditNameDialogFragment.newInstance(title.toString());
                 editNameDialogFragment.setOkAction(new OkAction() {
                     @Override
                     public void doAction() {
@@ -109,20 +111,6 @@ public class AllTasksActivity extends AppCompatActivity {
                 goToEditTask(view, allProyects, typesValues);
             }
         });
-    }
-
-    private void goToEditTask(View view, List<Proyect> allProyects, List<TaskType> typesValues){
-        if(allProyects.size() <= 1){
-            Snackbar.make(view, getString(R.string.youNeedToCreateAProjectBefore), Snackbar.LENGTH_LONG).setAction("Action", null).show();
-            return;
-        }
-        if(typesValues.size() <= 1){
-            Snackbar.make(view, getString(R.string.youNeedToCreateAHaveCategories), Snackbar.LENGTH_LONG).setAction("Action", null).show();
-            return;
-        }
-        Intent intent = new Intent(this, EditTaskActivity.class);
-        fillExtra(intent);
-        startActivity(intent);
     }
 
     private void filter() {
@@ -184,7 +172,9 @@ public class AllTasksActivity extends AppCompatActivity {
     private void fillProyectSpinnerWithData(List<TaskApp> taskApps) {
         taskToday.clear();
         taskToday.addAll(taskApps);
-        listView.setAdapter(new TaskAppAdapter(this, taskApps));
+        listView.setAdapter(new TaskAppAdapter(this, taskApps, false));
+        String message = getString(R.string.hayTareas);
+        showMessage(String.format(message, taskToday.size()));
     }
 
     private void fillData(Intent intent, List<TaskType> typesValues, List<Proyect> proyects, String[] rangeTimeValues) {
@@ -216,12 +206,27 @@ public class AllTasksActivity extends AppCompatActivity {
         }
     }
 
-    private void goToEditActivity(long id) {
+    private void goToEditTask(View view, List<Proyect> allProyects, List<TaskType> typesValues){
+        if(allProyects.size() <= 1){
+            Snackbar.make(view, getString(R.string.youNeedToCreateAProjectBefore), Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            return;
+        }
+        if(typesValues.size() <= 1){
+            Snackbar.make(view, getString(R.string.youNeedToCreateAHaveCategories), Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            return;
+        }
+        goToEditActivity((Long)null);
+    }
+
+    private void goToEditActivity(Long id) {
         Intent intent = new Intent(this, EditTaskActivity.class);
-        intent.putExtra(MainActivity.ID_TASK, id);
+        if(id != null){
+            intent.putExtra(MainActivity.ID_TASK, id);
+        }
         intent.putExtra(EditTaskActivity.FROM_ACTIVITY, this.getClass().getName());
         fillExtra(intent);
         startActivity(intent);
+        finish();
     }
 
     private void fillExtra(Intent intent) {
