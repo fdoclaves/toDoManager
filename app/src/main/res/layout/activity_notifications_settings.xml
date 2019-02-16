@@ -6,35 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".NotificationsSettingsActivity">
 
-    <Switch
-        android:id="@+id/switchNotificationGeneral"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/notificationsActive"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/notifacionButtonGeneral"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="@color/colorPrimary"
-        android:onClick="set_hour"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:text="Button"
-        android:textColor="@android:color/white"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="@+id/switchNotificationGeneral"
-        app:layout_constraintStart_toStartOf="@+id/switchNotificationGeneral"
-        app:layout_constraintTop_toBottomOf="@+id/switchNotificationGeneral" />
-
     <ImageButton
         android:id="@+id/imageButtonNotificationSaveGeneral"
         android:layout_width="53dp"
@@ -52,17 +23,20 @@
         android:id="@+id/layoutSnoozeGeneral"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
         android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="@+id/notifacionButtonGeneral"
-        app:layout_constraintStart_toStartOf="@+id/notifacionButtonGeneral"
-        app:layout_constraintTop_toBottomOf="@+id/notifacionButtonGeneral">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/textView9General"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/tiempo_para_recordar_despues" />
+            android:text="@string/tiempo_para_recordar_despues"
+            android:textSize="24sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -75,6 +49,7 @@
                 android:id="@+id/spinnerHorasMinutosGeneral"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorPrimaryDark"
                 android:layout_weight="1" />
 
         </LinearLayout>

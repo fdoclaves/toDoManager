@@ -86,7 +86,7 @@
     <string name="tiempo_finalizado">TIME IS OVER</string>
     <string name="Finished_project">Finished project</string>
     <string name="snoozeAction">SNOOZE</string>
-    <string name="faltan">" "</string>
+    <string name="faltan">""</string>
     <string name="faltan_una_semana_">One week left</string>
     <string name="falta_un_dia">One day left</string>
     <string name="fata_un_mes">One month left</string>
@@ -131,4 +131,15 @@
     <string name="filterList">Filter list</string>
     <string name="ThereAreNoTasksToFilter">There are no tasks to filter</string>
     <string name="ThereAreNoTasks">There are no tasks</string>
+    <string name="notificationsSettings">Notification settings</string>
+    <string name="alertDeleteCategory">%d tasks with this category will be delete</string>
+    <string name="addNotification">Add notification</string>
+    <string name="setHour">Set hour</string>
+    <string name="youNeedToSetHour">You need to set hour</string>
+    <string name="hayTareas">%d tasks</string>
+    <string name="creation">creation</string>
+    <string name="tag">tag</string>
+    <string name="date">date</string>
+    <string name="finish_order">finish</string>
+    <string name="orderBy">Order by:</string>
 </resources>

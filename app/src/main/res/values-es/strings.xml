@@ -53,7 +53,7 @@
     <string name="orange">NARANJA</string>
     <string name="fechaEstimada">Fecha estimada:</string>
     <string name="addTaskType">Agregar una nueva categoría</string>
-    <string name="notificationSettings">Configurar notificaciones</string>
+    <string name="notificationSettings">Configurar notificacion</string>
     <string name="notificationsActive">Activar notificaciones: </string>
     <string name="pendientesDelDia">Pendientes del día:</string>
     <string name="refresh">Refrescar</string>
@@ -122,4 +122,15 @@
     <string name="filterList">Filtar lista</string>
     <string name="ThereAreNoTasksToFilter">No hay tareas a filtar</string>
     <string name="ThereAreNoTasks">No hay tareas</string>
+    <string name="notificationsSettings">Configuración de notificaciones</string>
+    <string name="alertDeleteCategory">Se borrarán %d tareas con esta categoría</string>
+    <string name="addNotification">Agregar notificación</string>
+    <string name="setHour">Configurar hora</string>
+    <string name="youNeedToSetHour">Se necesita configurar la hora</string>
+    <string name="hayTareas">%d tareas</string>
+    <string name="creation">creación</string>
+    <string name="tag">etiqueta</string>
+    <string name="date">fecha</string>
+    <string name="finish_order">terminación</string>
+    <string name="orderBy">Ordenar por:</string>
 </resources>

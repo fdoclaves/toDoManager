@@ -28,10 +28,11 @@
 
     <Button
         android:id="@+id/button"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:background="@color/colorPrimary"
         android:drawableStart="@drawable/ic_color_lens_white"
         android:drawablePadding="5dp"
@@ -41,6 +42,7 @@
         android:textAlignment="textStart"
         android:textColor="@android:color/white"
         android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -71,7 +73,7 @@
         android:drawableStart="@drawable/ic_action_alarm_white"
         android:drawablePadding="5dp"
         android:onClick="goToNotificationSettings"
-        android:text="@string/notificationSettings"
+        android:text="@string/notificationsSettings"
         android:padding="8dp"
         android:textAlignment="textStart"
         android:textColor="@android:color/white"
