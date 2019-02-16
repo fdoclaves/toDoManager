@@ -35,7 +35,7 @@ public class FechasUtils {
             if(resultTimeLong.longValue() == 1){
                 resultaTimeString = map.get(StringUtils.fata_un_mes_);
             } else {
-                resultaTimeString = map.get(StringUtils.faltan_) + " " + resultTimeLong + " " + map.get(StringUtils.meses_);
+                resultaTimeString = getRealValor(map.get(StringUtils.faltan_)) + resultTimeLong + " " + map.get(StringUtils.meses_);
             }
         }
         if (selectedTimeRange.equals(map.get(StringUtils.DIAS))){
@@ -44,7 +44,7 @@ public class FechasUtils {
             if(resultTimeLong.longValue() == 1){
                 resultaTimeString = map.get(StringUtils.falta_un_dia_);
             } else {
-                resultaTimeString = map.get(StringUtils.faltan_) + " " + resultTimeLong + " " + map.get(StringUtils.dias_);
+                resultaTimeString = getRealValor(map.get(StringUtils.faltan_)) + resultTimeLong + " " + map.get(StringUtils.dias_);
             }
         }
         if (selectedTimeRange.equals(map.get(StringUtils.SEMANAS))){
@@ -54,10 +54,17 @@ public class FechasUtils {
             if(resultTimeLong.longValue() == 1){
                 resultaTimeString = map.get(StringUtils.faltan_una_semana_);
             } else {
-                resultaTimeString = map.get(StringUtils.faltan_) + " " + resultTimeLong + " " + map.get(StringUtils.semanas_);
+                resultaTimeString = getRealValor(map.get(StringUtils.faltan_)) + resultTimeLong + " " + map.get(StringUtils.semanas_);
             }
         }
         String endDateText = map.get(StringUtils.fecha_final_) + simpleDateFormat.format(endCalendar.getTime());
         return new FechasBean(endDateText, resultaTimeString, endCalendar);
+    }
+
+    private static String getRealValor(String value) {
+        if(value.isEmpty()){
+            return "";
+        }
+        return value + " ";
     }
 }

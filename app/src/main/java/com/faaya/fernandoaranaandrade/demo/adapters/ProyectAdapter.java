@@ -74,8 +74,6 @@ public class ProyectAdapter extends ArrayAdapter<Proyect> {
                     textView1.setText(getBoldText(this.proyect_finished));
                     relativeLayout.setBackgroundColor(GREEN);
                 }
-            } else {
-                textView1.setTextColor(Color.GRAY);
             }
         } catch (ParseException e) {
             e.printStackTrace();

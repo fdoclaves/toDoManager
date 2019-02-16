@@ -70,10 +70,8 @@ public class DataBase extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO SETTINGS(KEYWORD,VALUE) VALUES ('" + SettingsEnum.YELLOW_SEMAFORO.toString() +"','5-DB')");
         db.execSQL("INSERT INTO SETTINGS(KEYWORD,VALUE) VALUES ('" + SettingsEnum.ORANGE_SEMAFORO.toString() +"','3-DB')");
         db.execSQL("INSERT INTO SETTINGS(KEYWORD,VALUE) VALUES ('" + SettingsEnum.RED_SEMAFORO.toString() +"','1-DB')");
-        db.execSQL("INSERT INTO SETTINGS(KEYWORD,VALUE) VALUES ('" + SettingsEnum.ACTIVE.toString() +"','" + SettingsEnum.ON.toString() +"')");
+        db.execSQL("INSERT INTO SETTINGS(KEYWORD,VALUE) VALUES ('" + SettingsEnum.ACTIVE.toString() +"','" + SettingsEnum.OFF.toString() +"')");
         db.execSQL("INSERT INTO SETTINGS(KEYWORD,VALUE) VALUES ('" + SettingsEnum.REAL_SEMAFORO.toString() +"','" + verde +"')");
-        db.execSQL("INSERT INTO SETTINGS(KEYWORD,VALUE) VALUES ('" + SettingsEnum.ACTIVE_NOTIFICTION.toString() +"','" + SettingsEnum.ON.toString() +"')");
-        db.execSQL("INSERT INTO SETTINGS(KEYWORD,VALUE) VALUES ('" + SettingsEnum.DATE_NOTIFICATION.toString() +"','09:00 AM')");
         db.execSQL("INSERT INTO SETTINGS(KEYWORD,VALUE) VALUES ('" + SettingsEnum.TIME_SNOOZE.toString() +"','15M')");
     }
 

@@ -14,6 +14,7 @@ import com.faaya.fernandoaranaandrade.demo.Beans.SettingsEnum;
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskApp;
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskEnum;
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskType;
+import com.faaya.fernandoaranaandrade.demo.R;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,8 +23,10 @@ import java.util.List;
 public class Queries {
 
     private SQLiteDatabase sqLiteDatabase;
+    private Context context;
 
     public Queries(Context context) {
+        this.context = context;
         DataBase dataBase = new DataBase(context, DataBase.SCHEMA, null, 3);
         sqLiteDatabase = dataBase.getWritableDatabase();
     }
@@ -193,10 +196,10 @@ public class Queries {
         if(taskType != null){
            ids.add(taskType);
        }
-       return selectTaskByIdProyectEndDateAndType(idProyect,endRangeDateStart,endRangeDateFinish,ids, onlyPendientes);
+       return selectTaskByIdProyectEndDateAndType(idProyect,endRangeDateStart,endRangeDateFinish,ids, onlyPendientes, null);
     }
 
-    public List<TaskApp> selectTaskByIdProyectEndDateAndType(Long idProyect, Long endRangeDateStart, Long endRangeDateFinish, List<TaskType> idTaskTypes, Boolean onlyPendientes) {
+    public List<TaskApp> selectTaskByIdProyectEndDateAndType(Long idProyect, Long endRangeDateStart, Long endRangeDateFinish, List<TaskType> idTaskTypes, Boolean onlyPendientes, String order) {
         StringBuffer query = new StringBuffer("SELECT * FROM " + DataBase.TASK_TABLE);
         List<String> values = new ArrayList<>();
         boolean useFilter = false;
@@ -244,6 +247,21 @@ public class Queries {
             }
             query.append(DataBase.REAL_DATE + " is null");
             useFilter = true;
+        }
+        if(order != null && !order.isEmpty()){
+            if(order.equals(context.getString(R.string.creation))){
+                query.append("");
+            }
+            if(order.equals(context.getString(R.string.date))){
+                query.append(" order by " + DataBase.END_DATE);
+            }
+            if(order.equals(context.getString(R.string.tag))){
+                query.append(" order by " + DataBase.ID_TYPE);
+            }
+            if(order.equals(context.getString(R.string.finish_order))){
+                query.append(" order by " + DataBase.REAL_DATE);
+            }
+
         }
         System.out.println(query);
         String[] valueArray = new String[values.size()];
@@ -465,6 +483,18 @@ public class Queries {
 
     public long getCountTask() {
         Cursor cursor = sqLiteDatabase.rawQuery("SELECT COUNT(1) FROM " + DataBase.TASK_TYPE_TABLE, new String[0]);
+        if (cursor.moveToFirst()) {
+            do {
+                return cursor.getInt(0);
+            } while (cursor.moveToNext());
+        }
+        return 0;
+    }
+
+    public Integer getCountTaskByTypeTask(Long idType) {
+        String[] values = new String[1];
+        values[0] = idType.toString();
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT COUNT(1) FROM " + DataBase.TASK_TABLE + " WHERE ID_TYPE = ?", values);
         if (cursor.moveToFirst()) {
             do {
                 return cursor.getInt(0);
