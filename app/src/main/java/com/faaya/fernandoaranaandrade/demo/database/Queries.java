@@ -27,7 +27,7 @@ public class Queries {
 
     public Queries(Context context) {
         this.context = context;
-        DataBase dataBase = new DataBase(context, DataBase.SCHEMA, null, 4);
+        DataBase dataBase = new DataBase(context, DataBase.SCHEMA, null, 5);
         sqLiteDatabase = dataBase.getWritableDatabase();
     }
 
@@ -56,28 +56,26 @@ public class Queries {
     }
 
     public void updateProyect(final Proyect proyect) {
-        ContentValues cv = new ContentValues();
-        cv.put(DataBase.NAME, proyect.getName());
-        cv.put(DataBase.RANGE, proyect.getRange());
-        cv.put(DataBase.START, proyect.getStart());
-        cv.put(DataBase.TIME, proyect.getTime());
         String[] ids = new String[1];
         ids[0] = proyect.getId().toString();
-        sqLiteDatabase.update(DataBase.PROYECT_TABLE, cv, "ID = ?", ids);
+        sqLiteDatabase.update(DataBase.PROYECT_TABLE, fillProyectContentValues(proyect), "ID = ?", ids);
     }
 
-    public Proyect saveProyect(final Proyect proyect) {
+    @NonNull
+    private ContentValues fillProyectContentValues(Proyect proyect) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DataBase.NAME, proyect.getName());
+        contentValues.put(DataBase.RANGE, proyect.getRange());
+        contentValues.put(DataBase.START, proyect.getStart());
+        contentValues.put(DataBase.TIME, proyect.getTime());
+        contentValues.put(DataBase.END_DATE, proyect.getEndDate());
+        return contentValues;
+    }
+
+    public void saveProyect(final Proyect proyect) {
         if (sqLiteDatabase != null) {
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(DataBase.NAME, proyect.getName());
-            contentValues.put(DataBase.RANGE, proyect.getRange());
-            contentValues.put(DataBase.START, proyect.getStart());
-            contentValues.put(DataBase.TIME, proyect.getTime());
-            sqLiteDatabase.insert(DataBase.PROYECT_TABLE, null, contentValues);
-            System.out.println("time:" + proyect.getTime());
-            return selectProyect("SELECT * FROM " + DataBase.PROYECT_TABLE + " WHERE TIME=? AND NAME = ?", proyect.getTime().toString(), proyect.getName()).get(0);
+            sqLiteDatabase.insert(DataBase.PROYECT_TABLE, null, fillProyectContentValues(proyect));
         }
-        return null;
     }
 
     public Proyect getByIdProyect(Long idProyect) {
@@ -171,8 +169,11 @@ public class Queries {
         return selectTask("SELECT * FROM " + DataBase.TASK_TABLE);
     }
 
-    public List<TaskApp> getAllPendientesTask(Long time) {
-        return selectTask("SELECT * FROM " + DataBase.TASK_TABLE + " WHERE END_DATE <= ? and REAL_DATE is null", time.toString());
+    public List<TaskApp> getAllPendientesTask(Long time, String orderBy) {
+        StringBuffer query = new StringBuffer("SELECT * FROM " + DataBase.TASK_TABLE + " WHERE (END_DATE <= ? or END_DATE is null or END_DATE = 0) and (REAL_DATE is null or REAL_DATE = 0) ");
+        taskOrderBy(orderBy, query);
+        System.out.println(query.toString());
+        return selectTask(query.toString(), time.toString());
     }
 
     public void deleteTask(Long id) {
@@ -183,23 +184,23 @@ public class Queries {
         }
     }
 
-    public List<TaskApp> selectTaskByIdProyectEndDateAndType(Long idProyect, Long endRangeDateStart, Long endRangeDateFinish, Long idTaskType) {
+    public List<TaskApp> selectTaskByIdProyectEndDateAndType(Long idProyect, Long endRangeDateStart, Long endRangeDateFinish, Long idTaskType, String order) {
         TaskType taskType = null;
         if(idTaskType != null){
             taskType = getTaskTypeById(idTaskType);
         }
-        return selectTaskByIdProyectEndDateAndType(idProyect, endRangeDateStart, endRangeDateFinish, taskType, false);
+        return selectTaskByIdProyectEndDateAndType(idProyect, endRangeDateStart, endRangeDateFinish, taskType, false, order);
     }
 
-    public List<TaskApp> selectTaskByIdProyectEndDateAndType(Long idProyect, Long endRangeDateStart, Long endRangeDateFinish, TaskType taskType, Boolean onlyPendientes) {
+    public List<TaskApp> selectTaskByIdProyectEndDateAndType(Long idProyect, Long endRangeDateStart, Long endRangeDateFinish, TaskType taskType, Boolean onlyPendientes, String order) {
         List<TaskType> ids = new ArrayList<>();
         if(taskType != null){
            ids.add(taskType);
        }
-       return selectTaskByIdProyectEndDateAndType(idProyect,endRangeDateStart,endRangeDateFinish,ids, onlyPendientes, null);
+       return selectTaskByIdProyectEndDateAndType(idProyect,endRangeDateStart,endRangeDateFinish,ids, onlyPendientes, order);
     }
 
-    public List<TaskApp> selectTaskByIdProyectEndDateAndType(Long idProyect, Long endRangeDateStart, Long endRangeDateFinish, List<TaskType> idTaskTypes, Boolean onlyPendientes, String order) {
+    public List<TaskApp> selectTaskByIdProyectEndDateAndType(Long idProyect, Long endRangeDateStart, Long endRangeDateFinish, List<TaskType> idTaskTypes, Boolean unfinish, String order) {
         StringBuffer query = new StringBuffer("SELECT * FROM " + DataBase.TASK_TABLE);
         List<String> values = new ArrayList<>();
         boolean useFilter = false;
@@ -241,13 +242,23 @@ public class Queries {
             query.append(") ");
             useFilter = true;
         }
-        if (onlyPendientes != null && onlyPendientes) {
+        if (unfinish != null && unfinish) {
             if (useFilter) {
                 query.append(" AND ");
             }
-            query.append(DataBase.REAL_DATE + " is null");
+            query.append("(" + DataBase.REAL_DATE + " is null or " + DataBase.REAL_DATE + " = 0)");
             useFilter = true;
         }
+        taskOrderBy(order, query);
+        System.out.println(query);
+        String[] valueArray = new String[values.size()];
+        for (int index = 0; index < values.size(); index++) {
+            valueArray[index] = values.get(index);
+        }
+        return selectTask(query.toString(), valueArray);
+    }
+
+    private void taskOrderBy(String order, StringBuffer query) {
         if(order != null && !order.isEmpty()){
             if(order.equals(context.getString(R.string.creation))){
                 query.append("");
@@ -263,12 +274,6 @@ public class Queries {
             }
 
         }
-        System.out.println(query);
-        String[] valueArray = new String[values.size()];
-        for (int index = 0; index < values.size(); index++) {
-            valueArray[index] = values.get(index);
-        }
-        return selectTask(query.toString(), valueArray);
     }
 
     public void deleteTasksByIdProyect(Long id) {

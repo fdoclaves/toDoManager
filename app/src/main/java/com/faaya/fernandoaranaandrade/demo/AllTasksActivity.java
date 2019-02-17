@@ -156,7 +156,7 @@ public class AllTasksActivity extends AppCompatActivity {
             calendarEnd.set(Calendar.DAY_OF_MONTH,calendarEnd.getActualMaximum(Calendar.DAY_OF_MONTH));
             endRange = calendarEnd.getTimeInMillis();
         }
-        fillProyectSpinnerWithData(queries.selectTaskByIdProyectEndDateAndType(idProyect, startRange, endRange, idTaskType));
+        fillProyectSpinnerWithData(queries.selectTaskByIdProyectEndDateAndType(idProyect, startRange, endRange, idTaskType, null));
     }
 
     @NonNull

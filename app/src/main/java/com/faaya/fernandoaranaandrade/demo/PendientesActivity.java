@@ -2,28 +2,34 @@ package com.faaya.fernandoaranaandrade.demo;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.faaya.fernandoaranaandrade.demo.Beans.PendientesBean;
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskApp;
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskType;
 import com.faaya.fernandoaranaandrade.demo.adapters.TaskAppAdapter;
 import com.faaya.fernandoaranaandrade.demo.database.Queries;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 public class PendientesActivity extends AppCompatActivity {
 
+    public static final String FILTER_BEAN = "FILTER_BEAN";
     public static String TODAY = "TODAY";
 
     private Queries queries;
@@ -32,15 +38,39 @@ public class PendientesActivity extends AppCompatActivity {
 
     List<TaskApp> taskToday = new ArrayList<>();
 
-    Switch aSwitch;
+    Switch switchChecked;
+
+    Spinner spinnerFilterOrder;
+
+    private String orderBy;
+
+    private String[] orderFilters = new String[4];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pendientes);
         queries = new Queries(this);
-        aSwitch = findViewById(R.id.switchPendientesDia);
-        aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        switchChecked = findViewById(R.id.switchPendientesDia);
+        spinnerFilterOrder = findViewById(R.id.spinnerFilterOrder);
+        orderFilters[0]=getString(R.string.creation);
+        orderFilters[1]=getString(R.string.tag);
+        orderFilters[2]=getString(R.string.date);
+        orderFilters[3]=getString(R.string.finish_order);
+        spinnerFilterOrder.setAdapter(new ArrayAdapter<String>(this, R.layout.spinner18, orderFilters));
+        spinnerFilterOrder.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                orderBy = (String) spinnerFilterOrder.getSelectedItem();
+                filter();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+
+            }
+        });
+        switchChecked.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -74,15 +104,30 @@ public class PendientesActivity extends AppCompatActivity {
             }
         });
         Intent intent = getIntent();
+        if(orderBy != null){
+            for (int index = 0; index < orderFilters.length; index++) {
+                if(orderFilters[index].equals(orderBy)){
+                    spinnerFilterOrder.setSelection(index);
+                    break;
+                }
+            }
+        }
         fillData(intent);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToEditActivity(null);
+            }
+        });
     }
 
     private void filter() {
         List<TaskApp> allTask;
-        if(aSwitch.isChecked()){
-            allTask = queries.selectTaskByIdProyectEndDateAndType(null, getStartDate(), getEndDate(), (TaskType) null, true);
+        if(switchChecked.isChecked()){
+            allTask = queries.selectTaskByIdProyectEndDateAndType(null, getStartDate(), getEndDate(), (TaskType) null, true, orderBy);
         } else {
-            allTask = queries.getAllPendientesTask(getStartDate());
+            allTask = queries.getAllPendientesTask(getStartDate(), orderBy);
         }
         taskToday.clear();
         taskToday.addAll(allTask);
@@ -123,12 +168,20 @@ public class PendientesActivity extends AppCompatActivity {
     }
 
     private void fillData(Intent intent) {
-        aSwitch.setChecked(intent.getBooleanExtra(TODAY, false));
+        switchChecked.setChecked(intent.getBooleanExtra(TODAY, false));
+        Serializable serializable = intent.getSerializableExtra(FILTER_BEAN);
+        if(serializable != null){
+            fillFromSerializable(serializable);
+        }
     }
 
-    private void goToEditActivity(long id) {
+    private void goToEditActivity(Long id) {
         Intent intent = new Intent(this, EditTaskActivity.class);
-        intent.putExtra(MainActivity.ID_TASK, id);
+        if(id != null){
+            intent.putExtra(MainActivity.ID_TASK, id);
+        }
+        intent.putExtra(EditTaskActivity.FROM_ACTIVITY, this.getClass().getName());
+        intent.putExtra(FILTER_BEAN, buildSerializable());
         startActivity(intent);
     }
 
@@ -136,5 +189,35 @@ public class PendientesActivity extends AppCompatActivity {
     public void onResume(){
         super.onResume();
         filter();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState){
+        savedInstanceState.putSerializable(FILTER_BEAN, buildSerializable());
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    private Serializable buildSerializable() {
+        return new PendientesBean(switchChecked.isChecked(), orderBy);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null){
+            fillFromSerializable(savedInstanceState.getSerializable(FILTER_BEAN));
+        }
+    }
+
+    private void fillFromSerializable(Serializable serializable) {
+        PendientesBean pendientesBean = (PendientesBean) serializable;
+        switchChecked.setChecked(pendientesBean.getToday());
+        orderBy = pendientesBean.getOrderBy();
+        for (int i = 0; i < orderFilters.length; i++) {
+            if(orderFilters[i].equalsIgnoreCase(orderBy)){
+                spinnerFilterOrder.setSelection(i);
+                break;
+            }
+        }
     }
 }

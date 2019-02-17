@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.faaya.fernandoaranaandrade.demo.Beans.DateEnum;
 import com.faaya.fernandoaranaandrade.demo.Beans.NotificationsApp;
 import com.faaya.fernandoaranaandrade.demo.Beans.Proyect;
 import com.faaya.fernandoaranaandrade.demo.Beans.SettingsEnum;
@@ -35,6 +36,10 @@ public class NotificationServiceBroadcastReceiver extends BroadcastReceiver {
                 Long newDate = getNewDate(queries);
                 queries.saveUpdateOrDeleteNotifications(true, new NotificationsApp(newDate, idTask));
                 Util.scheduleNotification(context, queries, newDate);
+                TaskApp taskApp = queries.getByIdTask(idTask);
+                String format = DateEnum.fullDateSimpleDateFormat.format(new Date(newDate));
+                taskApp.setDateNotification(format);
+                queries.saveOrUpdateTaskApp(taskApp);
                 Toast.makeText(context, context.getString(R.string.snoozeAction), Toast.LENGTH_SHORT).show();
             }
             if(intent.getAction().contains(FINISH)){

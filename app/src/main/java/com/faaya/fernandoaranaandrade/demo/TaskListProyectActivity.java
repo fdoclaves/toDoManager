@@ -144,11 +144,11 @@ public class TaskListProyectActivity extends AppCompatActivity {
             Snackbar.make(view, getString(R.string.youNeedToCreateAHaveCategories), Snackbar.LENGTH_LONG).setAction("Action", null).show();
             return;
         }
-        Intent intent = new Intent(this, EditTaskActivity.class);
-        intent.putExtra(TaskEnum.ID_PROYECT.toString(), proyect.getId());
-        intent.putExtra(EditTaskActivity.FROM_ACTIVITY, this.getClass().getName());
-        intent.putExtra(FILTER_BEAN, buildSerializable());
-        startActivity(intent);
+        Intent newIntent = new Intent(this, EditTaskActivity.class);
+        newIntent.putExtra(TaskEnum.ID_PROYECT.toString(), proyect.getId());
+        newIntent.putExtra(EditTaskActivity.FROM_ACTIVITY, this.getClass().getName());
+        newIntent.putExtra(FILTER_BEAN, buildSerializable());
+        startActivity(newIntent);
         finish();
     }
 
@@ -228,6 +228,7 @@ public class TaskListProyectActivity extends AppCompatActivity {
             case R.id.editProyectTool:
                 Intent intent = new Intent(this, EditProyectActivity.class);
                 intent.putExtra(ID_PROYECT, idProyect);
+                intent.putExtra(FILTER_BEAN, buildSerializable());
                 startActivity(intent);
                 finish();
                 return true;
@@ -261,4 +262,5 @@ public class TaskListProyectActivity extends AppCompatActivity {
             fillFromSerializable(savedInstanceState.getSerializable(FILTER_BEAN));
         }
     }
+
 }

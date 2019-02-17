@@ -11,6 +11,7 @@ public class Proyect implements Serializable {
     private long start;
     private Long time;
     private String range;
+    private Long endDate;
 
     public Proyect(){
 
@@ -22,6 +23,7 @@ public class Proyect implements Serializable {
         setStart(cursor.getLong(2));
         setTime(cursor.getLong(3));
         setRange(cursor.getString(4));
+        setEndDate(cursor.getLong(5));
     }
 
     public Proyect(String name) {
@@ -72,4 +74,11 @@ public class Proyect implements Serializable {
         return name;
     }
 
+    public Long getEndDate() {
+        return endDate;
     }
+
+    public void setEndDate(Long endDate) {
+        this.endDate = endDate;
+    }
+}

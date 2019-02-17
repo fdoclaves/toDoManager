@@ -22,10 +22,8 @@
         </activity>
         <activity
             android:name=".EditProyectActivity"
-            android:label="@string/proyect">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.faaya.fernandoaranaandrade.demo.MainActivity" />
+            android:label="@string/proyect"
+            android:theme="@style/AppTheme2">
         </activity>
         <activity
             android:name=".EditTaskActivity"

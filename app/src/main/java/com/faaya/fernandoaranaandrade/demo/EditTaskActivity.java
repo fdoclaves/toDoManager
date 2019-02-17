@@ -433,6 +433,11 @@ public class EditTaskActivity extends AppCompatActivity {
             if(fromActivity.contains("CalendarActivity")){
                 newIntent = new Intent(this, CalendarActivity.class);
             }
+            if(fromActivity.contains("PendientesActivity")){
+                newIntent = new Intent(this, PendientesActivity.class);
+                Serializable serializable = getIntent().getSerializableExtra(PendientesActivity.FILTER_BEAN);
+                newIntent.putExtra(PendientesActivity.FILTER_BEAN, serializable);
+            }
         }
         startActivity(newIntent);
         finish();
@@ -600,5 +605,10 @@ public class EditTaskActivity extends AppCompatActivity {
             getMenuInflater().inflate(R.menu.tool_bar_edit_task_sin_finish, menu);
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        exit();
     }
 }

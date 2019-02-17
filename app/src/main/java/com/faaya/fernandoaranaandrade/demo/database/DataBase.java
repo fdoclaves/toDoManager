@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.faaya.fernandoaranaandrade.demo.Beans.DateEnum;
+import com.faaya.fernandoaranaandrade.demo.Beans.Proyect;
 import com.faaya.fernandoaranaandrade.demo.Beans.SettingsEnum;
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskApp;
 import com.faaya.fernandoaranaandrade.demo.R;
@@ -54,13 +55,15 @@ public class DataBase extends SQLiteOpenHelper {
     private String task1;
     private String task2;
     private String verde;
-
+    private String moths, weeks;
 
     public DataBase(Context context,String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
         task1 = context.getString(R.string.pendientes);
         task2 = context.getString(R.string.activities);
         verde = context.getString(R.string.green);
+        moths = context.getString(R.string.MESES);
+        weeks = context.getString(R.string.SEMANAS);
     }
 
     @Override
@@ -94,6 +97,29 @@ public class DataBase extends SQLiteOpenHelper {
                 db.execSQL("INSERT INTO SETTINGS(KEYWORD,VALUE) VALUES ('" + SettingsEnum.TIME_SNOOZE.toString() +"','15M')");
             case 3:
                 changeAlams(db);
+            case 4:
+                db.execSQL("DELETE FROM SETTINGS WHERE KEYWORD = '" + SettingsEnum.ACTIVE_NOTIFICTION.toString() +"'");
+                db.execSQL("DELETE FROM SETTINGS WHERE KEYWORD = '" + SettingsEnum.DATE_NOTIFICATION.toString() +"'");
+                db.execSQL("ALTER TABLE OBRA ADD COLUMN END_DATE INT");
+                changeMonths(db);
+        }
+    }
+
+    private void changeMonths(SQLiteDatabase db) {
+        Cursor cursor = db.rawQuery("SELECT * FROM " + PROYECT_TABLE, new String[0]);
+        if (cursor.moveToFirst()) {
+            do {
+                Proyect proyect = new Proyect(cursor);
+                String range = proyect.getRange();
+                if(range.equalsIgnoreCase(moths)){
+                    range = weeks;
+                }
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(RANGE, range);
+                String[] values = new String[1];
+                values[0] = proyect.getId().toString();
+                db.update(PROYECT_TABLE, contentValues, "ID = ?", values);
+            } while (cursor.moveToNext());
         }
     }
 
