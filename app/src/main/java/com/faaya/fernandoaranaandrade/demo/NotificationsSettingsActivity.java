@@ -8,13 +8,17 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
 
+import com.faaya.fernandoaranaandrade.demo.Beans.DateEnum;
+import com.faaya.fernandoaranaandrade.demo.Beans.NotificationsApp;
 import com.faaya.fernandoaranaandrade.demo.Beans.SettingsEnum;
 import com.faaya.fernandoaranaandrade.demo.database.Queries;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +56,20 @@ public class NotificationsSettingsActivity extends AppCompatActivity {
         tiempoSpinner = findViewById(R.id.spinnerHorasMinutosGeneral);
         tiempoSpinner.setAdapter(new ArrayAdapter<String>(this, R.layout.spinner18, list));
         fillSnooze();
+        fillNextNotification();
+    }
+
+    private void fillNextNotification() {
+        TextView textViewNextNotifacion = findViewById(R.id.textViewNextNotifacion);
+        NotificationsApp firstNotification = queries.getFirstNotification();
+        if(firstNotification == null){
+            textViewNextNotifacion.setVisibility(View.INVISIBLE);
+            TextView textViewNextNotificationTitule = findViewById(R.id.textViewNextNotificationTitule);
+            textViewNextNotificationTitule.setVisibility(View.INVISIBLE);
+        } else {
+            String format = DateEnum.fullDateSimpleDateFormat.format(new Date(firstNotification.getDate()));
+            textViewNextNotifacion.setText(format);
+        }
     }
 
     private void fillSnooze() {

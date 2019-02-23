@@ -154,4 +154,8 @@
     <string name="finish_order_Down">done ↓</string>
     <string name="IfTaskDoesNotHaveDate">If task does not have date:</string>
     <string name="changeColors">Change colors</string>
+    <string name="Next_notification">Next notification:</string>
+    <string name="Search">Search</string>
+    <string name="taskName">Task name</string>
+    <string name="filter">Filter</string>
 </resources>

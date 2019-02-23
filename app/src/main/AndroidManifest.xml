@@ -15,10 +15,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".AllTasksActivity"
-            android:label="@string/tasks_">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.faaya.fernandoaranaandrade.demo.MainActivity" />
+            android:label="@string/tasks_"
+            android:theme="@style/AppTheme2">
         </activity>
         <activity
             android:name=".EditProyectActivity"

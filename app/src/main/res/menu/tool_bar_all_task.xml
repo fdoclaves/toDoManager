@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/filterAllTaskSearchTool"
+        android:icon="@drawable/ic_action_search"
+        app:showAsAction="ifRoom"
+        android:title="@string/Search">
+    </item>
+    <item
+        android:id="@+id/filterAllTaskFilterTool"
+        android:icon="@drawable/ic_action_filter"
+        app:showAsAction="ifRoom"
+        android:title="@string/filterList">
+    </item>
+</menu>

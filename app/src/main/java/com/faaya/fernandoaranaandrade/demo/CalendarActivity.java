@@ -47,7 +47,7 @@ public class CalendarActivity extends AppCompatActivity {
                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                 Long endRangeDateStart = getStartDay(calendar);
                 Long endRangeDateFinish = getEndDay(calendar);
-                fillProyectSpinnerWithData(queries.selectTaskByIdProyectEndDateAndType(null, endRangeDateStart, endRangeDateFinish, null, null));
+                fillProyectSpinnerWithData(queries.selectTaskByIdProyectEndDateAndType(null, endRangeDateStart, endRangeDateFinish, null, getString(R.string.dateUp), null));
 
             }
         });
@@ -127,7 +127,7 @@ public class CalendarActivity extends AppCompatActivity {
         queries = new Queries(this);
         Long endRangeDateStart = getStartDay(calendar);
         Long endRangeDateFinish = getEndDay(calendar);
-        fillProyectSpinnerWithData(queries.selectTaskByIdProyectEndDateAndType(null, endRangeDateStart, endRangeDateFinish, null, null));
+        fillProyectSpinnerWithData(queries.selectTaskByIdProyectEndDateAndType(null, endRangeDateStart, endRangeDateFinish, null, getString(R.string.dateUp), null));
     }
 
 }

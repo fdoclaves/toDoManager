@@ -145,4 +145,8 @@
     <string name="finish_order_Down">terminación ↓</string>
     <string name="IfTaskDoesNotHaveDate">Si la tarea no tiene fecha:</string>
     <string name="changeColors">Cambiar colores</string>
+    <string name="Next_notification">Siguiente notificación:</string>
+    <string name="Search">Buscar</string>
+    <string name="taskName">Nombre de la tarea</string>
+    <string name="filter">Filtrar</string>
 </resources>

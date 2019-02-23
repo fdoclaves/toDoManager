@@ -129,7 +129,7 @@ public class PendientesActivity extends AppCompatActivity {
     private void filter() {
         List<TaskApp> allTask;
         if(switchChecked.isChecked()){
-            allTask = queries.selectTaskByIdProyectEndDateAndType(null, getStartDate(), getEndDate(), (TaskType) null, true, orderBy);
+            allTask = queries.selectTaskByIdProyectEndDateAndType(null, getStartDate(), getEndDate(), (TaskType) null, true, orderBy, null);
         } else {
             allTask = queries.getAllPendientesTask(getStartDate(), orderBy);
         }

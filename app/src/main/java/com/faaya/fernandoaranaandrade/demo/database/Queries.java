@@ -185,28 +185,28 @@ public class Queries {
         }
     }
 
-    public List<TaskApp> selectTaskByIdProyectEndDateAndType(Long idProyect, Long endRangeDateStart, Long endRangeDateFinish, Long idTaskType, String order) {
+    public List<TaskApp> selectTaskByIdProyectEndDateAndType(Long idProyect, Long endRangeDateStart, Long endRangeDateFinish, Long idTaskType, String order, String searchText) {
         TaskType taskType = null;
         if (idTaskType != null) {
             taskType = getTaskTypeById(idTaskType);
         }
-        return selectTaskByIdProyectEndDateAndType(idProyect, endRangeDateStart, endRangeDateFinish, taskType, null, order);
+        return selectTaskByIdProyectEndDateAndType(idProyect, endRangeDateStart, endRangeDateFinish, taskType, null, order, searchText);
     }
 
-    public List<TaskApp> selectTaskByIdProyectEndDateAndType(Long idProyect, Long endRangeDateStart, Long endRangeDateFinish, TaskType taskType, Boolean onlyPendientes, String order) {
+    public List<TaskApp> selectTaskByIdProyectEndDateAndType(Long idProyect, Long endRangeDateStart, Long endRangeDateFinish, TaskType taskType, Boolean onlyPendientes, String order, String searchText) {
         List<TaskType> ids = null;
         if (taskType != null) {
             ids = new ArrayList<>();
             ids.add(taskType);
         }
-        return selectTaskByIdProyectEndDateAndType(idProyect, endRangeDateStart, endRangeDateFinish, ids, onlyPendientes, order);
+        return selectTaskByIdProyectEndDateAndType(idProyect, endRangeDateStart, endRangeDateFinish, ids, onlyPendientes, order, searchText);
     }
 
-    public List<TaskApp> selectTaskByIdProyectEndDateAndType(Long idProyect, Long endRangeDateStart, Long endRangeDateFinish, List<TaskType> idTaskTypes, Boolean unfinish, String order) {
+    public List<TaskApp> selectTaskByIdProyectEndDateAndType(Long idProyect, Long endRangeDateStart, Long endRangeDateFinish, List<TaskType> idTaskTypes, Boolean unfinish, String order, String searchText) {
         StringBuffer query = new StringBuffer("SELECT * FROM " + DataBase.TASK_TABLE);
         List<String> values = new ArrayList<>();
         boolean useFilter = false;
-        if (idProyect != null || endRangeDateStart != null || idTaskTypes != null || endRangeDateFinish != null || unfinish != null) {
+        if (idProyect != null || endRangeDateStart != null || idTaskTypes != null || endRangeDateFinish != null || unfinish != null || searchText != null) {
             query.append(" WHERE ");
         }
         if (idProyect != null) {
@@ -253,6 +253,14 @@ public class Queries {
             } else {
                 query.append("(" + DataBase.REAL_DATE + " is not null and " + DataBase.REAL_DATE + " != 0)");
             }
+            useFilter = true;
+        }
+        if(searchText != null){
+            if (useFilter) {
+                query.append(" AND ");
+            }
+            query.append(DataBase.NAME + " LIKE ? ");
+            values.add("%" + searchText.replaceAll("%","\\%").replaceAll("'","\\'") +"%");
             useFilter = true;
         }
         taskOrderBy(order, query);
@@ -436,6 +444,14 @@ public class Queries {
 
     public List<NotificationsApp> getAllNotification() {
         return selectNotificationsApp("SELECT * FROM " + DataBase.NOTIFICATIONS_TABLE);
+    }
+
+    public NotificationsApp getFirstNotification() {
+        List<NotificationsApp> notificationsApps = selectNotificationsApp("SELECT * FROM " + DataBase.NOTIFICATIONS_TABLE + " LIMIT 1");
+        if(notificationsApps.isEmpty()){
+            return null;
+        }
+        return notificationsApps.get(0);
     }
 
     @NonNull
