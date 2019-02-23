@@ -36,7 +36,6 @@ import java.util.Date;
 
 public class EditProyectActivity extends AppCompatActivity {
 
-    public static final String DATE_REGEX = "^([0-2][0-9]|3[0-1])\\/(0[0-9]|1[0-2])\\/([0-9][0-9])?[0-9][0-9]$";
     Spinner rageSpinner;
     EditText obraNameEditText;
     EditText timeEditText;
@@ -113,13 +112,14 @@ public class EditProyectActivity extends AppCompatActivity {
 
     public void set_date(View view) {
         String textButton = null;
-        if (startEditButton.getText().toString().matches(DATE_REGEX)) {
+        if (!startEditButton.getText().toString().equalsIgnoreCase(getString(R.string.setDate))) {
             textButton = startEditButton.getText().toString();
         }
         DateDialogFragment dateDialogFragment = DateDialogFragment.newInstance(" ", textButton);
         dateDialogFragment.setOkActionDate(new OkActionDate() {
             @Override
             public void doAction(Calendar calendar) {
+                cleanDate();
                 startEditButton.setText(DateEnum.dateSimpleDateFormat.format(calendar.getTime()));
                 setVisibilityDates(View.VISIBLE);
                 fillResultData();
@@ -130,7 +130,7 @@ public class EditProyectActivity extends AppCompatActivity {
 
     public void set_end_date(View view) {
         String textButton = null;
-        if (endProyectButton.getText().toString().matches(DATE_REGEX)) {
+        if (!endProyectButton.getText().toString().equalsIgnoreCase(getString(R.string.setDate))) {
             textButton = endProyectButton.getText().toString();
         }
         DateDialogFragment dateDialogFragment = DateDialogFragment.newInstance(" ", textButton);
@@ -339,6 +339,10 @@ public class EditProyectActivity extends AppCompatActivity {
     }
 
     public void cleanDate(View view) {
+        cleanDate();
+    }
+
+    private void cleanDate() {
         setVisibilityDates(View.INVISIBLE);
         String setDate = getString(R.string.setDate);
         endProyectButton.setText(setDate);
@@ -347,6 +351,7 @@ public class EditProyectActivity extends AppCompatActivity {
         proyect.setEndDate(null);
         proyect.setRange(null);
         proyect.setTime(null);
+        proyect.setStart(null);
     }
 
     private void setVisibilityDates(int visibility) {

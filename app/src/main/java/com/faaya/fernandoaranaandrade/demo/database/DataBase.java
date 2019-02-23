@@ -23,6 +23,7 @@ public class DataBase extends SQLiteOpenHelper {
     public static final String COMMENTS = "COMMENTS";
     public static final String TASK_TABLE = "TASKS";
     public static final String SETTINGS_TABLE = "SETTINGS";
+    public static final String ID = "ID";
     public static String NAME = "NAME";
     public static String START = "START";
     public static String TIME = "TIME";
@@ -42,6 +43,7 @@ public class DataBase extends SQLiteOpenHelper {
     public static String DATE_NOTIFICATION="DATE_NOTIFICATION";
     public static String NOTIFICATIONS_TABLE = "NOTIFICATIONS";
     public static String ID_TASK = "ID_TASK";
+    public static String UNFINISH_SEMAFORO = "UNFINISH_SEMAFORO";
 
     String proyectTable = "CREATE TABLE OBRA(ID INTEGER PRIMARY KEY AUTOINCREMENT, NAME TEXT, START INT, TIME INT, RANGE TEXT)";
 
@@ -56,12 +58,14 @@ public class DataBase extends SQLiteOpenHelper {
     private String task2;
     private String verde;
     private String moths, weeks;
+    private String red;
 
     public DataBase(Context context,String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
         task1 = context.getString(R.string.pendientes);
         task2 = context.getString(R.string.activities);
         verde = context.getString(R.string.green);
+        red = context.getString(R.string.red);
         moths = context.getString(R.string.MESES);
         weeks = context.getString(R.string.SEMANAS);
     }
@@ -79,7 +83,7 @@ public class DataBase extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO SETTINGS(KEYWORD,VALUE) VALUES ('" + SettingsEnum.YELLOW_SEMAFORO.toString() +"','5-DB')");
         db.execSQL("INSERT INTO SETTINGS(KEYWORD,VALUE) VALUES ('" + SettingsEnum.ORANGE_SEMAFORO.toString() +"','3-DB')");
         db.execSQL("INSERT INTO SETTINGS(KEYWORD,VALUE) VALUES ('" + SettingsEnum.RED_SEMAFORO.toString() +"','1-DB')");
-        db.execSQL("INSERT INTO SETTINGS(KEYWORD,VALUE) VALUES ('" + SettingsEnum.ACTIVE.toString() +"','" + SettingsEnum.OFF.toString() +"')");
+        db.execSQL("INSERT INTO SETTINGS(KEYWORD,VALUE) VALUES ('" + SettingsEnum.ACTIVE.toString() +"','" + SettingsEnum.ON.toString() +"')");
         db.execSQL("INSERT INTO SETTINGS(KEYWORD,VALUE) VALUES ('" + SettingsEnum.REAL_SEMAFORO.toString() +"','" + verde +"')");
         db.execSQL("INSERT INTO SETTINGS(KEYWORD,VALUE) VALUES ('" + SettingsEnum.TIME_SNOOZE.toString() +"','15M')");
     }
@@ -102,6 +106,9 @@ public class DataBase extends SQLiteOpenHelper {
                 db.execSQL("DELETE FROM SETTINGS WHERE KEYWORD = '" + SettingsEnum.DATE_NOTIFICATION.toString() +"'");
                 db.execSQL("ALTER TABLE OBRA ADD COLUMN END_DATE INT");
                 changeMonths(db);
+            case 5:
+                db.execSQL("INSERT INTO SETTINGS(KEYWORD,VALUE) VALUES ('" + SettingsEnum.UNFINISH_SEMAFORO.toString() +"','" + red + "')");
+                db.execSQL("ALTER TABLE TASKS ADD COLUMN UNFINISH_SEMAFORO TEXT DEFAULT '" + red + "'");
         }
     }
 

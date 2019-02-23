@@ -45,8 +45,7 @@ public class TaskAppAdapter extends ArrayAdapter<TaskApp> {
     private static int RED_R = Color.argb(100, 186, 32, 37);
     private static int YELLOW_R = Color.argb(100, 172, 148, 49);
     private static int GREEN_R = Color.argb(100, 0, 133, 119);
-    private String fecha_estimada;
-    private String verde;
+    private String verde, rojo, blanco;
     private boolean sameProyect;
 
     public TaskAppAdapter(Context context, List<TaskApp> values, boolean sameProyect) {
@@ -54,8 +53,9 @@ public class TaskAppAdapter extends ArrayAdapter<TaskApp> {
         this.context = context;
         this.values = values;
         this.queries = new Queries(context);
-        this.fecha_estimada = context.getString(R.string.fecha_estimada);
         this.verde = context.getString(R.string.green);
+        this.rojo = context.getString(R.string.red);
+        this.blanco = context.getString(R.string.white);
         this.sameProyect = sameProyect;
     }
 
@@ -94,7 +94,19 @@ public class TaskAppAdapter extends ArrayAdapter<TaskApp> {
             startTextView.setText(dateString);
             putColor(rowView, taskApp, nameTextView, isUnfinished);
         } else {
-            strikeThruText(taskApp, nameTextView, isUnfinished);
+            if (taskApp.getActiveSemaforo().equals(SettingsEnum.ON.toString())) {
+                LinearLayout linearLayout = rowView.findViewById(R.id.layout_all_task_);
+                int color = getColorWithEndDate(taskApp, isUnfinished);
+                linearLayout.setBackgroundColor(color);
+                if(color == RED){
+                    nameTextView.setTextColor(RED_R);
+                }
+                if(color == GREEN){
+                    nameTextView.setTextColor(GREEN_R);
+                }
+            } else {
+                strikeThruText(taskApp, nameTextView, isUnfinished);
+            }
         }
         if(activeNotifications){
             TextView textViewInfo = rowView.findViewById(R.id.textViewNotificationInfo);
@@ -109,6 +121,27 @@ public class TaskAppAdapter extends ArrayAdapter<TaskApp> {
             }
         }
         return rowView;
+    }
+
+    private int getColorWithEndDate(TaskApp taskApp, boolean isUnfinished) {
+        if(isUnfinished){
+            return getSemaforoByColor(taskApp.getUnfinishSemaforo());
+        } else {
+            return getSemaforoByColor(taskApp.getRealSemaforo());
+        }
+    }
+
+    private int getSemaforoByColor(String semaforo) {
+        if (semaforo.equalsIgnoreCase(rojo)) {
+            return RED;
+        }
+        if (semaforo.equalsIgnoreCase(blanco)) {
+            return WHITE;
+        }
+        if (semaforo.equalsIgnoreCase(verde)) {
+            return GREEN;
+        }
+        return WHITE;
     }
 
     private boolean isBegingDate(Long dateEnd) {

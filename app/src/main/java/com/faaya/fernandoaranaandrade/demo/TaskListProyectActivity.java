@@ -37,9 +37,9 @@ public class TaskListProyectActivity extends AppCompatActivity {
     private Queries queries;
     private Proyect proyect;
     private List<TaskType> checked;
-    private Boolean unfishedTask;
+    private String comboValue;
     private List<TaskType> allTaskType;
-    private Integer countAllTask;
+    private Long countAllTask;
     private Spinner spinnerFilterOrder;
     private String orderBy;
 
@@ -57,6 +57,7 @@ public class TaskListProyectActivity extends AppCompatActivity {
         Intent currentIntent = getIntent();
         idProyect = currentIntent.getLongExtra(ID_PROYECT, 0);
         queries = new Queries(this);
+        countAllTask = queries.getCountAllTasksByProyect(idProyect);
         allTaskType = queries.getAllTaskTypes();
         if(checked == null){
             checked = new ArrayList<>();
@@ -89,7 +90,8 @@ public class TaskListProyectActivity extends AppCompatActivity {
                         Long idTask = allTask.get(position).getId();
                         queries.deleteTask(idTask);
                         queries.deleteNotificationByIdTask(idTask);
-                        filter(checked, unfishedTask);
+                        countAllTask = queries.getCountAllTasksByProyect(idProyect);
+                        filter(checked, comboValue);
                         showMessage(getString(R.string.task_delete));
                     }
                 });
@@ -108,13 +110,13 @@ public class TaskListProyectActivity extends AppCompatActivity {
         if(serializable != null && serializable instanceof TaskListProyectBean){
             fillFromSerializable(serializable);
         }
-        String[] orderFilters = {getString(R.string.creation), getString(R.string.tag), getString(R.string.date), getString(R.string.finish_order)};
-        spinnerFilterOrder.setAdapter(new ArrayAdapter<String>(this, R.layout.spinner18, orderFilters));
+        String[] orderFilters = {getString(R.string.creationUp), getString(R.string.creationDown), getString(R.string.tagUp), getString(R.string.tagDown), getString(R.string.dateUp), getString(R.string.dateDown), getString(R.string.finish_order), getString(R.string.finish_order_Down)};
+        spinnerFilterOrder.setAdapter(new ArrayAdapter<String>(this, R.layout.spinner18_bond, orderFilters));
         spinnerFilterOrder.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 orderBy = (String) spinnerFilterOrder.getSelectedItem();
-                filter(checked,unfishedTask);
+                filter(checked,comboValue);
             }
 
             @Override
@@ -135,7 +137,7 @@ public class TaskListProyectActivity extends AppCompatActivity {
     private void fillFromSerializable(Serializable serializable) {
         TaskListProyectBean taskListProyectBean = (TaskListProyectBean) serializable;
         checked = taskListProyectBean.getChecked();
-        unfishedTask = taskListProyectBean.getUnfishedTask();
+        comboValue = taskListProyectBean.getUnfishedTask();
         orderBy = taskListProyectBean.getOrderBy();
     }
 
@@ -154,11 +156,20 @@ public class TaskListProyectActivity extends AppCompatActivity {
 
     @NonNull
     private TaskListProyectBean buildSerializable() {
-        return new TaskListProyectBean(checked, unfishedTask, orderBy);
+        return new TaskListProyectBean(checked, comboValue, orderBy);
     }
 
-    private void filter(List<TaskType> checked, Boolean unfishedTask) {
-        List<TaskApp> taskApps = queries.selectTaskByIdProyectEndDateAndType(idProyect, null, null, checked, unfishedTask, orderBy);
+    private void filter(List<TaskType> checked, String comboValue) {
+        Boolean unfinished = null;
+        if(comboValue != null){
+            if(comboValue.equalsIgnoreCase(getString(R.string.done))){
+                unfinished = false;
+            }
+            if(comboValue.equalsIgnoreCase(getString(R.string.ToDo))){
+                unfinished = true;
+            }
+        }
+        List<TaskApp> taskApps = queries.selectTaskByIdProyectEndDateAndType(idProyect, null, null, checked, unfinished, orderBy);
         fillProyectSpinnerWithData(taskApps);
         if(taskApps.size() == 0){
             View view = findViewById(android.R.id.content);
@@ -200,12 +211,12 @@ public class TaskListProyectActivity extends AppCompatActivity {
             FilterTaskDialogFragment filterTaskDialogFragment = FilterTaskDialogFragment.newInstance(getString(R.string.eliminar_definitivamente));
             filterTaskDialogFragment.setData(new OkActionFilter() {
                 @Override
-                public void doAction(List<TaskType> checkedfilter, boolean unfishedTaskfilter) {
+                public void doAction(List<TaskType> checkedfilter, String comboValueFilter) {
                     checked = checkedfilter;
-                    unfishedTask = unfishedTaskfilter;
-                    filter(checked, unfishedTask);
+                    comboValue = comboValueFilter;
+                    filter(checked, comboValue);
                 }
-            }, checked, unfishedTask, allTaskType);
+            }, checked, comboValue, allTaskType);
             filterTaskDialogFragment.show(fm, "fragment_edit_name");
 
     }
@@ -243,10 +254,7 @@ public class TaskListProyectActivity extends AppCompatActivity {
     @Override
     public void onResume(){
         super.onResume();
-        filter(checked, unfishedTask);
-        if(countAllTask == null){
-            countAllTask = allTask.size();
-        }
+        filter(checked, comboValue);
     }
 
     @Override

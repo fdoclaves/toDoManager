@@ -8,7 +8,7 @@ public class Proyect implements Serializable {
 
     private Long id;
     private String name;
-    private long start;
+    private Long start;
     private Long time;
     private String range;
     private Long endDate;
@@ -46,11 +46,11 @@ public class Proyect implements Serializable {
         this.name = name;
     }
 
-    public long getStart() {
+    public Long getStart() {
         return start;
     }
 
-    public void setStart(long start) {
+    public void setStart(Long start) {
         this.start = start;
     }
 

@@ -27,7 +27,7 @@ public class Queries {
 
     public Queries(Context context) {
         this.context = context;
-        DataBase dataBase = new DataBase(context, DataBase.SCHEMA, null, 5);
+        DataBase dataBase = new DataBase(context, DataBase.SCHEMA, null, 6);
         sqLiteDatabase = dataBase.getWritableDatabase();
     }
 
@@ -128,6 +128,7 @@ public class Queries {
         contentValues.put(DataBase.ACTIVE_SEMAFORO, taskApp.getActiveSemaforo());
         contentValues.put(DataBase.ACTIVE_NOTIFICATION, taskApp.getActiveNotification());
         contentValues.put(DataBase.DATE_NOTIFICATION, taskApp.getDateNotification());
+        contentValues.put(DataBase.UNFINISH_SEMAFORO, taskApp.getUnfinishSemaforo());
         return contentValues;
     }
 
@@ -186,31 +187,32 @@ public class Queries {
 
     public List<TaskApp> selectTaskByIdProyectEndDateAndType(Long idProyect, Long endRangeDateStart, Long endRangeDateFinish, Long idTaskType, String order) {
         TaskType taskType = null;
-        if(idTaskType != null){
+        if (idTaskType != null) {
             taskType = getTaskTypeById(idTaskType);
         }
-        return selectTaskByIdProyectEndDateAndType(idProyect, endRangeDateStart, endRangeDateFinish, taskType, false, order);
+        return selectTaskByIdProyectEndDateAndType(idProyect, endRangeDateStart, endRangeDateFinish, taskType, null, order);
     }
 
     public List<TaskApp> selectTaskByIdProyectEndDateAndType(Long idProyect, Long endRangeDateStart, Long endRangeDateFinish, TaskType taskType, Boolean onlyPendientes, String order) {
-        List<TaskType> ids = new ArrayList<>();
-        if(taskType != null){
-           ids.add(taskType);
-       }
-       return selectTaskByIdProyectEndDateAndType(idProyect,endRangeDateStart,endRangeDateFinish,ids, onlyPendientes, order);
+        List<TaskType> ids = null;
+        if (taskType != null) {
+            ids = new ArrayList<>();
+            ids.add(taskType);
+        }
+        return selectTaskByIdProyectEndDateAndType(idProyect, endRangeDateStart, endRangeDateFinish, ids, onlyPendientes, order);
     }
 
     public List<TaskApp> selectTaskByIdProyectEndDateAndType(Long idProyect, Long endRangeDateStart, Long endRangeDateFinish, List<TaskType> idTaskTypes, Boolean unfinish, String order) {
         StringBuffer query = new StringBuffer("SELECT * FROM " + DataBase.TASK_TABLE);
         List<String> values = new ArrayList<>();
         boolean useFilter = false;
-        if (idProyect != null || endRangeDateStart != null || !idTaskTypes.isEmpty() || endRangeDateFinish != null) {
+        if (idProyect != null || endRangeDateStart != null || idTaskTypes != null || endRangeDateFinish != null || unfinish != null) {
             query.append(" WHERE ");
         }
         if (idProyect != null) {
             query.append(DataBase.ID_PROYECT + " = ? ");
             values.add(idProyect.toString());
-            useFilter=true;
+            useFilter = true;
         }
         if (endRangeDateStart != null) {
             if (useFilter) {
@@ -228,13 +230,13 @@ public class Queries {
             values.add(endRangeDateFinish.toString());
             useFilter = true;
         }
-        if (!idTaskTypes.isEmpty()) {
+        if (idTaskTypes != null) {
             if (useFilter) {
                 query.append(" AND ");
             }
             query.append(DataBase.ID_TYPE + " in (");
             for (int i = 0; i < idTaskTypes.size(); i++) {
-                if(i != 0){
+                if (i != 0) {
                     query.append(", ");
                 }
                 query.append("" + idTaskTypes.get(i).getId());
@@ -242,11 +244,15 @@ public class Queries {
             query.append(") ");
             useFilter = true;
         }
-        if (unfinish != null && unfinish) {
+        if (unfinish != null) {
             if (useFilter) {
                 query.append(" AND ");
             }
-            query.append("(" + DataBase.REAL_DATE + " is null or " + DataBase.REAL_DATE + " = 0)");
+            if (unfinish) {
+                query.append("(" + DataBase.REAL_DATE + " is null or " + DataBase.REAL_DATE + " = 0)");
+            } else {
+                query.append("(" + DataBase.REAL_DATE + " is not null and " + DataBase.REAL_DATE + " != 0)");
+            }
             useFilter = true;
         }
         taskOrderBy(order, query);
@@ -259,18 +265,30 @@ public class Queries {
     }
 
     private void taskOrderBy(String order, StringBuffer query) {
-        if(order != null && !order.isEmpty()){
-            if(order.equals(context.getString(R.string.creation))){
+        if (order != null && !order.isEmpty()) {
+            if (order.equals(context.getString(R.string.creationUp))) {
                 query.append("");
             }
-            if(order.equals(context.getString(R.string.date))){
+            if (order.equals(context.getString(R.string.dateUp))) {
                 query.append(" order by " + DataBase.END_DATE);
             }
-            if(order.equals(context.getString(R.string.tag))){
+            if (order.equals(context.getString(R.string.tagUp))) {
                 query.append(" order by " + DataBase.ID_TYPE);
             }
-            if(order.equals(context.getString(R.string.finish_order))){
+            if (order.equals(context.getString(R.string.finish_order))) {
                 query.append(" order by " + DataBase.REAL_DATE);
+            }
+            if (order.equals(context.getString(R.string.creationDown))) {
+                query.append(" order by " + DataBase.ID + " desc");
+            }
+            if (order.equals(context.getString(R.string.dateDown))) {
+                query.append(" order by " + DataBase.END_DATE + " desc ");
+            }
+            if (order.equals(context.getString(R.string.tagDown))) {
+                query.append(" order by " + DataBase.ID_TYPE + " desc ");
+            }
+            if (order.equals(context.getString(R.string.finish_order_Down))) {
+                query.append(" order by " + DataBase.REAL_DATE + " desc ");
             }
 
         }
@@ -457,7 +475,7 @@ public class Queries {
     public int getCountTaskWithoutRealDate(Long id) {
         String[] ids = new String[1];
         ids[0] = id.toString();
-        Cursor cursor = sqLiteDatabase.rawQuery("SELECT COUNT(1) FROM " + DataBase.TASK_TABLE + " WHERE " + DataBase.ID_PROYECT + " = ? AND " + DataBase.REAL_DATE + " IS NULL", ids);
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT COUNT(1) FROM " + DataBase.TASK_TABLE + " WHERE " + DataBase.ID_PROYECT + " = ? AND (" + DataBase.REAL_DATE + " IS NULL or " + DataBase.REAL_DATE + " = 0)", ids);
         if (cursor.moveToFirst()) {
             do {
                 return cursor.getInt(0);
@@ -486,7 +504,7 @@ public class Queries {
         return 0;
     }
 
-    public long getCountTask() {
+    public long getCountTypeTask() {
         Cursor cursor = sqLiteDatabase.rawQuery("SELECT COUNT(1) FROM " + DataBase.TASK_TYPE_TABLE, new String[0]);
         if (cursor.moveToFirst()) {
             do {
@@ -494,6 +512,18 @@ public class Queries {
             } while (cursor.moveToNext());
         }
         return 0;
+    }
+
+    public Long getCountAllTasksByProyect(Long idProyect) {
+        String[] values = new String[1];
+        values[0] = idProyect.toString();
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT COUNT(1) FROM " + DataBase.TASK_TABLE + " WHERE ID_PROYECT = ?" , values);
+        if (cursor.moveToFirst()) {
+            do {
+                return cursor.getLong(0);
+            } while (cursor.moveToNext());
+        }
+        return 0l;
     }
 
     public Integer getCountTaskByTypeTask(Long idType) {

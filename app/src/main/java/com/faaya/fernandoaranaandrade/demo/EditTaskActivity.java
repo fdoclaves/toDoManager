@@ -38,8 +38,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import static com.faaya.fernandoaranaandrade.demo.EditProyectActivity.DATE_REGEX;
-
 public class EditTaskActivity extends AppCompatActivity {
 
     public static final String FROM_ACTIVITY = "FROM_ACTIVITY";
@@ -468,6 +466,7 @@ public class EditTaskActivity extends AppCompatActivity {
                 taskApp.setActiveSemaforo(queries.getValueByProperty(SettingsEnum.ACTIVE));
                 taskApp.setRealSemaforo(queries.getValueByProperty(SettingsEnum.REAL_SEMAFORO));
                 taskApp.setActiveNotification(SettingsEnum.OFF.toString());
+                taskApp.setUnfinishSemaforo(queries.getValueByProperty(SettingsEnum.UNFINISH_SEMAFORO));
             } else {
                 taskApp = queries.getByIdTask(id);
                 if(taskApp == null){ //tarea eliminada (posiblemente viene de una notificacion)
@@ -501,7 +500,7 @@ public class EditTaskActivity extends AppCompatActivity {
 
     public void set_date(View view) {
         String textButton = null;
-        if (dateEndTaskButton.getText().toString().matches(DATE_REGEX)) {
+        if (!dateEndTaskButton.getText().toString().equalsIgnoreCase(getString(R.string.setDate))) {
             textButton = dateEndTaskButton.getText().toString();
         }
         DateDialogFragment dateDialogFragment = DateDialogFragment.newInstance(" ", textButton);
@@ -518,7 +517,7 @@ public class EditTaskActivity extends AppCompatActivity {
 
     public void set_date_real(View view) {
         String textButton = null;
-        if (realDataTaskButton.getText().toString().matches(DATE_REGEX)) {
+        if (!realDataTaskButton.getText().toString().equalsIgnoreCase(getString(R.string.setDate))) {
             textButton = realDataTaskButton.getText().toString();
         }
         DateDialogFragment dateDialogFragment = DateDialogFragment.newInstance(" ", textButton);

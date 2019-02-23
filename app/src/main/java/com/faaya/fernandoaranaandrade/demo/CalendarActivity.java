@@ -103,7 +103,7 @@ public class CalendarActivity extends AppCompatActivity {
             Snackbar.make(view, getString(R.string.youNeedToCreateAProjectBefore), Snackbar.LENGTH_LONG).setAction("Action", null).show();
             return;
         }
-        if (queries.getCountTask() <= 0) {
+        if (queries.getCountTypeTask() <= 0) {
             Snackbar.make(view, getString(R.string.youNeedToCreateAHaveCategories), Snackbar.LENGTH_LONG).setAction("Action", null).show();
             return;
         }

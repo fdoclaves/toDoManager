@@ -44,7 +44,7 @@ public class PendientesActivity extends AppCompatActivity {
 
     private String orderBy;
 
-    private String[] orderFilters = new String[4];
+    private String[] orderFilters = new String[8];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,10 +53,14 @@ public class PendientesActivity extends AppCompatActivity {
         queries = new Queries(this);
         switchChecked = findViewById(R.id.switchPendientesDia);
         spinnerFilterOrder = findViewById(R.id.spinnerFilterOrder);
-        orderFilters[0]=getString(R.string.creation);
-        orderFilters[1]=getString(R.string.tag);
-        orderFilters[2]=getString(R.string.date);
-        orderFilters[3]=getString(R.string.finish_order);
+        orderFilters[0]=getString(R.string.creationUp);
+        orderFilters[1]=getString(R.string.creationDown);
+        orderFilters[2]=getString(R.string.tagUp);
+        orderFilters[3]=getString(R.string.tagDown);
+        orderFilters[4]=getString(R.string.dateUp);
+        orderFilters[5]=getString(R.string.dateDown);
+        orderFilters[6]=getString(R.string.finish_order);
+        orderFilters[7]=getString(R.string.finish_order_Down);
         spinnerFilterOrder.setAdapter(new ArrayAdapter<String>(this, R.layout.spinner18, orderFilters));
         spinnerFilterOrder.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

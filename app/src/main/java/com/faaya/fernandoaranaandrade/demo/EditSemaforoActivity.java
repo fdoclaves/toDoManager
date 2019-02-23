@@ -27,6 +27,7 @@ public class EditSemaforoActivity extends SuperEditSemaforoActivity {
                 queries.saveProperty(SettingsEnum.ACTIVE, SettingsEnum.OFF.toString());
             }
             queries.saveProperty(SettingsEnum.REAL_SEMAFORO, (String) spinnerColorReal.getSelectedItem());
+            queries.saveProperty(SettingsEnum.UNFINISH_SEMAFORO, (String) spinnerColorUnfinish.getSelectedItem());
             //Snackbar.make(view, "Ajustes guardados", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
@@ -55,6 +56,13 @@ public class EditSemaforoActivity extends SuperEditSemaforoActivity {
         for (int index = 0; index < colorValues.length; index++) {
             if(colorValues[index].equals(realSemanforo)){
                 spinnerColorReal.setSelection(index);
+            }
+        }
+
+        String unFinishSemanforo = queries.getValueByProperty(SettingsEnum.UNFINISH_SEMAFORO);
+        for (int index = 0; index < colorUnfinishValues.length; index++) {
+            if(colorUnfinishValues[index].equals(unFinishSemanforo)){
+                spinnerColorUnfinish.setSelection(index);
             }
         }
     }

@@ -40,6 +40,7 @@ public class EditSemaforoTaskActivity extends SuperEditSemaforoActivity {
             taskApp.setYellowSemaforo(getText(spinnerBeforeAfterYellow,  editTextYellow));
             taskApp.setWhiteSemaforo(getText(spinnerBeforeAfterWhite, editTextWhite));
             taskApp.setRealSemaforo((String) spinnerColorReal.getSelectedItem());
+            taskApp.setUnfinishSemaforo((String) spinnerColorUnfinish.getSelectedItem());
             if (aSwitch.isChecked()) {
                 taskApp.setActiveSemaforo(SettingsEnum.ON.toString());
             } else {
@@ -97,6 +98,11 @@ public class EditSemaforoTaskActivity extends SuperEditSemaforoActivity {
         for (int index = 0; index < colorValues.length; index++) {
             if(colorValues[index].equals(taskApp.getRealSemaforo())){
                 spinnerColorReal.setSelection(index);
+            }
+        }
+        for (int index = 0; index < colorUnfinishValues.length; index++) {
+            if(colorUnfinishValues[index].equals(taskApp.getUnfinishSemaforo())){
+                spinnerColorUnfinish.setSelection(index);
             }
         }
     }

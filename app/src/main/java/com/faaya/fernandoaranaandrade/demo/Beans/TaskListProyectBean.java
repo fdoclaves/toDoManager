@@ -5,16 +5,16 @@ import java.util.List;
 
 public class TaskListProyectBean implements Serializable {
     private List<TaskType> checked;
-    private Boolean unfishedTask;
+    private String comboValue;
     private String orderBy;
 
     public TaskListProyectBean(){
 
     }
 
-    public TaskListProyectBean(List<TaskType> checked, Boolean unfishedTask, String orderBy) {
+    public TaskListProyectBean(List<TaskType> checked, String comboValue, String orderBy) {
         this.checked = checked;
-        this.unfishedTask = unfishedTask;
+        this.comboValue = comboValue;
         this.orderBy = orderBy;
     }
 
@@ -26,12 +26,12 @@ public class TaskListProyectBean implements Serializable {
         this.checked = checked;
     }
 
-    public Boolean getUnfishedTask() {
-        return unfishedTask;
+    public String getUnfishedTask() {
+        return comboValue;
     }
 
-    public void setUnfishedTask(Boolean unfishedTask) {
-        this.unfishedTask = unfishedTask;
+    public void setUnfishedTask(String comboValue) {
+        this.comboValue = comboValue;
     }
 
     public String getOrderBy() {
