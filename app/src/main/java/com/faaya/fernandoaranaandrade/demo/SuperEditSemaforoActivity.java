@@ -22,7 +22,6 @@ public abstract class SuperEditSemaforoActivity extends AppCompatActivity {
     Spinner spinnerBeforeAfterRed;
     Spinner spinnerBeforeAfterYellow;
     Spinner spinnerColorReal;
-    Spinner spinnerColorUnfinish;
     EditText editTextWhite;
     EditText editTextYellow;
     EditText editTextOrange;
@@ -31,7 +30,7 @@ public abstract class SuperEditSemaforoActivity extends AppCompatActivity {
     Map<String, Integer> mapIndex;
     Map<String, String> mapValues;
     Switch aSwitch;
-    String[] colorValues, colorUnfinishValues;
+    String[] colorValues;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +66,6 @@ public abstract class SuperEditSemaforoActivity extends AppCompatActivity {
         editTextOrange = findViewById(R.id.editTextOrange);
         editTextRed = findViewById(R.id.editTextRed);
         aSwitch = findViewById(R.id.switch1);
-        spinnerColorUnfinish = findViewById(R.id.spinnerColorUnfinish);
 
         spinnerBeforeAfterWhite = findViewById(R.id.spinnerBeforeAfterWhite);
         spinnerBeforeAfterOrange = findViewById(R.id.spinnerBeforeAfterOrange);
@@ -84,11 +82,7 @@ public abstract class SuperEditSemaforoActivity extends AppCompatActivity {
         colorValues[0] = getString(R.string.green);
         colorValues[1] = getString(R.string.white);
         spinnerColorReal.setAdapter(new ArrayAdapter<String>(this, R.layout.spinner18, colorValues));
-        colorUnfinishValues = new String[3];
-        colorUnfinishValues[2] = getString(R.string.green);
-        colorUnfinishValues[1] = getString(R.string.white);
-        colorUnfinishValues[0] = getString(R.string.red);
-        spinnerColorUnfinish.setAdapter(new ArrayAdapter<String>(this, R.layout.spinner18, colorUnfinishValues));
+
         fillData();
     }
 

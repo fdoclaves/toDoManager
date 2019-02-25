@@ -21,12 +21,17 @@ public class Util {
     public static final String TO_DO_MANAGER_CHANNEL = "ToDoManager Channel";
     public static String CHANNEL_ID = "CHANNEL_TODOMANAGER";
 
-    public static void showNotifications(Context context, Proyect proyect, TaskApp taskApp, String titleActionSnooze, String titleActionFinish) {
+    public static void showNotifications(Context context, Proyect proyect, TaskApp taskApp, String title_action) {
         Long idTask = taskApp.getId();
         Intent intent = new Intent(context, EditTaskActivity.class);
         intent.putExtra(MainActivity.ID_TASK, taskApp.getId());
         PendingIntent contentPendingIntent = PendingIntent.getActivity
                 (context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Intent snoozeIntent = new Intent(context, NotificationServiceBroadcastReceiver.class);
+        snoozeIntent.setAction(NotificationServiceBroadcastReceiver.SNOOZE + idTask);
+        PendingIntent snoozePendingIntent =
+                PendingIntent.getBroadcast(context, 0, snoozeIntent, 0);
 
         NotificationManager manager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "1")
@@ -36,8 +41,7 @@ public class Util {
                 .setSmallIcon(R.drawable.todomanager512)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
-                .addAction(R.drawable.todomanager512, titleActionSnooze, getSnoozeIntent(context, idTask))
-                .addAction(R.drawable.todomanager512, titleActionFinish, getFinishIntent(context, idTask))
+                .addAction(R.drawable.todomanager512, title_action, snoozePendingIntent)
                 //.setColor(context.getResources().getColor(R.color.colorYellow))
                 .setAutoCancel(true);
 
@@ -49,18 +53,6 @@ public class Util {
         }
 
         manager.notify(idTask.intValue(), builder.build());
-    }
-
-    private static PendingIntent getFinishIntent(Context context, Long idTask) {
-        Intent intent = new Intent(context, NotificationServiceBroadcastReceiver.class);
-        intent.setAction(NotificationServiceBroadcastReceiver.FINISH + idTask);
-        return PendingIntent.getBroadcast(context, 0, intent, 0);
-    }
-
-    private static PendingIntent getSnoozeIntent(Context context, Long idTask) {
-        Intent snoozeIntent = new Intent(context, NotificationServiceBroadcastReceiver.class);
-        snoozeIntent.setAction(NotificationServiceBroadcastReceiver.SNOOZE + idTask);
-        return PendingIntent.getBroadcast(context, 0, snoozeIntent, 0);
     }
 
     public static void scheduleNotification(Context context, Queries queries, Long alarmTime) {

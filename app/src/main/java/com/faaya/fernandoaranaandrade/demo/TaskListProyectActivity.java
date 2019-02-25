@@ -169,7 +169,8 @@ public class TaskListProyectActivity extends AppCompatActivity {
                 unfinished = true;
             }
         }
-        List<TaskApp> taskApps = queries.selectTaskByIdProyectEndDateAndType(idProyect, null, null, checked, unfinished, orderBy, null);
+        Proyect project = queries.getByIdProyect(idProyect);
+        List<TaskApp> taskApps = queries.selectTaskByIdProyectEndDateAndType(project, null, null, checked, unfinished, orderBy, null);
         fillProyectSpinnerWithData(taskApps);
         if(taskApps.size() == 0){
             View view = findViewById(android.R.id.content);

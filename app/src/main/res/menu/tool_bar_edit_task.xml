@@ -8,7 +8,7 @@
     </item>
     <item
         android:id="@+id/finishTool"
-        android:icon="@drawable/ic_check"
+        android:icon="@drawable/ic_check_box"
         app:showAsAction="ifRoom"
         android:title="@string/finish">
     </item>

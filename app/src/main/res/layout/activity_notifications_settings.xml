@@ -6,42 +6,63 @@
     android:layout_height="match_parent"
     tools:context=".NotificationsSettingsActivity">
 
-    <Button
-        android:id="@+id/button9"
-        android:layout_width="0dp"
+    <Switch
+        android:id="@+id/switchNotification"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="@color/colorPrimary"
-        android:drawableStart="@android:drawable/ic_menu_save"
-        android:onClick="save"
-        android:padding="8dp"
-        android:text="@string/save"
-        android:textColor="@color/colorWhite"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <LinearLayout
-        android:id="@+id/layoutSnoozeGeneral"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="32dp"
-        android:orientation="vertical"
+        android:text="@string/notificationsActive"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/notifacionButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@color/colorPrimary"
+        android:onClick="set_hour"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:text="Button"
+        android:textColor="@android:color/white"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@+id/switchNotification"
+        app:layout_constraintStart_toStartOf="@+id/switchNotification"
+        app:layout_constraintTop_toBottomOf="@+id/switchNotification" />
+
+    <ImageButton
+        android:id="@+id/imageButtonNotificationSave"
+        android:layout_width="53dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@color/colorPrimary"
+        android:onClick="save"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_save" />
+
+    <LinearLayout
+        android:id="@+id/layoutSnooze"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="@+id/notifacionButton"
+        app:layout_constraintStart_toStartOf="@+id/notifacionButton"
+        app:layout_constraintTop_toBottomOf="@+id/notifacionButton">
 
         <TextView
-            android:id="@+id/textView9General"
+            android:id="@+id/textView9"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/tiempo_para_recordar_despues"
-            android:textSize="24sp" />
+            android:text="@string/tiempo_para_recordar_despues" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -51,39 +72,12 @@
             tools:layout_editor_absoluteY="123dp">
 
             <Spinner
-                android:id="@+id/spinnerHorasMinutosGeneral"
+                android:id="@+id/spinnerHorasMinutos"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/colorPrimaryDark"
                 android:layout_weight="1" />
 
         </LinearLayout>
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/textViewNextNotificationTitule"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/Next_notification"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutSnoozeGeneral" />
-
-    <TextView
-        android:id="@+id/textViewNextNotifacion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:text="TextView"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewNextNotificationTitule" />
 
 </android.support.constraint.ConstraintLayout>

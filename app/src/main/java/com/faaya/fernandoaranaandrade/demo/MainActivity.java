@@ -1,6 +1,9 @@
 package com.faaya.fernandoaranaandrade.demo;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
@@ -37,7 +40,6 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setTitle(getString(R.string.proyects));
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -59,8 +61,8 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, EditProyectActivity.class);
-                startActivity(intent);
+                goToEditProyect(0l);
+                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
         });
         proyects = queries.getAllProyects();
@@ -104,7 +106,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void goToEditProyect(long id) {
-        Intent intent = new Intent(this, TaskListProyectActivity.class);
+        Intent intent = new Intent(this, EditProyectActivity.class);
         intent.putExtra(ID_PROYECT, id);
         startActivity(intent);
     }
@@ -138,10 +140,6 @@ public class MainActivity extends AppCompatActivity
             goToSettings();
             return true;
         }
-        if (id == R.id.action_exit) {
-            exit();
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -157,10 +155,7 @@ public class MainActivity extends AppCompatActivity
         editNameDialogFragment.setOkAction(new OkAction() {
             @Override
             public void doAction() {
-                Intent intent = new Intent(Intent.ACTION_MAIN);
-                intent.addCategory(Intent.CATEGORY_HOME);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+                System.exit(0);
             }
         });
         editNameDialogFragment.show(fm, "fragment_edit_name");

@@ -44,7 +44,7 @@ public class MonitorActivity extends AppCompatActivity {
     }
 
     private void fill() {
-        textView1.setText("version 1.8");
+        textView1.setText("xy!");
         List<NotificationsApp> allNotification = queries.getAllNotification();
         textView2.setText("Total de notificaciónes:"+ allNotification.size());
         textView3.setText("Tiempo actual:" + new Date(System.currentTimeMillis()));

@@ -28,7 +28,7 @@ public class TaskTypeAdapter extends ArrayAdapter<TaskType> {
         View rowView = inflater.inflate(R.layout.task_type_layout, parent, false);
         TextView textView = rowView.findViewById(R.id.textViewTitule);
         TaskType taskType = values.get(position);
-        textView.setText(taskType.getName().toUpperCase());
+        textView.setText(taskType.getName());
         return rowView;
     }
 }

@@ -38,15 +38,12 @@ public class ListTaskTypeActivity extends AppCompatActivity {
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-                final Long idTaskType = allTaskTypes.get(position).getId();
-                Integer count = queries.getCountTaskByTypeTask(idTaskType);
                 FragmentManager fm = getSupportFragmentManager();
-                String title = getString(R.string.alertDeleteCategory);
-                String format = String.format(title, count);
-                EditNameDialogFragment editNameDialogFragment = EditNameDialogFragment.newInstance(format);
+                EditNameDialogFragment editNameDialogFragment = EditNameDialogFragment.newInstance(" Se eliminaran TODAS la tareas de este tipo ");
                 editNameDialogFragment.setOkAction(new OkAction() {
                     @Override
                     public void doAction() {
+                        Long idTaskType = allTaskTypes.get(position).getId();
                         queries.deleteNotificationByTaskType(idTaskType);
                         queries.deleteTaskType(idTaskType);
                         queries.deleteTaskByTaskType(idTaskType);
@@ -77,6 +74,5 @@ public class ListTaskTypeActivity extends AppCompatActivity {
             intent.putExtra(TaskType.ID_TASK_TYPE,taskType);
         }
         startActivity(intent);
-        finish();
     }
 }

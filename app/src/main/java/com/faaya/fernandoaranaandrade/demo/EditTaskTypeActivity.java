@@ -5,8 +5,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskType;
@@ -20,7 +20,7 @@ public class EditTaskTypeActivity extends AppCompatActivity {
 
     private TaskType taskType;
 
-    private Button deleteButton;
+    private ImageButton deleteButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +44,7 @@ public class EditTaskTypeActivity extends AppCompatActivity {
             taskType.setName(nameEditText.getText().toString());
             queries.saveOrUpdate(taskType);
             showMessage(getString(R.string.se_guardo_correctamente));
-            exit();
+            goToSettinsActivity();
         } else {
             showMessage(getString(R.string.el_nombre_no_es_valido));
         }
@@ -55,25 +55,22 @@ public class EditTaskTypeActivity extends AppCompatActivity {
     }
 
     public void deleteTaskType(View view) {
-        Integer count = queries.getCountTaskByTypeTask(taskType.getId());
         FragmentManager fm = getSupportFragmentManager();
-        String title = getString(R.string.alertDeleteCategory);
-        String format = String.format(title, count);
-        EditNameDialogFragment editNameDialogFragment = EditNameDialogFragment.newInstance(format);
+        EditNameDialogFragment editNameDialogFragment = EditNameDialogFragment.newInstance(getString(R.string.se_eliminaran_TODAS_la_tareas_de_este_tipo));
         editNameDialogFragment.setOkAction(new OkAction() {
             @Override
             public void doAction() {
                 queries.deleteNotificationByTaskType(taskType.getId());
                 queries.deleteTaskType(taskType.getId());
                 queries.deleteTaskByTaskType(taskType.getId());
-                exit();
+                goToSettinsActivity();
             }
         });
         editNameDialogFragment.show(fm, "fragment_edit_task_type");
     }
 
-    private void exit() {
-        Intent intent = new Intent(this, ListTaskTypeActivity.class);
+    private void goToSettinsActivity() {
+        Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
         finish();
     }

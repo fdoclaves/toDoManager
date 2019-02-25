@@ -52,7 +52,8 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:text="@string/categories"
-            android:textColor="@color/colorPrimary"
+            android:textAllCaps="true"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

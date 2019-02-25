@@ -8,31 +8,30 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Switch;
-import android.widget.TextView;
 
-import com.faaya.fernandoaranaandrade.demo.Beans.DateEnum;
-import com.faaya.fernandoaranaandrade.demo.Beans.NotificationsApp;
 import com.faaya.fernandoaranaandrade.demo.Beans.SettingsEnum;
 import com.faaya.fernandoaranaandrade.demo.database.Queries;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class NotificationsSettingsActivity extends AppCompatActivity {
 
+    public static final String REGEX = "^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9] ((AM)|(PM))$$";
     public static final String HORAS = "H";
     public static final String MINUTOS = "M";
     public static final String _5MINUTOS = "5M";
     public static final String _15MINUTOS = "15M";
     public static final String _30MINUTOS = "30M";
     public static final String _1HORA = "1H";
-    public static final String _24HORAS = "24H";
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a");
 
+    private Button hourButton;
+    private Switch aSwitch;
     private Queries queries;
     private Spinner tiempoSpinner;
     Map<String, String> map = new HashMap<>();
@@ -45,31 +44,21 @@ public class NotificationsSettingsActivity extends AppCompatActivity {
         list.add(getString(R.string._15minutos));
         list.add(getString(R.string._30minutos));
         list.add(getString(R.string._1Hora));
-        list.add(getString(R.string._24Horas));
         map.put(list.get(0),_5MINUTOS);
         map.put(list.get(1),_15MINUTOS);
         map.put(list.get(2),_30MINUTOS);
         map.put(list.get(3),_1HORA);
-        map.put(list.get(4), _24HORAS);
         setContentView(R.layout.activity_notifications_settings);
+        hourButton = findViewById(R.id.notifacionButton);
         queries = new Queries(this);
-        tiempoSpinner = findViewById(R.id.spinnerHorasMinutosGeneral);
+        aSwitch = findViewById(R.id.switchNotification);
+        String activeNotification = queries.getValueByProperty(SettingsEnum.ACTIVE_NOTIFICTION);
+        aSwitch.setChecked(activeNotification.equals(SettingsEnum.ON.toString()));
+        String hourNotification = queries.getValueByProperty(SettingsEnum.DATE_NOTIFICATION);
+        hourButton.setText(hourNotification);
+        tiempoSpinner = findViewById(R.id.spinnerHorasMinutos);
         tiempoSpinner.setAdapter(new ArrayAdapter<String>(this, R.layout.spinner18, list));
         fillSnooze();
-        fillNextNotification();
-    }
-
-    private void fillNextNotification() {
-        TextView textViewNextNotifacion = findViewById(R.id.textViewNextNotifacion);
-        NotificationsApp firstNotification = queries.getFirstNotification();
-        if(firstNotification == null){
-            textViewNextNotifacion.setVisibility(View.INVISIBLE);
-            TextView textViewNextNotificationTitule = findViewById(R.id.textViewNextNotificationTitule);
-            textViewNextNotificationTitule.setVisibility(View.INVISIBLE);
-        } else {
-            String format = DateEnum.fullDateSimpleDateFormat.format(new Date(firstNotification.getDate()));
-            textViewNextNotifacion.setText(format);
-        }
     }
 
     private void fillSnooze() {
@@ -85,7 +74,28 @@ public class NotificationsSettingsActivity extends AppCompatActivity {
         }
     }
 
+    public void set_hour(View view) {
+        String textButton = null;
+        if(hourButton.getText().toString().matches(REGEX)){
+            textButton = hourButton.getText().toString();
+        }
+        HourDialogFragment dialogFragment = HourDialogFragment.newInstance(" ", textButton);
+        dialogFragment.setOkActionDate(new OkActionDate() {
+            @Override
+            public void doAction(Calendar calendar) {
+                hourButton.setText(simpleDateFormat.format(calendar.getTime()));
+            }
+        });
+        dialogFragment.show(getSupportFragmentManager(), "fragment_edit_hour");
+    }
+
     public void save(View view) {
+        if (aSwitch.isChecked()) {
+            queries.saveProperty(SettingsEnum.ACTIVE_NOTIFICTION, SettingsEnum.ON.toString());
+        } else {
+            queries.saveProperty(SettingsEnum.ACTIVE_NOTIFICTION, SettingsEnum.OFF.toString());
+        }
+        queries.saveProperty(SettingsEnum.DATE_NOTIFICATION, hourButton.getText().toString());
         queries.saveProperty(SettingsEnum.TIME_SNOOZE, map.get(tiempoSpinner.getSelectedItem()));
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);

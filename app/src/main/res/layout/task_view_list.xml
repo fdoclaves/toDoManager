@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_all_task_"
     android:layout_width="match_parent"
@@ -19,105 +18,37 @@
         android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@android:color/black"
-        android:textSize="19sp" />
+        android:textSize="18sp" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/textView_proyect"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:text="TextView"
+        android:paddingRight="8dp"
+        android:paddingLeft="8dp"
+        android:textSize="12sp" />
 
-        <ImageView
-            android:id="@+id/imageView5"
-            android:layout_width="26dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:paddingLeft="8dp"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/ic_proyect" />
+    <TextView
+        android:id="@+id/textView_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingRight="8dp"
+        android:paddingLeft="8dp"
+        android:text="TextView"
+        android:textSize="12sp" />
 
-        <TextView
-            android:id="@+id/textView_proyect"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingRight="8dp"
-            android:text="TextView"
-            android:textColor="@android:color/black"
-            android:textSize="12sp" />
-    </LinearLayout>
-
-    <LinearLayout
+    <TextView
+        android:id="@+id/start_label_task"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="26dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:paddingLeft="8dp"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/ic_action_tag" />
-
-        <TextView
-            android:id="@+id/textView_type"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingRight="8dp"
-            android:text="@string/back"
-            android:textColor="@android:color/black"
-            android:textSize="12sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="26dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:paddingLeft="8dp"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/ic_action_calendar_day" />
-
-        <TextView
-            android:id="@+id/start_label_task"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingRight="8dp"
-            android:text="@string/back"
-            android:textColor="@android:color/black"
-            android:textSize="12sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/layoutNotificationInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/imageViewClock"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:paddingLeft="8dp"
-            app:srcCompat="@drawable/ic_alarm" />
-
-        <TextView
-            android:id="@+id/textViewNotificationInfo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingRight="8dp"
-            android:text="TextView"
-            android:textColor="@android:color/black"
-            android:textSize="12sp" />
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:paddingRight="8dp"
+        android:paddingLeft="8dp"
+        android:layout_below="@+id/name"
+        android:layout_alignStart="@+id/name_task"
+        android:layout_marginTop="5dp"
+        android:text="@string/back"
+        android:textSize="12sp" />
 
 
 </LinearLayout>

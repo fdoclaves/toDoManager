@@ -33,6 +33,13 @@ public class CalendarActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
+        Calendar calendar = Calendar.getInstance();
+        year = calendar.get(Calendar.YEAR);
+        month = calendar.get(Calendar.MONTH);
+        dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        queries = new Queries(this);
+        Long endRangeDateStart = getStartDay(calendar);
+        Long endRangeDateFinish = getEndDay(calendar);
         CalendarView calendarView = findViewById(R.id.calendarView);
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
 
@@ -47,7 +54,7 @@ public class CalendarActivity extends AppCompatActivity {
                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                 Long endRangeDateStart = getStartDay(calendar);
                 Long endRangeDateFinish = getEndDay(calendar);
-                fillProyectSpinnerWithData(queries.selectTaskByIdProyectEndDateAndType(null, endRangeDateStart, endRangeDateFinish, null, getString(R.string.dateUp), null));
+                fillProyectSpinnerWithData(queries.selectTaskByIdProyectEndDateAndType(null, endRangeDateStart, endRangeDateFinish, null));
 
             }
         });
@@ -66,12 +73,13 @@ public class CalendarActivity extends AppCompatActivity {
                 goToEditActivity(taskList.get(position).getId());
             }
         });
+        fillProyectSpinnerWithData(queries.selectTaskByIdProyectEndDateAndType(null, endRangeDateStart, endRangeDateFinish, null));
     }
 
     private void fillProyectSpinnerWithData(List<TaskApp> taskApps) {
         taskList.clear();
         taskList.addAll(taskApps);
-        listView.setAdapter(new TaskAppAdapter(this, taskList, false));
+        listView.setAdapter(new TaskAppAdapter(this, taskList));
     }
 
     private Long getEndDay(Calendar calendar) {
@@ -93,7 +101,6 @@ public class CalendarActivity extends AppCompatActivity {
     private void goToEditActivity(long id) {
         Intent intent = new Intent(this, EditTaskActivity.class);
         intent.putExtra(MainActivity.ID_TASK, id);
-        intent.putExtra(EditTaskActivity.FROM_ACTIVITY, this.getClass().getName());
         //fillExtra(intent);
         startActivity(intent);
     }
@@ -103,7 +110,7 @@ public class CalendarActivity extends AppCompatActivity {
             Snackbar.make(view, getString(R.string.youNeedToCreateAProjectBefore), Snackbar.LENGTH_LONG).setAction("Action", null).show();
             return;
         }
-        if (queries.getCountTypeTask() <= 0) {
+        if (queries.getCountTask() <= 0) {
             Snackbar.make(view, getString(R.string.youNeedToCreateAHaveCategories), Snackbar.LENGTH_LONG).setAction("Action", null).show();
             return;
         }
@@ -113,21 +120,7 @@ public class CalendarActivity extends AppCompatActivity {
         calendar.set(Calendar.MONTH, month);
         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         intent.putExtra(TaskEnum.END_DAY.toString(), calendar);
-        intent.putExtra(EditTaskActivity.FROM_ACTIVITY, this.getClass().getName());
         startActivity(intent);
-    }
-
-    @Override
-    public void onResume(){
-        super.onResume();
-        Calendar calendar = Calendar.getInstance();
-        year = calendar.get(Calendar.YEAR);
-        month = calendar.get(Calendar.MONTH);
-        dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-        queries = new Queries(this);
-        Long endRangeDateStart = getStartDay(calendar);
-        Long endRangeDateFinish = getEndDay(calendar);
-        fillProyectSpinnerWithData(queries.selectTaskByIdProyectEndDateAndType(null, endRangeDateStart, endRangeDateFinish, null, getString(R.string.dateUp), null));
     }
 
 }

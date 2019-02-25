@@ -4,15 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 
 import com.faaya.fernandoaranaandrade.demo.Beans.SettingsEnum;
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskApp;
 import com.faaya.fernandoaranaandrade.demo.Beans.TaskEnum;
-
-import java.io.Serializable;
 
 public class EditSemaforoTaskActivity extends SuperEditSemaforoActivity {
 
@@ -20,12 +18,13 @@ public class EditSemaforoTaskActivity extends SuperEditSemaforoActivity {
 
     private TaskApp taskApp;
 
-    private Button imageButton;
+    private ImageButton imageButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        imageButton = findViewById(R.id.buttonSaveSemaforo);
+        imageButton = findViewById(R.id.imageButtonSaveSemaforo);
+        imageButton.setImageResource(R.drawable.ic_keyboard_backspace);
         imageButton.setVisibility(View.INVISIBLE);
     }
 
@@ -40,7 +39,6 @@ public class EditSemaforoTaskActivity extends SuperEditSemaforoActivity {
             taskApp.setYellowSemaforo(getText(spinnerBeforeAfterYellow,  editTextYellow));
             taskApp.setWhiteSemaforo(getText(spinnerBeforeAfterWhite, editTextWhite));
             taskApp.setRealSemaforo((String) spinnerColorReal.getSelectedItem());
-            taskApp.setUnfinishSemaforo((String) spinnerColorUnfinish.getSelectedItem());
             if (aSwitch.isChecked()) {
                 taskApp.setActiveSemaforo(SettingsEnum.ON.toString());
             } else {
@@ -51,12 +49,10 @@ public class EditSemaforoTaskActivity extends SuperEditSemaforoActivity {
     }
 
     private void exit() {
-        Intent newIntent = new Intent(this, EditTaskActivity.class);
-        newIntent.putExtra(TASK, taskApp);
-        Serializable serializable = getIntent().getSerializableExtra(TaskListProyectActivity.FILTER_BEAN);
-        newIntent.putExtra(TaskListProyectActivity.FILTER_BEAN, serializable);
-        fillIBackIntent(newIntent, getIntent());
-        startActivity(newIntent);
+        Intent intent = new Intent(this, EditTaskActivity.class);
+        intent.putExtra(TASK, taskApp);
+        fillIBackIntent(intent, getIntent());
+        startActivity(intent);
         finish();
     }
 
@@ -72,10 +68,6 @@ public class EditSemaforoTaskActivity extends SuperEditSemaforoActivity {
         }
         if (idProyectCurrentIntent != 0) {
             newIntent.putExtra(TaskEnum.ID_PROYECT.toString(), idProyectCurrentIntent);
-        }
-        String fromActivity = currentIntent.getStringExtra(EditTaskActivity.FROM_ACTIVITY);
-        if(fromActivity != null){
-            newIntent.putExtra(EditTaskActivity.FROM_ACTIVITY, fromActivity);
         }
     }
 
@@ -98,11 +90,6 @@ public class EditSemaforoTaskActivity extends SuperEditSemaforoActivity {
         for (int index = 0; index < colorValues.length; index++) {
             if(colorValues[index].equals(taskApp.getRealSemaforo())){
                 spinnerColorReal.setSelection(index);
-            }
-        }
-        for (int index = 0; index < colorUnfinishValues.length; index++) {
-            if(colorUnfinishValues[index].equals(taskApp.getUnfinishSemaforo())){
-                spinnerColorUnfinish.setSelection(index);
             }
         }
     }

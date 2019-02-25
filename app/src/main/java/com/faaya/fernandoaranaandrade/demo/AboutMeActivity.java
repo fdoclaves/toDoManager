@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 
 public class AboutMeActivity extends AppCompatActivity {
@@ -29,15 +28,5 @@ public class AboutMeActivity extends AppCompatActivity {
             Intent intent = new Intent(this, MonitorActivity.class);
             startActivity(intent);
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }

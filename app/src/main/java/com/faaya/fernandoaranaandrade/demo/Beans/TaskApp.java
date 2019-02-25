@@ -20,7 +20,6 @@ public class TaskApp implements Serializable {
     private String realSemaforo;
     private String activeNotification;
     private String dateNotification;
-    private String unfinishSemaforo;
 
     public TaskApp() {
 
@@ -42,7 +41,6 @@ public class TaskApp implements Serializable {
         setActiveSemaforo(cursor.getString(12));
         setActiveNotification(cursor.getString(13));
         setDateNotification(cursor.getString(14));
-        setUnfinishSemaforo(cursor.getString(15));
     }
 
     public void setProyectId(Long proyectId) {
@@ -163,13 +161,5 @@ public class TaskApp implements Serializable {
 
     public void setDateNotification(String dateNotification) {
         this.dateNotification = dateNotification;
-    }
-
-    public String getUnfinishSemaforo() {
-        return unfinishSemaforo;
-    }
-
-    public void setUnfinishSemaforo(String unfinishSemaforo) {
-        this.unfinishSemaforo = unfinishSemaforo;
     }
 }

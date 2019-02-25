@@ -1,17 +1,14 @@
 package com.faaya.fernandoaranaandrade.demo.adapters;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -47,8 +44,6 @@ public class ProyectAdapter extends ArrayAdapter<Proyect> {
         this.proyect_finished = context.getString(R.string.Finished_project);
         this.map = StringUtils.getMap(context);
         this.queries = new Queries(context);
-        GREEN_R = context.getResources().getColor(R.color.colorPrimaryDark);
-        RED_R = context.getResources().getColor(R.color.colorRed);
     }
 
     @Override
@@ -56,52 +51,27 @@ public class ProyectAdapter extends ArrayAdapter<Proyect> {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.obra_view_list, parent, false);
+        TextView textView = rowView.findViewById(R.id.name);
+        TextView textView1 = rowView.findViewById(R.id.start_label);
+        RelativeLayout relativeLayout = rowView.findViewById(R.id.relaviteLayoutProyect);
+        Proyect proyect = values.get(position);
+        textView.setText(proyect.getName());
         try {
-            TextView nameTextView = rowView.findViewById(R.id.name);
-            TextView textView1 = rowView.findViewById(R.id.start_label);
-            Proyect proyect = values.get(position);
-            nameTextView.setText(proyect.getName());
-            if(proyect.getStart() == 0l){
-                textView1.setVisibility(View.INVISIBLE);
-                ImageView imageView = rowView.findViewById(R.id.imageViewSandClock);
-                imageView.setVisibility(View.INVISIBLE);
-
-            } else {
-                RelativeLayout relativeLayout = rowView.findViewById(R.id.relaviteLayoutProyect);
-                FechasBean fechaBean = FechasUtils.getFechasBean(new Date(proyect.getStart()), proyect.getTime().intValue(), proyect.getRange(), map);
+            FechasBean fechaBean = FechasUtils.getFechasBean(new Date(proyect.getStart()), proyect.getTime().intValue(), proyect.getRange(), map);
+            textView1.setText(fechaBean.getResultaTimeString());
+            if(fechaBean.getEndCalendar().getTime().before(new Date())){
                 int countTaskWithoutRealDate = queries.getCountTaskWithoutRealDate(proyect.getId());
-                if(countTaskWithoutRealDate > 0){
-                    textView1.setText(fechaBean.getResultaTimeString() + " - " + context.getString(R.string.unfinishTask) + ": " + countTaskWithoutRealDate);
+                if(hasTaskWithoutFinish(countTaskWithoutRealDate)){
+                    textView1.setTextColor(RED_R);
+                    textView1.setText(getBoldText(this.tiempo_finalizado + ". " + countTaskWithoutRealDate + " " + context.getString(R.string.unfinishTask)));
+                    relativeLayout.setBackgroundColor(RED);
                 } else {
-                    textView1.setText(fechaBean.getResultaTimeString());
+                    textView1.setTextColor(GREEN_R);
+                    textView1.setText(getBoldText(this.proyect_finished));
+                    relativeLayout.setBackgroundColor(GREEN);
                 }
-                if (fechaBean.getEndCalendar().getTime().before(new Date())) {
-                    if (hasTaskWithoutFinish(countTaskWithoutRealDate)) {
-                        textView1.setTextColor(RED_R);
-                        textView1.setText(getBoldText(this.tiempo_finalizado + " - " + context.getString(R.string.unfinishTask) + ": " + countTaskWithoutRealDate));
-                        relativeLayout.setBackgroundColor(RED);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            ImageView imageView = rowView.findViewById(R.id.imageViewSandClock);
-                            imageView.setImageTintList(rowView.getResources().getColorStateList(R.color.colorRed));
-                        }
-                    } else {
-                        textView1.setTextColor(GREEN_R);
-                        textView1.setText(getBoldText(this.proyect_finished));
-                        relativeLayout.setBackgroundColor(GREEN);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            ImageView imageView = rowView.findViewById(R.id.imageViewSandClock);
-                            imageView.setImageDrawable(rowView.getResources().getDrawable(R.drawable.ic_check));
-                            imageView.setImageTintList(rowView.getResources().getColorStateList(R.color.colorPrimaryDark));
-                        }
-                    }
-                } else {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        ColorStateList colorStateList = rowView.getResources().getColorStateList(R.color.colorGray);
-                        textView1.setTextColor(colorStateList);
-                        ImageView imageView = rowView.findViewById(R.id.imageViewSandClock);
-                        imageView.setImageTintList(colorStateList);
-                    }
-                }
+            } else {
+                textView1.setTextColor(Color.GRAY);
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -116,7 +86,7 @@ public class ProyectAdapter extends ArrayAdapter<Proyect> {
     }
 
     private boolean hasTaskWithoutFinish(int countTaskWithoutRealDate) {
-        System.out.println("count:" + countTaskWithoutRealDate);
+        System.out.println("count:"+countTaskWithoutRealDate);
         return countTaskWithoutRealDate > 0;
     }
 }
