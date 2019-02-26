@@ -80,4 +80,20 @@ public class FechasUtils {
         }
         return resultaTimeString;
     }
+
+    public static Calendar getCalendarStart(Calendar calendar) {
+        calendar.set(11, 0);
+        calendar.set(12, 0);
+        calendar.set(13, 0);
+        calendar.set(14, 0);
+        return calendar;
+    }
+
+    public static Calendar getCalendarEnd(Calendar calendar) {
+        calendar.set(11, 23);
+        calendar.set(12, 59);
+        calendar.set(13, 59);
+        calendar.set(14, 999);
+        return calendar;
+    }
 }

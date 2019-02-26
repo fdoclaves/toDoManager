@@ -420,6 +420,7 @@ public class EditTaskActivity extends AppCompatActivity {
         if(fromActivity != null){
             if(fromActivity.contains("AllTasksActivity")){
                 newIntent = new Intent(this, AllTasksActivity.class);
+                newIntent.putExtra(AllTasksActivity.FILTER, getIntent().getSerializableExtra(AllTasksActivity.FILTER));
                 fillIBackIntent(newIntent);
             }
             if(fromActivity.contains("TaskListProyectActivity")){

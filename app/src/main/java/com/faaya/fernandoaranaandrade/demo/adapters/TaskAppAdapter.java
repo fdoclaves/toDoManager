@@ -232,6 +232,9 @@ public class TaskAppAdapter extends ArrayAdapter<TaskApp> {
     }
 
     private boolean isAfterTodayDate(TaskApp taskApp) {
+        if(taskApp.getDateNotification() == null || taskApp.getDateNotification().isEmpty()){
+            return true;
+        }
         Long alarmTime = HourUtils.getCalendar(taskApp.getDateNotification());
         return new Date().before(new Date(alarmTime));
     }

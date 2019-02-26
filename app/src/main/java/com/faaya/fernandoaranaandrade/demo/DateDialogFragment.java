@@ -9,10 +9,10 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CalendarView;
-import android.widget.TextView;
+
+import com.faaya.fernandoaranaandrade.demo.Beans.DateEnum;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 // ...
@@ -20,7 +20,6 @@ import java.util.Date;
 public class DateDialogFragment extends DialogFragment {
 
     private static final String BUTTON_TEXT = "buttonText";
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     public static final String TITLE = "ID";
     private Button okButton;
@@ -86,13 +85,13 @@ public class DateDialogFragment extends DialogFragment {
     }
 
     private void setDate(CalendarView calendarView) {
-        try{
-            if(getArguments().get(BUTTON_TEXT) != null){
-                Date date = simpleDateFormat.parse((String) getArguments().get(BUTTON_TEXT));
+        try {
+            if (getArguments().get(BUTTON_TEXT) != null) {
+                Date date = DateEnum.dateSimpleDateFormat.parse((String) getArguments().get(BUTTON_TEXT));
                 calendarView.setDate(date.getTime());
                 calendar.setTime(date);
             }
-        } catch (ParseException e){
+        } catch (ParseException e) {
             e.printStackTrace();
         }
     }

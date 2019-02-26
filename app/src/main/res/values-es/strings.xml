@@ -149,4 +149,8 @@
     <string name="Search">Buscar</string>
     <string name="taskName">Nombre de la tarea</string>
     <string name="filter">Filtrar</string>
+    <string name="RangeOfTime">Intervalo de tiempo</string>
+    <string name="From_time">Del</string>
+    <string name="To_time">al</string>
+    <string name="clear">Limpiar</string>
 </resources>

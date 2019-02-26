@@ -185,33 +185,39 @@ public class Queries {
         }
     }
 
-    public List<TaskApp> selectTaskByIdProyectEndDateAndType(Long idProyect, Long endRangeDateStart, Long endRangeDateFinish, Long idTaskType, String order, String searchText) {
+    public List<TaskApp> selectTaskByIdProyectEndDateAndType(List<Proyect> projects, Long endRangeDateStart, Long endRangeDateFinish, Long idTaskType, String order, String searchText) {
         TaskType taskType = null;
         if (idTaskType != null) {
             taskType = getTaskTypeById(idTaskType);
         }
-        return selectTaskByIdProyectEndDateAndType(idProyect, endRangeDateStart, endRangeDateFinish, taskType, null, order, searchText);
+        return selectTaskByIdProyectEndDateAndType(projects, endRangeDateStart, endRangeDateFinish, taskType, null, order, searchText);
     }
 
-    public List<TaskApp> selectTaskByIdProyectEndDateAndType(Long idProyect, Long endRangeDateStart, Long endRangeDateFinish, TaskType taskType, Boolean onlyPendientes, String order, String searchText) {
+    public List<TaskApp> selectTaskByIdProyectEndDateAndType(List<Proyect> projects, Long endRangeDateStart, Long endRangeDateFinish, TaskType taskType, Boolean onlyPendientes, String order, String searchText) {
         List<TaskType> ids = null;
         if (taskType != null) {
             ids = new ArrayList<>();
             ids.add(taskType);
         }
-        return selectTaskByIdProyectEndDateAndType(idProyect, endRangeDateStart, endRangeDateFinish, ids, onlyPendientes, order, searchText);
+        return selectTaskByIdProyectEndDateAndType(projects, endRangeDateStart, endRangeDateFinish, ids, onlyPendientes, order, searchText);
     }
 
-    public List<TaskApp> selectTaskByIdProyectEndDateAndType(Long idProyect, Long endRangeDateStart, Long endRangeDateFinish, List<TaskType> idTaskTypes, Boolean unfinish, String order, String searchText) {
+    public List<TaskApp> selectTaskByIdProyectEndDateAndType(List<Proyect> projects, Long endRangeDateStart, Long endRangeDateFinish, List<TaskType> idTaskTypes, Boolean unfinish, String order, String searchText) {
         StringBuffer query = new StringBuffer("SELECT * FROM " + DataBase.TASK_TABLE);
         List<String> values = new ArrayList<>();
         boolean useFilter = false;
-        if (idProyect != null || endRangeDateStart != null || idTaskTypes != null || endRangeDateFinish != null || unfinish != null || searchText != null) {
+        if (projects != null || endRangeDateStart != null || idTaskTypes != null || endRangeDateFinish != null || unfinish != null || searchText != null) {
             query.append(" WHERE ");
         }
-        if (idProyect != null) {
-            query.append(DataBase.ID_PROYECT + " = ? ");
-            values.add(idProyect.toString());
+        if (projects != null) {
+            query.append(DataBase.ID_PROYECT + " in (");
+            for (int i = 0; i < projects.size(); i++) {
+                if (i != 0) {
+                    query.append(", ");
+                }
+                query.append("" + projects.get(i).getId());
+            }
+            query.append(") ");
             useFilter = true;
         }
         if (endRangeDateStart != null) {

@@ -16,18 +16,15 @@
         <activity
             android:name=".AllTasksActivity"
             android:label="@string/tasks_"
-            android:theme="@style/AppTheme2">
-        </activity>
+            android:theme="@style/AppTheme2" />
         <activity
             android:name=".EditProyectActivity"
             android:label="@string/proyect"
-            android:theme="@style/AppTheme2">
-        </activity>
+            android:theme="@style/AppTheme2" />
         <activity
             android:name=".EditTaskActivity"
             android:label="@string/task_"
-            android:theme="@style/AppTheme2">
-        </activity>
+            android:theme="@style/AppTheme2" />
         <activity
             android:name=".SettingsActivity"
             android:label="@string/settings">
@@ -48,6 +45,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -121,7 +119,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.faaya.fernandoaranaandrade.demo.AboutMeActivity" />
         </activity>
-        <activity android:name=".TaskListProyectActivity" android:theme="@style/AppTheme2">
+        <activity
+            android:name=".TaskListProyectActivity"
+            android:theme="@style/AppTheme2" />
+        <activity android:name=".FilterAllTaskActivity">
+        </activity>
+        <activity android:name=".RangeDatesActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.faaya.fernandoaranaandrade.demo.FilterAllTaskActivity" />
         </activity>
     </application>
 

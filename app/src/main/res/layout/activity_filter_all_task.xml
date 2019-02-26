@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <ScrollView
+        android:layout_width="0.0dip"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@id/layoutAll"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <Spinner
+                android:id="@id/spinnerFinished"
+                android:layout_width="0.0dip"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16.0dip"
+                android:layout_marginEnd="16.0dip"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textViewCategories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16.0dip"
+                android:layout_marginTop="8.0dip"
+                android:text="@string/categories"
+                android:textAllCaps="true"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="24.0sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/spinnerFinished" />
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@id/layoutCateories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorYellowTrans"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textViewCategories">
+
+                <Button
+                    android:id="@id/buttonNone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8.0dip"
+                    android:background="@color/colorPrimary"
+                    android:minWidth="0.0dip"
+                    android:minHeight="0.0dip"
+                    android:paddingStart="2.0dip"
+                    android:paddingEnd="2.0dip"
+                    android:text="@string/none"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="14.0sp"
+                    app:layout_constraintBottom_toBottomOf="@id/buttonAll"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <Button
+                    android:id="@id/buttonAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8.0dip"
+                    android:background="@color/colorPrimary"
+                    android:minWidth="0.0dip"
+                    android:minHeight="0.0dip"
+                    android:paddingStart="2.0dip"
+                    android:paddingEnd="2.0dip"
+                    android:text="@string/TODOS"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="14.0sp"
+                    app:layout_constraintEnd_toStartOf="@id/buttonNone"
+                    app:layout_constraintTop_toBottomOf="@id/textView3" />
+
+                <ListView
+                    android:id="@id/listViewCheckTypes"
+                    android:layout_width="fill_parent"
+                    android:layout_height="125.0dip"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/buttonAll" />
+            </android.support.constraint.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/textView33"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/proyects"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="24.0sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layoutCateories" />
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/layoutProyects"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorYellowTrans"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textView33">
+
+                <Button
+                    android:id="@+id/buttonNoneProjects"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8.0dip"
+                    android:background="@color/colorPrimary"
+                    android:minWidth="0.0dip"
+                    android:minHeight="0.0dip"
+                    android:paddingStart="2.0dip"
+                    android:paddingEnd="2.0dip"
+                    android:text="@string/none"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="14.0sp"
+                    app:layout_constraintBottom_toBottomOf="@id/buttonAllProjects"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <Button
+                    android:id="@+id/buttonAllProjects"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8.0dip"
+                    android:background="@color/colorPrimary"
+                    android:minWidth="0.0dip"
+                    android:minHeight="0.0dip"
+                    android:paddingStart="2.0dip"
+                    android:paddingEnd="2.0dip"
+                    android:text="@string/TODOS"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="14.0sp"
+                    app:layout_constraintEnd_toStartOf="@id/buttonNoneProjects"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ListView
+                    android:id="@+id/listViewCheckTypesProjects"
+                    android:layout_width="fill_parent"
+                    android:layout_height="125.0dip"
+                    app:layout_constraintTop_toBottomOf="@id/buttonAllProjects" />
+            </android.support.constraint.ConstraintLayout>
+
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="0.0dip"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8.0dip"
+                android:layout_marginTop="4.0dip"
+                android:layout_marginEnd="8.0dip"
+                android:background="@color/colorPrimary"
+                android:drawableStart="@drawable/ic_action_calendar_day_white"
+                android:onClick="range"
+                android:padding="6.0dip"
+                android:paddingStart="8.0dip"
+                android:paddingEnd="8.0dip"
+                android:text="@string/RangeOfTime"
+                android:textColor="@color/colorWhite"
+                android:textSize="18.0sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/layoutProyects" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4.0dip"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/button2">
+
+                <Button
+                    android:id="@id/ok_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8.0dip"
+                    android:layout_marginTop="4.0dip"
+                    android:layout_marginEnd="8.0dip"
+                    android:layout_marginBottom="8.0dip"
+                    android:layout_weight="1.0"
+                    android:background="@color/colorPrimary"
+                    android:drawableStart="@drawable/ic_action_filter"
+                    android:onClick="filter"
+                    android:paddingEnd="4.0dip"
+                    android:paddingStart="4dp"
+                    android:text="@string/filter"
+                    android:textColor="@color/cardview_light_background"
+                    android:textSize="18.0sp" />
+
+                <Button
+                    android:id="@id/cancel_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8.0dip"
+                    android:layout_marginTop="4.0dip"
+                    android:layout_marginEnd="8.0dip"
+                    android:layout_marginBottom="8.0dip"
+                    android:layout_weight="1.0"
+                    android:background="@color/colorPrimary"
+                    android:onClick="cancel"
+                    android:paddingStart="4dp"
+                    android:drawableStart="@drawable/ic_clear"
+                    android:text="@string/clear"
+                    android:textColor="@color/cardview_light_background"
+                    android:textSize="18.0sp" />
+            </LinearLayout>
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
+</android.support.constraint.ConstraintLayout>

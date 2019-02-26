@@ -158,4 +158,8 @@
     <string name="Search">Search</string>
     <string name="taskName">Task name</string>
     <string name="filter">Filter</string>
+    <string name="RangeOfTime">Range of time</string>
+    <string name="From_time">From</string>
+    <string name="To_time">to</string>
+    <string name="clear">clear</string>
 </resources>
