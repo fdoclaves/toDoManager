@@ -27,7 +27,7 @@ public class Queries {
 
     public Queries(Context context) {
         this.context = context;
-        DataBase dataBase = new DataBase(context, DataBase.SCHEMA, null, 6);
+        DataBase dataBase = new DataBase(context, DataBase.SCHEMA, null, 5);
         sqLiteDatabase = dataBase.getWritableDatabase();
     }
 
@@ -453,7 +453,7 @@ public class Queries {
     }
 
     public NotificationsApp getFirstNotification() {
-        List<NotificationsApp> notificationsApps = selectNotificationsApp("SELECT * FROM " + DataBase.NOTIFICATIONS_TABLE + " LIMIT 1");
+        List<NotificationsApp> notificationsApps = selectNotificationsApp("SELECT * FROM " + DataBase.NOTIFICATIONS_TABLE + " order by DATE_NOTIFICATION LIMIT 1");
         if(notificationsApps.isEmpty()){
             return null;
         }

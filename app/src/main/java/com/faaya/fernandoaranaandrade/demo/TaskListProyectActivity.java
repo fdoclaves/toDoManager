@@ -234,9 +234,7 @@ public class TaskListProyectActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent newIntent = new Intent(this, MainActivity.class);
-                startActivity(newIntent);
-                finish();
+                goHome();
                 return true;
             case R.id.editProyectTool:
                 Intent intent = new Intent(this, EditProyectActivity.class);
@@ -251,6 +249,12 @@ public class TaskListProyectActivity extends AppCompatActivity {
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void goHome() {
+        Intent newIntent = new Intent(this, MainActivity.class);
+        startActivity(newIntent);
+        finish();
     }
 
     @Override
@@ -271,6 +275,11 @@ public class TaskListProyectActivity extends AppCompatActivity {
         if (savedInstanceState != null){
             fillFromSerializable(savedInstanceState.getSerializable(FILTER_BEAN));
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        goHome();
     }
 
 }

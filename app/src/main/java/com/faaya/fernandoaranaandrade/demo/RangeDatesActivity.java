@@ -119,4 +119,11 @@ public class RangeDatesActivity extends AppCompatActivity {
         intent.putExtra(AllTasksActivity.FILTER, this.allTareasBean);
         startActivity(intent);
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent newIntent  = new Intent(this, AllTasksActivity.class);
+        startActivity(newIntent);
+        finish();
+    }
 }

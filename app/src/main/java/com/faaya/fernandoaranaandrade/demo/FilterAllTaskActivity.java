@@ -169,4 +169,11 @@ public class FilterAllTaskActivity extends AppCompatActivity {
         startActivity(newIntent);
         finish();
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent newIntent  = new Intent(this, AllTasksActivity.class);
+        startActivity(newIntent);
+        finish();
+    }
 }

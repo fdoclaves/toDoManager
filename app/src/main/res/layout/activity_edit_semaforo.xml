@@ -6,6 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".EditSemaforoActivity">
 
+    <ScrollView
+        android:layout_width="0.0dip"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@id/layoutAll"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
     <TextView
         android:id="@+id/textView10"
         android:layout_width="wrap_content"
@@ -140,36 +153,37 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/editTextRed" />
 
-    <Switch
-        android:id="@+id/switch1"
-        android:layout_width="wrap_content"
-        android:layout_height="76dp"
-        android:lineSpacingExtra="8sp"
-        android:padding="8sp"
-        android:text="@string/changeColors"
-        android:textAlignment="viewStart"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="18sp"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="8dp" />
+            <Switch
+                android:id="@+id/switch1"
+                android:layout_width="wrap_content"
+                android:layout_height="76dp"
+                android:layout_marginStart="16dp"
+                android:lineSpacingExtra="8sp"
+                android:padding="8sp"
+                android:text="@string/changeColors"
+                android:textAlignment="viewStart"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/buttonSaveSemaforo"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="@color/colorPrimary"
-        android:drawableStart="@android:drawable/ic_menu_save"
-        android:onClick="save_semaforo"
-        android:padding="8dp"
-        android:text="@string/save"
-        android:textColor="@color/colorWhite"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+            <Button
+                android:id="@+id/buttonSaveSemaforo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:background="@color/colorPrimary"
+                android:drawableStart="@android:drawable/ic_menu_save"
+                android:onClick="save_semaforo"
+                android:padding="8dp"
+                android:text="@string/save"
+                android:textColor="@color/colorWhite"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/spinnerColorUnfinish" />
 
     <TextView
         android:id="@+id/textView14"
@@ -234,5 +248,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView14" />
+
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
 
 </android.support.constraint.ConstraintLayout>

@@ -102,15 +102,14 @@ public class DataBase extends SQLiteOpenHelper {
             case 2:
                 db.execSQL("INSERT INTO SETTINGS(KEYWORD,VALUE) VALUES ('" + SettingsEnum.TIME_SNOOZE.toString() +"','15M')");
             case 3:
-                changeAlams(db);
-            case 4:
                 db.execSQL("DELETE FROM SETTINGS WHERE KEYWORD = '" + SettingsEnum.ACTIVE_NOTIFICTION.toString() +"'");
                 db.execSQL("DELETE FROM SETTINGS WHERE KEYWORD = '" + SettingsEnum.DATE_NOTIFICATION.toString() +"'");
                 db.execSQL("ALTER TABLE OBRA ADD COLUMN END_DATE INT");
                 changeMonths(db);
-            case 5:
+            case 4:
                 db.execSQL("INSERT INTO SETTINGS(KEYWORD,VALUE) VALUES ('" + SettingsEnum.UNFINISH_SEMAFORO.toString() +"','" + red + "')");
                 db.execSQL("ALTER TABLE TASKS ADD COLUMN UNFINISH_SEMAFORO TEXT DEFAULT '" + red + "'");
+                changeAlams(db);
         }
     }
 
